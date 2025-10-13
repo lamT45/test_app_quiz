@@ -12,10 +12,10 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("courses")
 @RestController
-public class UserController {
+public class UsersController {
     private final CourseService courseService;
 
-    public UserController(CourseService courseService) {
+    public UsersController(CourseService courseService) {
         this.courseService = courseService;
     }
 

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MajorDao extends JpaRepository<questions, Long> {
+public interface ScoreDao extends JpaRepository<questions, Long> {
     @Query("SELECT m.students FROM questions m WHERE m.id= :majorId")
     List<quizzes> getAllStudentsFromMajor(Long majorId);
 }

@@ -14,10 +14,10 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("majors")
 @RestController
-public class QuizzeController {
+public class QuizzesController {
     private final MajorService majorService;
 
-    public QuizzeController(MajorService majorService) {
+    public QuizzesController(MajorService majorService) {
         this.majorService = majorService;
     }
 

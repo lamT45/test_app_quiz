@@ -1,78 +1,51 @@
--- 1_TABLES.sql (version PostgreSQL)
+-- Supprimer les tables si elles existent déjà (ordre inverse des dépendances)
+DROP TABLE IF EXISTS scores;
+DROP TABLE IF EXISTS questions;
+DROP TABLE IF EXISTS quizzes;
+DROP TABLE IF EXISTS users;
 
--- Création des séquences automatiques avec SERIAL
-CREATE TABLE majors (
-                        id SERIAL PRIMARY KEY,
-                        name VARCHAR(100) NOT NULL,
-                        description TEXT
+-- TABLE USERS
+CREATE TABLE users (
+                       id SERIAL PRIMARY KEY,
+                       username VARCHAR(100) NOT NULL UNIQUE,
+                       password VARCHAR(255) NOT NULL,
+                       email VARCHAR(150) NOT NULL UNIQUE,
+                       role VARCHAR(50) DEFAULT 'user',
+                       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE students (
-                          id SERIAL PRIMARY KEY,
-                          first_name VARCHAR(100),
-                          last_name VARCHAR(100),
-                          birthdate DATE,
-                          major_id INT,
-                          FOREIGN KEY (major_id) REFERENCES majors(id)
-);
-
-CREATE TABLE courses (
+-- TABLE QUIZZES
+CREATE TABLE quizzes (
                          id SERIAL PRIMARY KEY,
-                         name VARCHAR(100),
-                         hours INT
+                         title VARCHAR(255) NOT NULL,
+                         description TEXT,
+                         time_limit_per_question_seconds INT,
+                         created_by INT,
+                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                         leaderboard JSONB,
+                         FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
-CREATE TABLE student_course (
-                                student_id INT,
-                                course_id INT,
-                                PRIMARY KEY (student_id, course_id),
-                                FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE,
-                                FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
+-- TABLE QUESTIONS
+CREATE TABLE questions (
+                           id SERIAL PRIMARY KEY,
+                           quiz_id INT NOT NULL,
+                           text TEXT NOT NULL,
+                           type VARCHAR(50) NOT NULL,
+                           points INT DEFAULT 1,
+                           choices JSONB,
+                           correct_answer VARCHAR(255),
+                           image_url VARCHAR(255),
+                           FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
 );
 
--- Insertion des données
-DO $$
-    DECLARE
-        _STUDENT_1 INT;
-        _MAJOR_1 INT;
-        _COURSE_1 INT;
-    BEGIN
-        INSERT INTO majors (name, description)
-        VALUES ('Informatique', 'Ouaiiis du code partout')
-        RETURNING id INTO _MAJOR_1;
-
-        INSERT INTO majors (name, description) VALUES
-                                                   ('Construction', 'Beaucoup de béton et des poutres'),
-                                                   ('Aéronautique', 'Vive le vent'),
-                                                   ('Data', 'Trop cool plein de données à ordonner'),
-                                                   ('Energie & Environnement', 'On est full green'),
-                                                   ('Management', 'Des managers de qualité'),
-                                                   ('Santé', 'On connait tous les os et les muscles du corps humain'),
-                                                   ('Architecture durable', 'Objectif 0 carbone'),
-                                                   ('Design Industriel Durable', 'On résistera à la fin du pétrole');
-
-        INSERT INTO students (first_name, last_name, birthdate, major_id)
-        VALUES ('Paul', 'Harrohide', '2002-06-15', _MAJOR_1)
-        RETURNING id INTO _STUDENT_1;
-
-        INSERT INTO students (first_name, last_name, birthdate, major_id)
-        VALUES
-            ('Jean', 'Bonbeur', '2001-08-21', _MAJOR_1),
-            ('Alain', 'Térieur', '2000-01-11', _MAJOR_1);
-
-        INSERT INTO courses (name, hours)
-        VALUES ('Java', 30)
-        RETURNING id INTO _COURSE_1;
-
-        INSERT INTO courses (name, hours) VALUES
-                                              ('German', 30),
-                                              ('Internet of Things', 30),
-                                              ('Thermodynamic', 30),
-                                              ('Anatomy', 30),
-                                              ('Maths', 30),
-                                              ('Spanish', 30),
-                                              ('Lean Management', 30);
-
-        INSERT INTO student_course (student_id, course_id)
-        VALUES (_STUDENT_1, _COURSE_1);
-    END $$;
+-- TABLE SCORES
+CREATE TABLE scores (
+                        id SERIAL PRIMARY KEY,
+                        user_id INT NOT NULL,
+                        quiz_id INT NOT NULL,
+                        score FLOAT DEFAULT 0,
+                        time_taken INT,
+                        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                        FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+);

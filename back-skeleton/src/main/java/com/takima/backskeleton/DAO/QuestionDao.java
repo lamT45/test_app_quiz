@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StudentDao extends JpaRepository<quizzes, Long> {
+public interface QuestionDao extends JpaRepository<quizzes, Long> {
     @Query("SELECT s FROM quizzes s JOIN s.courses c WHERE c.id= :courseId AND s.major.id = :majorId ")
     List<quizzes> findByMajorIdAndCourseId(int majorId, int courseId);
 }

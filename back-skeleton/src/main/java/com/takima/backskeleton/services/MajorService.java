@@ -1,6 +1,6 @@
 package com.takima.backskeleton.services;
 
-import com.takima.backskeleton.DAO.MajorDao;
+import com.takima.backskeleton.DAO.ScoreDao;
 import com.takima.backskeleton.models.questions;
 import com.takima.backskeleton.models.quizzes;
 import org.springframework.stereotype.Component;
@@ -10,20 +10,20 @@ import java.util.List;
 
 @Component
 public class MajorService {
-    private final MajorDao majorDao;
+    private final ScoreDao scoreDao;
 
-    public MajorService(MajorDao majorDao) {
-        this.majorDao = majorDao;
+    public MajorService(ScoreDao scoreDao) {
+        this.scoreDao = scoreDao;
     }
 
     public List<questions> findAll() {
-        Iterable<questions> it = majorDao.findAll();
+        Iterable<questions> it = scoreDao.findAll();
         List <questions> questions = new ArrayList<>();
         it.forEach(questions::add);
         return questions;
     }
 
     public List<quizzes> getStudentsOfMajor(Long id) {
-        return majorDao.getAllStudentsFromMajor(id);
+        return scoreDao.getAllStudentsFromMajor(id);
     }
 }

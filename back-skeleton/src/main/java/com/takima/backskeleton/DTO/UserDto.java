@@ -5,7 +5,7 @@ import com.takima.backskeleton.models.users;
 
 import java.time.Instant;
 import java.util.List;
-public class StudentDto {
+public class UserDto {
     private String firstName;
     private String lastName;
     private Instant birthdate;
@@ -71,14 +71,14 @@ public class StudentDto {
             return this;
         }
 
-        public StudentDto build() {
-            StudentDto studentDto = new StudentDto();
-            studentDto.lastName = this.lastName;
-            studentDto.questions = this.questions;
-            studentDto.firstName = this.firstName;
-            studentDto.birthdate = this.birthdate;
-            studentDto.courses = this.courses;
-            return studentDto;
+        public UserDto build() {
+            UserDto userDto = new UserDto();
+            userDto.lastName = this.lastName;
+            userDto.questions = this.questions;
+            userDto.firstName = this.firstName;
+            userDto.birthdate = this.birthdate;
+            userDto.courses = this.courses;
+            return userDto;
         }
     }
 }

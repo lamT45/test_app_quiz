@@ -4,8 +4,8 @@ import com.takima.backskeleton.models.quizzes;
 
 import java.io.IOException;
 
-public class StudentMapper {
-    public static quizzes fromDto(StudentDto dto, Long id) throws IOException {
+public class UserMapper {
+    public static quizzes fromDto(UserDto dto, Long id) throws IOException {
         return new quizzes.Builder()
                 .id(id)
                 .firstName(dto.getFirstName())
@@ -16,8 +16,8 @@ public class StudentMapper {
                 .build();
     }
 
-    public static StudentDto toDto (quizzes quizzes){
-        return new StudentDto.StudentDtoBuilder()
+    public static UserDto toDto (quizzes quizzes){
+        return new UserDto.StudentDtoBuilder()
                 .firstName(quizzes.getFirstName())
                 .lastName(quizzes.getLastName())
                 .birthdate(quizzes.getBirthdate())

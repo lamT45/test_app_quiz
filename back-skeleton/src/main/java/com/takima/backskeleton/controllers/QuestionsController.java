@@ -1,6 +1,6 @@
 package com.takima.backskeleton.controllers;
 
-import com.takima.backskeleton.DTO.StudentDto;
+import com.takima.backskeleton.DTO.UserDto;
 import com.takima.backskeleton.models.quizzes;
 import com.takima.backskeleton.services.StudentService;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,10 +18,10 @@ import java.util.List;
 @CrossOrigin
 @RequestMapping("students")
 @RestController
-public class QuestionController {
+public class QuestionsController {
     private final StudentService studentService;
 
-    public QuestionController(StudentService studentService) {
+    public QuestionsController(StudentService studentService) {
         this.studentService = studentService;
     }
 
@@ -44,12 +44,12 @@ public class QuestionController {
     }
 
     @PostMapping("")
-    public void addStudent(@RequestBody StudentDto studentDto) {
-        studentService.addStudent(studentDto);
+    public void addStudent(@RequestBody UserDto userDto) {
+        studentService.addStudent(userDto);
     }
 
     @PostMapping("/{id}")
-    public void updateStudent(@RequestBody StudentDto studentDto, @PathVariable Long id) {
-        studentService.updateStudent(studentDto, id);
+    public void updateStudent(@RequestBody UserDto userDto, @PathVariable Long id) {
+        studentService.updateStudent(userDto, id);
     }
 }
