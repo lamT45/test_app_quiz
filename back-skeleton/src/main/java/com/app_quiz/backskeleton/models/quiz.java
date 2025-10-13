@@ -6,28 +6,43 @@ import java.util.List;
 @Entity
 @Table(name = "quizzes")
 public class quiz {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String title;
     private String subject;
-    private int total_score;
+    private int totalScore;
 
     @ManyToOne
     @JoinColumn(name = "created_by_id")
-    private user created_by;
+    private user createdBy;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     private List<question> questions;
 
     public quiz() {}
 
-    // Getters et Setters
+    // ✅ Getters et Setters
     public Long getId() { return id; }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
+
     public String getSubject() { return subject; }
     public void setSubject(String subject) { this.subject = subject; }
-    public int getTotal_score() { return total_score; }
-    public void setTotal_score(int total_score) { this.total_score = total_score; }
-    public user getCreated_by() { return created_by; }
-    public void setCreated_by(user created_by) { this.created_by = created_by; }
+
+    public int getTotalScore() { return totalScore; }
+    public void setTotalScore(int totalScore) { this.totalScore = totalScore; }
+
+    public user getCreatedBy() { return createdBy; }
+    public void setCreatedBy(user createdBy) { this.createdBy = createdBy; }
+
+    public List<question> getQuestions() { return questions; }
+    public void setQuestions(List<question> questions) { this.questions = questions; }
 }

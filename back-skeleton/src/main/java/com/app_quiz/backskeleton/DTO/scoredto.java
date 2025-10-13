@@ -4,8 +4,8 @@ public class scoredto {
     private Long id;
     private Long userId;
     private Long quizId;
-    private int totalScore;
-    private int durationSeconds;
+    private int scoreObtained;
+    private int timeTakenSeconds;
 
     public scoredto() {}
 
@@ -18,9 +18,9 @@ public class scoredto {
     public Long getQuizId() { return quizId; }
     public void setQuizId(Long quizId) { this.quizId = quizId; }
 
-    public int getTotalScore() { return totalScore; }
-    public void setTotalScore(int totalScore) { this.totalScore = totalScore; }
+    public int getScoreObtained() { return scoreObtained; }
+    public void setScoreObtained(int scoreObtained) { this.scoreObtained = scoreObtained; }
 
-    public int getDurationSeconds() { return durationSeconds; }
-    public void setDurationSeconds(int durationSeconds) { this.durationSeconds = durationSeconds; }
+    public int getTimeTakenSeconds() { return timeTakenSeconds; }
+    public void setTimeTakenSeconds(int timeTakenSeconds) { this.timeTakenSeconds = timeTakenSeconds; }
 }

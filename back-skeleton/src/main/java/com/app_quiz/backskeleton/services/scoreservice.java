@@ -1,12 +1,12 @@
 package com.app_quiz.backskeleton.services;
 
-import com.app_quiz.backskeleton.models.score;
-import com.app_quiz.backskeleton.models.quiz;
-import com.app_quiz.backskeleton.models.question;
-import com.app_quiz.backskeleton.DAO.scoredao;
-import com.app_quiz.backskeleton.DAO.quizdao;
 import com.app_quiz.backskeleton.DAO.questiondao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.app_quiz.backskeleton.DAO.quizdao;
+import com.app_quiz.backskeleton.DAO.scoredao;
+import com.app_quiz.backskeleton.models.question;
+import com.app_quiz.backskeleton.models.quiz;
+import com.app_quiz.backskeleton.models.score;
+import com.app_quiz.backskeleton.models.user;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,14 +15,15 @@ import java.util.Optional;
 @Service
 public class scoreservice {
 
-    @Autowired
-    private scoredao scoredao;
+    private final scoredao scoredao;
+    private final quizdao quizdao;
+    private final questiondao questiondao;
 
-    @Autowired
-    private quizdao quizdao;
-
-    @Autowired
-    private questiondao questiondao;
+    public scoreservice(scoredao scoredao, quizdao quizdao, questiondao questiondao) {
+        this.scoredao = scoredao;
+        this.quizdao = quizdao;
+        this.questiondao = questiondao;
+    }
 
     public List<score> findAllScores() {
         return scoredao.findAll();
@@ -40,16 +41,19 @@ public class scoreservice {
         scoredao.deleteById(id);
     }
 
+    // 🔹 Méthodes manquantes
+    public List<score> findScoresByUserId(Long userId) {
+        return scoredao.findByUserId(userId);
+    }
+
+    public List<score> findScoresByQuizId(Long quizId) {
+        return scoredao.findByQuizId(quizId);
+    }
+
     /**
      * Calcul automatique du score total et du temps total pour un quiz
      */
-    public score calculateAndSaveScore(Long userId, Long quizId, List<String> userAnswers, List<Integer> timesTaken) {
-        Optional<quiz> quizOpt = quizdao.findById(quizId);
-        if (quizOpt.isEmpty()) {
-            throw new RuntimeException("Quiz non trouvé avec l'id : " + quizId);
-        }
-
-        quiz qz = quizOpt.get();
+    public score calculateAndSaveScore(user u, quiz qz, List<String> userAnswers, List<Integer> timesTaken) {
         List<question> questions = qz.getQuestions();
 
         double totalScore = 0;
@@ -60,13 +64,12 @@ public class scoreservice {
             String userAnswer = userAnswers.get(i);
             int time = timesTaken.get(i);
 
-            // Si l'utilisateur a dépassé 30 secondes, on met 0 points
+            // Si >30s → 0 points
             if (time > 30) continue;
 
-            // Vrai/Faux = 2 points, sinon 4 points
+            // Vrai/Faux = 2 pts, sinon 4 pts
             int maxPoints = q.getType().equalsIgnoreCase("vrai/faux") ? 2 : 4;
 
-            // Si bonne réponse
             if (q.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
                 totalScore += maxPoints;
             }
@@ -75,10 +78,10 @@ public class scoreservice {
         }
 
         score finalScore = new score();
-        finalScore.setUserId(userId);
-        finalScore.setQuizId(quizId);
-        finalScore.setScore(totalScore);
-        finalScore.setTimeTaken(totalTime);
+        finalScore.setUser(u);
+        finalScore.setQuiz(qz);
+        finalScore.setScore_obtained((int) totalScore);
+        finalScore.setTime_taken_seconds(totalTime);
 
         return scoredao.save(finalScore);
     }

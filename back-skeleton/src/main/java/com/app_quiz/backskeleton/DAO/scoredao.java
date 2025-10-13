@@ -7,6 +7,8 @@ import java.util.List;
 
 @Repository
 public interface scoredao extends JpaRepository<score, Long> {
-    List<score> findByUserId(Long userId);
-    List<score> findByQuizId(Long quizId);
+
+    List<score> findByUserId(Long userId);  // Filtre par user
+
+    List<score> findByQuizId(Long quizId);  // Filtre par quiz
 }
