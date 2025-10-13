@@ -1,0 +1,108 @@
+@if (quizzes$ | async; as quizzes) {
+<h1>Données personnelles de l'étudiant</h1>
+<form (ngSubmit)="save(quizzes)" #studentForm="ngForm">
+  <div class="form-group">
+    <label for="lastName">Nom</label>
+    <input
+      type="text"
+      class="form-control"
+      id="lastName"
+      required
+      [(ngModel)]="quizzes.lastName"
+      name="lastName"
+      #lastName="ngModel"
+    />
+    <div [hidden]="lastName.valid || lastName.pristine" class="alert alert-danger">Le nom est obligatoire</div>
+  </div>
+  <div class="form-group">
+    <label for="firstName">Prénom</label>
+    <input
+      type="text"
+      class="form-control"
+      id="firstName"
+      required
+      [(ngModel)]="quizzes.firstName"
+      name="firstName"
+      #firstName="ngModel"
+    />
+    <div [hidden]="firstName.valid || firstName.pristine" class="alert alert-danger">Le prénom est obligatoire</div>
+  </div>
+  <div class="form-group">
+    <label for="birthDate">Date de naissance</label>
+    <input
+      type="date"
+      class="form-control"
+      id="birthDate"
+      required
+      [ngModel]="quizzes.birthdate | date : 'yyyy-MM-dd'"
+      name="birthDate"
+      #birthDate="ngModel"
+      (ngModelChange)="updateBirthdate($event, quizzes)"
+    />
+    <div
+      [hidden]="(birthDate.pristine && birthDate.untouched) || birthDate.value !== today.toISOString().slice(0, 10)"
+      class="alert alert-danger"
+    >
+      La Date de naissance est obligatoire
+    </div>
+  </div>
+  @if (allMajors$ | async; as allMajors) {
+  <div class="form-group">
+    <label for="questions">Major</label>
+    <select id="questions" [(ngModel)]="majorSelectModel" name="questions" class="form-control">
+      <option [ngValue]="null" [disabled]="true">Sélectionner une filière</option>
+      @for (questions of allMajors; track questions) {
+      <option [ngValue]="questions">{{ questions.name }}</option>
+      }
+    </select>
+  </div>
+  }
+  <div class="quizzes-courses">
+    <div class="d-flex align-items-center">
+      <h3 class="courses-title">Cours</h3>
+      <button type="button" mat-mini-fab color="primary" (click)="courseClick()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+    @if (allCourses$ | async; as allCourses) {
+    <div class="form-group">
+      <label for="courses">Cours disponibles</label>
+      <select id="courses" [(ngModel)]="courseSelectModel" name="courses" class="form-control">
+        <option [ngValue]="null" [disabled]="true">Sélectionner un cours</option>
+        @for (course of allCourses; track course) {
+        <option [ngValue]="course">{{ course.name }}</option>
+        }
+      </select>
+      @if (notSelectedCourse) {
+      <div class="alert alert-danger">Le cours est obligatoire</div>
+      }
+      <button
+        type="button"
+        [disabled]="courseSelectModel == null"
+        (click)="addCourseToStudent(quizzes)"
+        mat-raised-button
+        color="primary"
+      >
+        Ajouter un cours
+      </button>
+    </div>
+    }
+    <table class="table">
+      <tbody>
+        @for (course of quizzes.courses; track course) {
+        <tr>
+          <td>{{ course?.name }}</td>
+          <td>{{ course?.hours }}</td>
+          <td>
+            <button mat-icon-button color="warn" (click)="removeCourseToStudent(quizzes, course)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <button type="submit" mat-raised-button color="primary" [disabled]="!studentForm.form.valid">Enregistrer</button>
+</form>
+}
