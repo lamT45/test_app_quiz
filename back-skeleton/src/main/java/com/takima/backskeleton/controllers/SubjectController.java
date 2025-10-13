@@ -1,4 +1,0 @@
-package com.takima.backskeleton.controllers;
-
-public class SubjectController {
-}
