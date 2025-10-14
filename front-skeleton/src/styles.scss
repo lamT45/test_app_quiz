@@ -1,26 +1,59 @@
-@use "theme";
-@import "./bootstrap/_bootstrap";
+@import "@fontsource/poppins";
 
-/* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%;}
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.mat-mini-fab {
-  color : theme.$white !important;
+:root {
+  --primary: #7b4cf6;
+  --secondary: #f26bff;
+  --light-bg: #f6f2ff;
+  --text-dark: #333;
+  --text-light: #666;
 }
 
-.mat-raised-button {
-  color : theme.$white !important;
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+  color: var(--text-dark);
 }
 
-table {
-  font-size: medium;
-  tr {
-    height: 57px;
-    td {
-      vertical-align: middle;
-    }
-  }
+h1, h2, h3, h4, h5 {
+  font-weight: 700;
+  color: var(--primary);
+}
 
+button {
+  font-family: inherit;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+a {
+  text-decoration: none;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.text-center { text-align: center; }
+.mt-2 { margin-top: 20px; }
+.mt-4 { margin-top: 40px; }
+
+.active {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 10px;
 }

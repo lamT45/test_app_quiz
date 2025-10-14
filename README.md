@@ -5,9 +5,7 @@
 ### Windows
 #### Par téléchargements Internet :
 - Docker : https://docs.docker.com/desktop/install/windows-install/
-- IntelliJ : https://www.jetbrains.com/fr-fr/idea/download/#section=windows
-
-### Mac
+- IntelliJ : https://www.jetbrains.com/fr-fr/idea/down
 Pour les puces M1 ou M2, choisis *Apple Chip* & *(Apple Silicon)* <br>
 Pour les puces Intel, choisis *Intel Chip* & *(Intel)*
 

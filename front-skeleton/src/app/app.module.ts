@@ -1,43 +1,45 @@
-import { NgModule } from "@angular/core"
-import { BrowserModule } from "@angular/platform-browser"
+// src/app/app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
-import { AppRoutingModule } from "app-routing.module"
-import { AppComponent } from "app.component"
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
-import { NavbarComponent } from "navbar/navbar.component"
-import { MatListModule } from "@angular/material/list"
-import { HomeComponent } from "home/home.component"
-import { StudentsComponent } from "students/students.component"
-import { StudentDetailsComponent } from "students/student-details/student-details.component"
-import { FormsModule } from "@angular/forms"
-import { MatIconModule } from "@angular/material/icon"
-import { MatButtonModule } from "@angular/material/button"
-import { MajorsComponent } from "majors/majors.component"
-import { MajorStudentsComponent } from "majors/major-students/major-students.component"
-import { HttpClientModule } from "@angular/common/http"
+// Composants
+import { AppComponent } from './app.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { HomeComponent } from './components/home/home.component';
+import { QuizDetailComponent } from './quizzes/quiz-detail/quiz-detail.component';
+import { QuizPlayComponent } from './quizzes/quiz-play/quiz-play.component';
+
+// Services
+import { QuizService } from './services/quiz.service';
+
+const routes: Routes = [
+  { path: '', component: HomeComponent },
+  { path: 'quiz/:id', component: QuizDetailComponent },
+  { path: 'play/:id', component: QuizPlayComponent },
+  { path: '**', redirectTo: '' } // redirection si route non trouvée
+];
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     HomeComponent,
-    StudentsComponent,
-    StudentDetailsComponent,
-    MajorsComponent,
-    MajorStudentsComponent,
+    QuizDetailComponent,
+    QuizPlayComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MatListModule,
     FormsModule,
-    MatIconModule,
-    MatButtonModule,
+    ReactiveFormsModule,
     HttpClientModule,
+    RouterModule.forRoot(routes)
   ],
-  providers: [],
-  bootstrap: [AppComponent],
+  providers: [
+    QuizService
+  ],
+  bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule { }

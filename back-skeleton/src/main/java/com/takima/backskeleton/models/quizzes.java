@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import  com.quizapp.backskeleton.models.User;
+import  com.quizapp.backskeleton.models.Question;
+import  com.quizapp.backskeleton.models.Score;
 
 @Entity
 @Table(name = "quizzes")
