@@ -1,0 +1,18 @@
+<section class="leaderboard">
+  <h2>Classement Général</h2>
+  <p>Les meilleurs joueurs de QuizMaster</p>
+
+  <div class="top3">
+    <div *ngFor="let player of topPlayers" class="player-card">
+      <h3>{{ player.name }}</h3>
+      <p>{{ player.score }} pts</p>
+      <small>{{ player.quizzes }} quiz complétés</small>
+    </div>
+  </div>
+
+  <div class="others">
+    <div *ngFor="let p of others; let i = index">
+      <span>#{{ i + 4 }}</span> {{ p.name }} — {{ p.score }} pts
+    </div>
+  </div>
+</section>
