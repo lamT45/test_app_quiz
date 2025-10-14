@@ -5,10 +5,8 @@ export interface Quiz {
   category: string;
   description: string;
   level: 'Facile' | 'Moyen' | 'Difficile';
-  duration: number;
   players: number;
-  rating: number;
   questions: any[];
-  timeLimitPerQuestionSeconds?: number; // temps par question
+  timeLimitPerQuestion?: number; // temps par question
   createdBy?: string;
 }

@@ -31,10 +31,9 @@ export class QuizService {
         category: 'Culture Générale',
         description: 'Testez vos connaissances générales avec ce quiz pour débutants',
         level: 'Facile',
-        duration: 10,
         players: 1234,
-        rating: 4.5,
-        questions: Array(15)
+        questions: Array(15),
+        timeLimitPerQuestion: 45
       },
       {
         id: 2,
@@ -42,10 +41,9 @@ export class QuizService {
         category: 'Géographie',
         description: 'Connaissez-vous toutes les capitales ? Prouvez-le !',
         level: 'Moyen',
-        duration: 15,
         players: 856,
-        rating: 4.7,
-        questions: Array(20)
+        questions: Array(20),
+        timeLimitPerQuestion: 30
       },
       {
         id: 3,
@@ -53,10 +51,9 @@ export class QuizService {
         category: 'Histoire',
         description: 'De la Gaule à nos jours, testez vos connaissances historiques',
         level: 'Difficile',
-        duration: 20,
         players: 543,
-        rating: 4.8,
-        questions: Array(25)
+        questions: Array(25),
+        timeLimitPerQuestion: 15
       },
       {
         id: 4,
@@ -64,10 +61,9 @@ export class QuizService {
         category: 'Sciences',
         description: 'Physique, chimie, biologie... êtes-vous un scientifique ?',
         level: 'Moyen',
-        duration: 15,
         players: 978,
-        rating: 4.6,
-        questions: Array(18)
+        questions: Array(18),
+        timeLimitPerQuestion: 30
       },
       {
         id: 5,
@@ -75,10 +71,9 @@ export class QuizService {
         category: 'Divertissement',
         description: 'Êtes-vous un vrai cinéphile ? Testez vos connaissances !',
         level: 'Facile',
-        duration: 15,
         players: 1567,
-        rating: 4.9,
-        questions: Array(22)
+        questions: Array(22),
+        timeLimitPerQuestion: 45
       },
       {
         id: 6,
@@ -86,10 +81,9 @@ export class QuizService {
         category: 'Sport',
         description: 'Connaissez-vous les plus grands exploits sportifs ?',
         level: 'Moyen',
-        duration: 20,
         players: 876,
-        rating: 4.4,
-        questions: Array(20)
+        questions: Array(20),
+        timeLimitPerQuestion: 30
       }
     ];
     return of(quizzes);

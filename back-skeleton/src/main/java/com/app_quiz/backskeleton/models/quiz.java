@@ -12,8 +12,9 @@ public class quiz {
     private Long id;
 
     private String title;
-    private String subject;
-    private int totalScore;
+    private String category;
+    private String description;
+    //private int totalScore;
 
     @ManyToOne
     @JoinColumn(name = "created_by_id")
@@ -34,11 +35,14 @@ public class quiz {
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
 
-    public String getSubject() { return subject; }
-    public void setSubject(String subject) { this.subject = subject; }
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 
-    public int getTotalScore() { return totalScore; }
-    public void setTotalScore(int totalScore) { this.totalScore = totalScore; }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
+
+    //public int getTotalScore() { return totalScore; }
+    //public void setTotalScore(int totalScore) { this.totalScore = totalScore; }
 
     public user getCreatedBy() { return createdBy; }
     public void setCreatedBy(user createdBy) { this.createdBy = createdBy; }
