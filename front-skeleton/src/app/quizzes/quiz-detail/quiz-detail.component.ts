@@ -6,7 +6,7 @@ import { Quiz } from 'models/quiz.model';
 @Component({
   selector: 'app-quiz-detail',
   templateUrl: './quiz-detail.component.html',
-  styleUrls: ['./quiz-detail.component.css']
+  styleUrls: ['./quiz-detail.component.scss']
 })
 export class QuizDetailComponent implements OnInit {
 

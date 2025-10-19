@@ -1,21 +1,15 @@
 <nav class="navbar">
-  <div class="logo" routerLink="/">
-    <img src="assets/logo.png" alt="QuizMaster logo" />
-    <span>QuizMaster</span>
-  </div>
+  <a routerLink="/" class="logo">
+    <i class="fa-solid fa-trophy logo-icon"></i>
+    <span class="logo-text">QuizMaster</span>
+  </a>
 
-  <ul class="links" [class.open]="menuOpen">
-    <li><a routerLink="/" routerLinkActive="active" (click)="closeMenu()">Accueil</a></li>
-    <li><a routerLink="/quiz" routerLinkActive="active" (click)="closeMenu()">Quiz</a></li>
-    <li><a routerLink="/classement" routerLinkActive="active" (click)="closeMenu()">Classement</a></li>
-  </ul>
+      <ul class="links" [class.open]="menuOpen">
+          <li><a routerLink="/" routerLinkActive="active" (click)="closeMenu()">Accueil</a></li>
+          <li><a routerLink="/quiz" routerLinkActive="active" (click)="closeMenu()">Quiz</a></li>
+          <li><a routerLink="/classement" routerLinkActive="active" (click)="closeMenu()">Classement</a></li>
+        </ul> <button class="start-btn" routerLink="/quiz">Commencer</button> <!-- Bouton menu hamburger pour mobile -->
+        <div class="menu-icon" (click)="toggleMenu()"> <span class="bar"></span> <span class="bar"></span> <span
+          class="bar"></span> </div>
+      </nav>
 
-  <button class="start-btn" routerLink="/quiz">Commencer</button>
-
-  <!-- Bouton menu hamburger pour mobile -->
-  <div class="menu-icon" (click)="toggleMenu()">
-    <span class="bar"></span>
-    <span class="bar"></span>
-    <span class="bar"></span>
-  </div>
-</nav>
