@@ -1,19 +1,32 @@
-package com.app_quiz.backskeleton.DTO;
+package com.app_quiz.backskeleton.models;
 
-public class questiondto {
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "questions")
+public class Question {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String questionText;
     private String choice1;
     private String choice2;
     private String choice3;
     private String choice4;
-    private boolean trueFalse;
+    private boolean trueFalse;   // true = vrai/faux
     private String correctAnswer;
     private int points;
-    private Long quizId;
+    private String type;
 
-    public questiondto() {}
+    @ManyToOne
+    @JoinColumn(name = "quiz_id")
+    private Quiz quiz;
 
+    public Question() {}
+
+    // ✅ Getters et Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -41,6 +54,13 @@ public class questiondto {
     public int getPoints() { return points; }
     public void setPoints(int points) { this.points = points; }
 
-    public Long getQuizId() { return quizId; }
-    public void setQuizId(Long quizId) { this.quizId = quizId; }
+    public Quiz getQuiz() { return quiz; }
+    public void setQuiz(Quiz quiz) { this.quiz = quiz; }
+
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
 }

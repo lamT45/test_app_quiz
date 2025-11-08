@@ -1,7 +1,7 @@
 package com.app_quiz.backskeleton.services;
 
-import com.app_quiz.backskeleton.DAO.quizdao;
-import com.app_quiz.backskeleton.models.quiz;
+import com.app_quiz.backskeleton.DAO.QuizDao;
+import com.app_quiz.backskeleton.models.Quiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,20 +9,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class quizservice {
+public class QuizService {
 
     @Autowired
-    private quizdao quizdao;
+    private QuizDao quizdao;
 
-    public List<quiz> findAllQuizzes() {
+    public List<Quiz> findAllQuizzes() {
         return quizdao.findAll();
     }
 
-    public Optional<quiz> findQuizById(Long id) {
+    public Optional<Quiz> findQuizById(Long id) {
         return quizdao.findById(id);
     }
 
-    public quiz saveQuiz(quiz q) {
+    public Quiz saveQuiz(Quiz q) {
         return quizdao.save(q);
     }
 

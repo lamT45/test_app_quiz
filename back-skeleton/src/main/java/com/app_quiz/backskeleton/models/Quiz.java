@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "quizzes")
-public class quiz {
+public class Quiz {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +18,12 @@ public class quiz {
 
     @ManyToOne
     @JoinColumn(name = "created_by_id")
-    private user createdBy;
+    private User createdBy;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
-    private List<question> questions;
+    private List<Question> questions;
 
-    public quiz() {}
+    public Quiz() {}
 
     // ✅ Getters et Setters
     public Long getId() { return id; }
@@ -44,9 +44,9 @@ public class quiz {
     //public int getTotalScore() { return totalScore; }
     //public void setTotalScore(int totalScore) { this.totalScore = totalScore; }
 
-    public user getCreatedBy() { return createdBy; }
-    public void setCreatedBy(user createdBy) { this.createdBy = createdBy; }
+    public User getCreatedBy() { return createdBy; }
+    public void setCreatedBy(User createdBy) { this.createdBy = createdBy; }
 
-    public List<question> getQuestions() { return questions; }
-    public void setQuestions(List<question> questions) { this.questions = questions; }
+    public List<Question> getQuestions() { return questions; }
+    public void setQuestions(List<Question> questions) { this.questions = questions; }
 }

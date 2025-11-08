@@ -1,39 +1,39 @@
 package com.app_quiz.backskeleton.services;
 
-import com.app_quiz.backskeleton.DAO.questiondao;
-import com.app_quiz.backskeleton.DAO.quizdao;
-import com.app_quiz.backskeleton.DAO.scoredao;
-import com.app_quiz.backskeleton.models.question;
-import com.app_quiz.backskeleton.models.quiz;
-import com.app_quiz.backskeleton.models.score;
-import com.app_quiz.backskeleton.models.user;
+import com.app_quiz.backskeleton.DAO.QuestionDao;
+import com.app_quiz.backskeleton.DAO.QuizDao;
+import com.app_quiz.backskeleton.DAO.ScoreDao;
+import com.app_quiz.backskeleton.models.Question;
+import com.app_quiz.backskeleton.models.Quiz;
+import com.app_quiz.backskeleton.models.Score;
+import com.app_quiz.backskeleton.models.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class scoreservice {
+public class ScoreService {
 
-    private final scoredao scoredao;
-    private final quizdao quizdao;
-    private final questiondao questiondao;
+    private final ScoreDao scoredao;
+    private final QuizDao quizdao;
+    private final QuestionDao questiondao;
 
-    public scoreservice(scoredao scoredao, quizdao quizdao, questiondao questiondao) {
+    public ScoreService(ScoreDao scoredao, QuizDao quizdao, QuestionDao questiondao) {
         this.scoredao = scoredao;
         this.quizdao = quizdao;
         this.questiondao = questiondao;
     }
 
-    public List<score> findAllScores() {
+    public List<Score> findAllScores() {
         return scoredao.findAll();
     }
 
-    public Optional<score> findScoreById(Long id) {
+    public Optional<Score> findScoreById(Long id) {
         return scoredao.findById(id);
     }
 
-    public score saveScore(score s) {
+    public Score saveScore(Score s) {
         return scoredao.save(s);
     }
 
@@ -42,25 +42,25 @@ public class scoreservice {
     }
 
     // 🔹 Méthodes manquantes
-    public List<score> findScoresByUserId(Long userId) {
+    public List<Score> findScoresByUserId(Long userId) {
         return scoredao.findByUserId(userId);
     }
 
-    public List<score> findScoresByQuizId(Long quizId) {
+    public List<Score> findScoresByQuizId(Long quizId) {
         return scoredao.findByQuizId(quizId);
     }
 
     /**
      * Calcul automatique du score total et du temps total pour un quiz
      */
-    public score calculateAndSaveScore(user u, quiz qz, List<String> userAnswers, List<Integer> timesTaken) {
-        List<question> questions = qz.getQuestions();
+    public Score calculateAndSaveScore(User u, Quiz qz, List<String> userAnswers, List<Integer> timesTaken) {
+        List<Question> questions = qz.getQuestions();
 
         double totalScore = 0;
         int totalTime = 0;
 
         for (int i = 0; i < questions.size(); i++) {
-            question q = questions.get(i);
+            Question q = questions.get(i);
             String userAnswer = userAnswers.get(i);
             int time = timesTaken.get(i);
 
@@ -77,7 +77,7 @@ public class scoreservice {
             totalTime += time;
         }
 
-        score finalScore = new score();
+        Score finalScore = new Score();
         finalScore.setUser(u);
         finalScore.setQuiz(qz);
         finalScore.setScore_obtained((int) totalScore);

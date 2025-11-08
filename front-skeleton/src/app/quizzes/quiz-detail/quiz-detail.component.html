@@ -1,7 +1,7 @@
 <div class="quiz-detail" *ngIf="!loading && quiz; else loadingTpl">
   <h2>{{ quiz.title }}</h2>
   <p>{{ quiz.description }}</p>
-  <p>⏱ Temps/question : {{ quiz.timeLimitPerQuestion}} secondes</p>
+  <p>⏱ Temps/question : {{ quiz.duration}} secondes</p>
   <p>👤 Créé par : {{ quiz.createdBy }}</p>
 
   <button (click)="startQuiz()">🚀 Commencer le quiz</button>

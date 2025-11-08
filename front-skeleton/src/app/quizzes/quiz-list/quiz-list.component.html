@@ -10,11 +10,12 @@
       <h3>{{ q.title }}</h3>
       <p>{{ q.description }}</p>
       <div class="info">
-        <span>🕒 {{ q.duration }} min</span>
+        <span>🕒 {{ q.duration}} min</span>
         <span>👥 {{ q.players }}</span>
         <span>⭐ {{ q.rating }}</span>
       </div>
-      <button routerLink="/quiz/{{q.id}}">Jouer ({{ q.questions.length }} questions)</button>
-    </div>
+      <button [routerLink]="['/quiz', q.id]">
+        Jouer ({{ q.questions.length }} questions)
+      </button>    </div>
   </div>
 </section>

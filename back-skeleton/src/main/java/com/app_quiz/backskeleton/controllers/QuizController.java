@@ -1,7 +1,7 @@
 package com.app_quiz.backskeleton.controllers;
 
-import com.app_quiz.backskeleton.models.quiz;
-import com.app_quiz.backskeleton.services.quizservice;
+import com.app_quiz.backskeleton.models.Quiz;
+import com.app_quiz.backskeleton.services.QuizService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,29 +11,29 @@ import java.util.Optional;
 @RequestMapping("/api/quizzes")
 public class QuizController {
 
-    private final quizservice quizService;
+    private final QuizService quizService;
 
-    public QuizController(quizservice quizService) {
+    public QuizController(QuizService quizService) {
         this.quizService = quizService;
     }
 
     @GetMapping
-    public List<quiz> getAllQuizzes() {
+    public List<Quiz> getAllQuizzes() {
         return quizService.findAllQuizzes();
     }
 
     @GetMapping("/{id}")
-    public Optional<quiz> getQuizById(@PathVariable Long id) {
+    public Optional<Quiz> getQuizById(@PathVariable Long id) {
         return quizService.findQuizById(id);
     }
 
     @PostMapping
-    public quiz createQuiz(@RequestBody quiz q) {
+    public Quiz createQuiz(@RequestBody Quiz q) {
         return quizService.saveQuiz(q);
     }
 
     @PutMapping("/{id}")
-    public quiz updateQuiz(@PathVariable Long id, @RequestBody quiz q) {
+    public Quiz updateQuiz(@PathVariable Long id, @RequestBody Quiz q) {
         q.setId(id); // ✅ Assure-toi que la méthode setId existe dans le modèle quiz
         return quizService.saveQuiz(q);
     }

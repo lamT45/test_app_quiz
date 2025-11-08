@@ -10,7 +10,7 @@ export class HomeComponent implements OnInit {
   totalQuizzes = 0;
   totalUsers = 0;
 
-  private apiUrl = 'http://localhost:8080/api';
+  private apiUrl = 'http://localhost:8082/api';
 
   constructor(private http: HttpClient) {}
 

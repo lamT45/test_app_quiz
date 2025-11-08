@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "scores")
-public class score {
+public class Score {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,13 +16,13 @@ public class score {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private user user;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "quiz_id")
-    private quiz quiz;
+    private Quiz quiz;
 
-    public score() {}
+    public Score() {}
 
     // ✅ Getters et Setters
     public Long getId() {
@@ -49,19 +49,19 @@ public class score {
         this.time_taken_seconds = time_taken_seconds;
     }
 
-    public user getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(user user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public quiz getQuiz() {
+    public Quiz getQuiz() {
         return quiz;
     }
 
-    public void setQuiz(quiz quiz) {
+    public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
     }
 }

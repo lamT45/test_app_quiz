@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users")
-public class user {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,13 +21,13 @@ public class user {
 
     @OneToMany(mappedBy = "createdBy")
     @JsonIgnore
-    private List<quiz> quizzes;
+    private List<Quiz> quizzes;
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<score> scores;
+    private List<Score> scores;
 
-    public user() {}
+    public User() {}
 
     public void setId(Long id) {
         this.id = id;
@@ -52,9 +52,9 @@ public class user {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public List<quiz> getQuizzes() { return quizzes; }
-    public void setQuizzes(List<quiz> quizzes) { this.quizzes = quizzes; }
+    public List<Quiz> getQuizzes() { return quizzes; }
+    public void setQuizzes(List<Quiz> quizzes) { this.quizzes = quizzes; }
 
-    public List<score> getScores() { return scores; }
-    public void setScores(List<score> scores) { this.scores = scores; }
+    public List<Score> getScores() { return scores; }
+    public void setScores(List<Score> scores) { this.scores = scores; }
 }

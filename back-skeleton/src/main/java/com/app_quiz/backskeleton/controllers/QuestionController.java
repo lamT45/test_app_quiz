@@ -1,7 +1,7 @@
 package com.app_quiz.backskeleton.controllers;
 
-import com.app_quiz.backskeleton.models.question;
-import com.app_quiz.backskeleton.services.questionservice;
+import com.app_quiz.backskeleton.models.Question;
+import com.app_quiz.backskeleton.services.QuestionService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,29 +11,29 @@ import java.util.Optional;
 @RequestMapping("/api/questions")
 public class QuestionController {
 
-    private final questionservice questionService;
+    private final QuestionService questionService;
 
-    public QuestionController(questionservice questionService) {
+    public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
     }
 
     @GetMapping
-    public List<question> getAllQuestions() {
+    public List<Question> getAllQuestions() {
         return questionService.findAllQuestions();
     }
 
     @GetMapping("/{id}")
-    public Optional<question> getQuestionById(@PathVariable Long id) {
+    public Optional<Question> getQuestionById(@PathVariable Long id) {
         return questionService.findQuestionById(id);
     }
 
     @PostMapping
-    public question createQuestion(@RequestBody question q) {
+    public Question createQuestion(@RequestBody Question q) {
         return questionService.saveQuestion(q);
     }
 
     @PutMapping("/{id}")
-    public question updateQuestion(@PathVariable Long id, @RequestBody question q) {
+    public Question updateQuestion(@PathVariable Long id, @RequestBody Question q) {
         q.setId(id); // ✅ Assurez-vous que setId existe dans le modèle
         return questionService.saveQuestion(q);
     }

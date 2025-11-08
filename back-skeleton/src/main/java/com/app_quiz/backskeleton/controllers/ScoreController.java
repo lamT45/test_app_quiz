@@ -1,7 +1,7 @@
 package com.app_quiz.backskeleton.controllers;
 
-import com.app_quiz.backskeleton.models.score;
-import com.app_quiz.backskeleton.services.scoreservice;
+import com.app_quiz.backskeleton.models.Score;
+import com.app_quiz.backskeleton.services.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,32 +10,32 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/scores")
-public class scorecontroller {
+public class ScoreController {
 
     @Autowired
-    private scoreservice scoreservice;
+    private ScoreService scoreservice;
 
     // 1️⃣ Récupérer tous les scores
     @GetMapping
-    public List<score> getAllScores() {
+    public List<Score> getAllScores() {
         return scoreservice.findAllScores();
     }
 
     // 2️⃣ Récupérer un score par son ID
     @GetMapping("/{id}")
-    public Optional<score> getScoreById(@PathVariable Long id) {
+    public Optional<Score> getScoreById(@PathVariable Long id) {
         return scoreservice.findScoreById(id);
     }
 
     // 3️⃣ Créer un score
     @PostMapping
-    public score createScore(@RequestBody score s) {
+    public Score createScore(@RequestBody Score s) {
         return scoreservice.saveScore(s);
     }
 
     // 4️⃣ Mettre à jour un score
     @PutMapping("/{id}")
-    public score updateScore(@PathVariable Long id, @RequestBody score s) {
+    public Score updateScore(@PathVariable Long id, @RequestBody Score s) {
         s.setId(id);  // utile pour JPA afin de mettre à jour le bon enregistrement
         return scoreservice.saveScore(s);
     }
@@ -48,13 +48,13 @@ public class scorecontroller {
 
     // 6️⃣ Récupérer les scores d’un utilisateur
     @GetMapping("/user/{userId}")
-    public List<score> getScoresByUser(@PathVariable Long userId) {
+    public List<Score> getScoresByUser(@PathVariable Long userId) {
         return scoreservice.findScoresByUserId(userId);
     }
 
     // 7️⃣ Récupérer les scores d’un quiz
     @GetMapping("/quiz/{quizId}")
-    public List<score> getScoresByQuiz(@PathVariable Long quizId) {
+    public List<Score> getScoresByQuiz(@PathVariable Long quizId) {
         return scoreservice.findScoresByQuizId(quizId);
     }
 }

@@ -1,14 +1,27 @@
 <section class="hero">
-  <div class="blur-circle-right "></div>
+  <div class="blur-circle-right"></div>
   <div class="hero-content">
-  <h1><div class="m1">Testez vos</div><span> connaissances</span></h1>
-  <p>Des milliers de questions pour défier votre cerveau. Jouez<br> solo ou défiez vos amis !</p>
-  <div class="buttons">
-    <button class="primary" routerLink="/quiz">Commencer maintenant</button>
-    <button class="secondary" routerLink="/classement">Voir le classement</button>
+    <h1><div class="m1">Testez vos</div><span> connaissances</span></h1>
+    <p>Des milliers de questions pour défier votre cerveau. Jouez<br> solo ou défiez vos amis !</p>
+    <div class="buttons">
+      <button class="primary" routerLink="/quiz">Commencer maintenant</button>
+      <button class="secondary" routerLink="/classement">Voir le classement</button>
+    </div>
   </div>
+  <!-- 🌊 WAVE intégrée dans le hero -->
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
+      <path
+        fill="#f6f3ff"
+        fill-opacity="1"
+        d="M0,192L60,176C120,160,240,128,360,144C480,160,600,224,720,240C840,256,960,224,1080,186.7C1200,149,1320,107,1380,85.3L1440,64L1440,320L0,320Z"
+      ></path>
+    </svg>
   </div>
 </section>
+
+
+
 
 <section class="stats">
   <div class="stat-card">
@@ -24,12 +37,33 @@
 <section class="why">
   <h2>Pourquoi QuizMaster ?</h2>
   <div class="cards">
-    <div class="card">Des quiz variés et amusants 🎯</div>
-    <div class="card">Mesurez-vous à vos amis 🧠</div>
-    <div class="card">Progressez à votre rythme 🚀</div>
+    <div class="card">
+      <div class="icon"><i class="fa-solid fa-brain"></i></div>
+      <h3>Quiz Variés</h3>
+      <p>Des centaines de questions dans toutes les catégories</p>
+    </div>
+
+    <div class="card">
+      <div class="icon"><i class="fa-solid fa-bolt"></i></div>
+      <h3>Réponses Rapides</h3>
+      <p>Testez votre vitesse et vos connaissances</p>
+    </div>
+
+    <div class="card">
+      <div class="icon"><i class="fa-solid fa-trophy"></i></div>
+      <h3>Classements</h3>
+      <p>Comparez vos scores et grimpez dans le leaderboard</p>
+    </div>
+
+    <div class="card">
+      <div class="icon"><i class="fa-solid fa-users"></i></div>
+      <h3>Multijoueur</h3>
+      <p>Défiez vos amis en temps réel</p>
+    </div>
   </div>
 </section>
-<section class="hero">
+
+<section class="hero second">
   <h2>Prêt à relever le défi ?</h2>
   <p>Des milliers de questions pour défier votre cerveau. Jouez solo ou défiez vos amis !</p>
   <div class="buttons">
@@ -37,7 +71,3 @@
     <button class="secondary" routerLink="/classement">Voir le classement</button>
   </div>
 </section>
-
-
-
-

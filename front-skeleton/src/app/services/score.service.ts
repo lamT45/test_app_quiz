@@ -5,7 +5,7 @@ import { Score } from '../models/score.model';
 
 @Injectable({ providedIn: 'root' })
 export class ScoreService {
-  private apiUrl = 'http://localhost:5000/api/scores';
+  private apiUrl = 'http://localhost:8082/api/scores';
 
   constructor(private http: HttpClient) {}
 

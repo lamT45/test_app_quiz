@@ -33,7 +33,7 @@ export class QuizService {
         level: 'Facile',
         players: 1234,
         questions: Array(15),
-        timeLimitPerQuestion: 45
+        duration: 45
       },
       {
         id: 2,
@@ -43,7 +43,7 @@ export class QuizService {
         level: 'Moyen',
         players: 856,
         questions: Array(20),
-        timeLimitPerQuestion: 30
+        duration: 30
       },
       {
         id: 3,
@@ -53,7 +53,7 @@ export class QuizService {
         level: 'Difficile',
         players: 543,
         questions: Array(25),
-        timeLimitPerQuestion: 15
+        duration: 15
       },
       {
         id: 4,
@@ -63,7 +63,7 @@ export class QuizService {
         level: 'Moyen',
         players: 978,
         questions: Array(18),
-        timeLimitPerQuestion: 30
+        duration: 30
       },
       {
         id: 5,
@@ -73,7 +73,7 @@ export class QuizService {
         level: 'Facile',
         players: 1567,
         questions: Array(22),
-        timeLimitPerQuestion: 45
+        duration: 45
       },
       {
         id: 6,
@@ -83,7 +83,7 @@ export class QuizService {
         level: 'Moyen',
         players: 876,
         questions: Array(20),
-        timeLimitPerQuestion: 30
+        duration: 30
       }
     ];
     return of(quizzes);

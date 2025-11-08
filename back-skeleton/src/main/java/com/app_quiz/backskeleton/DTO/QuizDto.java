@@ -2,7 +2,7 @@ package com.app_quiz.backskeleton.DTO;
 
 import java.util.List;
 
-public class quizdto {
+public class QuizDto {
     private Long id;
     private String title;
     private String subject;
@@ -10,7 +10,7 @@ public class quizdto {
     private Long createdById;
     private List<Long> questionIds;
 
-    public quizdto() {}
+    public QuizDto() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

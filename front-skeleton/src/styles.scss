@@ -1,59 +1,83 @@
 @import "@fontsource/poppins";
 
 :root {
+  /* 🎨 Couleurs principales */
+  --lavender-light: hsl(266, 100%, 95%);
+  --lavender: hsl(266, 100%, 90%);
+  --lavender-deep: hsl(266, 80%, 80%);
+  --peach: hsl(25, 100%, 75%);
   --primary: linear-gradient(135deg, hsl(262 83% 58%), hsl(280 90% 65%));
   --secondary: linear-gradient(135deg, hsl(36 100% 63%), hsl(20 100% 60%));
   --light-bg: #f6f2ff;
   --text-dark: #333;
   --text-light: #666;
+  --white: #fff;
 }
 
+/* 🧠 Corps général */
 body {
-  font-family: 'Poppins', sans-serif;
-  background-color: #fff;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--white);
   margin: 0;
   padding: 0;
   color: var(--text-dark);
+  line-height: 1.6;
 }
 
+/* 🖋️ Titres */
 h1, h2, h3, h4, h5 {
   font-weight: 700;
-  color: var(--primary);
+  color: var(--text-dark);
+  margin: 0;
 }
 
+/* 💫 Boutons génériques */
 button {
   font-family: inherit;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
 }
 
 button:hover {
-  opacity: 0.9;
-  transform: scale(1.02);
+  opacity: 0.95;
+  transform: scale(1.03);
 }
 
+/* 🔗 Liens */
 a {
   text-decoration: none;
+  color: inherit;
 }
 
+a:hover {
+  color: hsl(262, 83%, 58%);
+}
+
+/* 📦 Conteneur global */
 .container {
   max-width: 1100px;
   margin: 0 auto;
   padding: 20px;
 }
 
+/* Utilitaires */
 .text-center { text-align: center; }
 .mt-2 { margin-top: 20px; }
 .mt-4 { margin-top: 40px; }
-
 .active {
-  color: var(--primary);
+  background: var(--primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: bold;
 }
 
+/* 🎚️ Scrollbar personnalisée */
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: var(--primary);
+  background: linear-gradient(180deg, hsl(262 83% 58%), hsl(280 90% 65%));
   border-radius: 10px;
 }

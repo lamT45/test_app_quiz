@@ -5,7 +5,7 @@ import { Quiz } from '../../models/quiz.model';
 @Component({
   selector: 'app-quiz-list',
   templateUrl: './quiz-list.component.html',
-  styleUrls: ['./quiz-list.component.css']
+  styleUrls: ['./quiz-list.component.scss']
 })
 export class QuizListComponent implements OnInit {
   quizzes: Quiz[] = [];

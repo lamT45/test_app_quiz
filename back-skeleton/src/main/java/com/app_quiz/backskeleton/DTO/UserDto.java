@@ -3,7 +3,7 @@ package com.app_quiz.backskeleton.DTO;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class userdto {
+public class UserDto {
     private Long id;
     private String username;
     private String email;
@@ -12,7 +12,7 @@ public class userdto {
     private List<Long> quizIds; // Les quizzes créés par l'utilisateur
     private List<Long> scoreIds; // Les scores obtenus
 
-    public userdto() {}
+    public UserDto() {}
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
