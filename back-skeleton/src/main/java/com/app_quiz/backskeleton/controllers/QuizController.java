@@ -3,6 +3,9 @@ package com.app_quiz.backskeleton.controllers;
 import com.app_quiz.backskeleton.models.Quiz;
 import com.app_quiz.backskeleton.services.QuizService;
 import org.springframework.web.bind.annotation.*;
+import com.app_quiz.backskeleton.DTO.QuizDto;
+import org.springframework.http.ResponseEntity;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +26,27 @@ public class QuizController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Quiz> getQuizById(@PathVariable Long id) {
-        return quizService.findQuizById(id);
+    public ResponseEntity<QuizDto> getQuizById(@PathVariable Long id) {
+        Optional<Quiz> quizOpt = quizService.findQuizById(id);
+        if (quizOpt.isEmpty()) return ResponseEntity.notFound().build();
+
+        Quiz quiz = quizOpt.get();
+        QuizDto dto = new QuizDto();
+        dto.setId(quiz.getId());
+        dto.setTitle(quiz.getTitle());
+        dto.setCategory(quiz.getCategory());
+        dto.setDescription(quiz.getDescription());
+        dto.setLevel(quiz.getLevel());
+        dto.setPlayers(quiz.getPlayers());
+        dto.setDuration(quiz.getDuration());
+        dto.setCreatedById(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getId() : null);
+        dto.setQuestionIds(
+                quiz.getQuestions() != null
+                        ? quiz.getQuestions().stream().map(q -> q.getId()).toList()
+                        : null
+        );
+
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
@@ -43,3 +65,4 @@ public class QuizController {
         quizService.deleteQuiz(id);
     }
 }
+

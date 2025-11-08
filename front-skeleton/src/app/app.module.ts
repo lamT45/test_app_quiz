@@ -41,14 +41,14 @@ import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
+    LoginComponent,
+    RegisterComponent,
     AppComponent,
     NavbarComponent,
     HomeComponent,
     QuizListComponent,
     QuizDetailComponent,
-    QuizPlayComponent,
-    LoginComponent,
-    RegisterComponent
+    QuizPlayComponent
   ],
   imports: [
     BrowserModule,

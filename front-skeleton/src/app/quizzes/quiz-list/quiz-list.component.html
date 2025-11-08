@@ -1,21 +1,37 @@
-<section class="quiz-list">
-  <h2>Tous les Quiz</h2>
-  <p>Choisissez votre quiz et commencez à jouer !</p>
+<div class="quiz-list-container">
+  <h1 class="page-title">Tous les Quiz</h1>
+  <p class="page-subtitle">Choisissez votre quiz et commencez à jouer !</p>
+
   <div class="quiz-grid">
-    <div class="quiz-card" *ngFor="let q of quizzes">
-      <div class="header">
-        <span class="category">{{ q.category }}</span>
-        <span class="level {{ q.level | lowercase }}">{{ q.level }}</span>
+    <div *ngFor="let quiz of quizzes" class="quiz-card" [ngStyle]="{'border-top-color': getCategoryColor(quiz.category)}">
+
+      <!-- Catégorie + Niveau -->
+      <div class="quiz-badges">
+        <span class="category-badge" [ngStyle]="{'background-color': getCategoryColor(quiz.category)}">
+          {{ quiz.category }}
+        </span>
+        <span class="level-badge" [ngStyle]="{'background-color': getLevelColor(quiz.level)}">
+          {{ quiz.level }}
+        </span>
       </div>
-      <h3>{{ q.title }}</h3>
-      <p>{{ q.description }}</p>
-      <div class="info">
-        <span>🕒 {{ q.duration}} min</span>
-        <span>👥 {{ q.players }}</span>
-        <span>⭐ {{ q.rating }}</span>
+
+      <!-- Titre et description -->
+      <h2 class="quiz-title">{{ quiz.title }}</h2>
+      <p class="quiz-desc">{{ quiz.description }}</p>
+
+      <!-- Infos -->
+      <div class="quiz-info">
+        <span>⏱️ {{ quiz.duration }} min</span>
+        <span>👥 {{ quiz.players }}</span>
+        <span>⭐ {{ quiz.rating || 4.7 }}</span>
       </div>
-      <button [routerLink]="['/quiz', q.id]">
-        Jouer ({{ q.questions.length }} questions)
-      </button>    </div>
+
+      <!-- Bouton -->
+      <button class="play-btn" [routerLink]="['/quiz', quiz.id]">
+        Jouer ({{ quiz.questions.length }} questions)
+      </button>
+    </div>
   </div>
-</section>
+</div>
+
+

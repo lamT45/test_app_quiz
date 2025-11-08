@@ -1,5 +1,6 @@
 package com.app_quiz.backskeleton.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -14,23 +15,23 @@ public class Quiz {
     private String title;
     private String category;
     private String description;
-    //private int totalScore;
+    private String level;      // ✅ niveau : Facile, Moyen, Difficile
+    private int players;       // ✅ nombre de joueurs
+    private int duration;      // ✅ durée du quiz (minutes)
 
     @ManyToOne
     @JoinColumn(name = "created_by_id")
     private User createdBy;
 
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Question> questions;
 
     public Quiz() {}
 
-    // ✅ Getters et Setters
+    // --- Getters & Setters ---
     public Long getId() { return id; }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setId(Long id) { this.id = id; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -41,8 +42,14 @@ public class Quiz {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    //public int getTotalScore() { return totalScore; }
-    //public void setTotalScore(int totalScore) { this.totalScore = totalScore; }
+    public String getLevel() { return level; }
+    public void setLevel(String level) { this.level = level; }
+
+    public int getPlayers() { return players; }
+    public void setPlayers(int players) { this.players = players; }
+
+    public int getDuration() { return duration; }
+    public void setDuration(int duration) { this.duration = duration; }
 
     public User getCreatedBy() { return createdBy; }
     public void setCreatedBy(User createdBy) { this.createdBy = createdBy; }

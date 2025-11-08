@@ -29,4 +29,8 @@ public class QuestionService {
     public void deleteQuestion(Long id) {
         questiondao.deleteById(id);
     }
+    public List<Question> findByQuizId(Long quizId) {
+        return questiondao.findByQuizId(quizId);
+    }
+
 }

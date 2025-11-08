@@ -1,18 +1,30 @@
-<section class="leaderboard">
-  <h2>Classement Général</h2>
-  <p>Les meilleurs joueurs de QuizMaster</p>
+<div class="leaderboard-container">
+  <h2 class="title">🏆 Classement Général</h2>
 
-  <div class="top3">
-    <div *ngFor="let player of topPlayers" class="player-card">
-      <h3>{{ player.name }}</h3>
-      <p>{{ player.score }} pts</p>
-      <small>{{ player.quizzes }} quiz complétés</small>
+  <!-- Chargement ou erreur -->
+  <div *ngIf="loading" class="loading">Chargement...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <!-- PODIUM -->
+  <div *ngIf="!loading && !errorMessage" class="podium">
+    <div
+      *ngFor="let player of topPlayers; let i = index"
+      class="podium-slot"
+      [ngClass]="'rank-' + (i + 1)"
+    >
+      <div class="medal">{{ i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉' }}</div>
+      <div class="username">{{ player.username }}</div>
+      <div class="score">{{ player.totalScore }} pts</div>
     </div>
   </div>
 
-  <div class="others">
-    <div *ngFor="let p of others; let i = index">
-      <span>#{{ i + 4 }}</span> {{ p.name }} — {{ p.score }} pts
+  <!-- AUTRES JOUEURS -->
+  <div class="others" *ngIf="others.length > 0">
+    <h3>Autres joueurs</h3>
+    <div *ngFor="let p of others; let i = index" class="player-row">
+      <span class="rank">#{{ i + 4 }}</span>
+      <span class="username">{{ p.username }}</span>
+      <span class="score">{{ p.totalScore }} pts</span>
     </div>
   </div>
-</section>
+</div>

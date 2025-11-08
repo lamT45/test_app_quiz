@@ -1,10 +1,9 @@
--- Supprimer les tables si elles existent déjà (ordre inverse des dépendances)
-DROP TABLE IF EXISTS scores;
-DROP TABLE IF EXISTS questions;
-DROP TABLE IF EXISTS quizzes;
-DROP TABLE IF EXISTS users;
+-- 1_TABLES.sql
+DROP TABLE IF EXISTS scores CASCADE;
+DROP TABLE IF EXISTS questions CASCADE;
+DROP TABLE IF EXISTS quizzes CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
 
--- TABLE USERS
 CREATE TABLE users (
                        id SERIAL PRIMARY KEY,
                        username VARCHAR(100) NOT NULL UNIQUE,
@@ -14,38 +13,41 @@ CREATE TABLE users (
                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- TABLE QUIZZES
 CREATE TABLE quizzes (
                          id SERIAL PRIMARY KEY,
                          title VARCHAR(255) NOT NULL,
+                         category VARCHAR(100),
                          description TEXT,
-                         time_limit_per_question_seconds INT,
-                         created_by INT,
+                         level VARCHAR(50),
+                         players INT DEFAULT 0,
+                         duration INT DEFAULT 0,
+                         created_by_id INT,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                         leaderboard JSONB,
-                         FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
+                         FOREIGN KEY (created_by_id) REFERENCES users(id) ON DELETE SET NULL
 );
 
--- TABLE QUESTIONS
+
 CREATE TABLE questions (
                            id SERIAL PRIMARY KEY,
-                           quiz_id INT NOT NULL,
-                           text TEXT NOT NULL,
-                           type VARCHAR(50) NOT NULL,
-                           points INT DEFAULT 1,
-                           choices JSONB,
+                           question_text VARCHAR(255),
+                           choice1 VARCHAR(255),
+                           choice2 VARCHAR(255),
+                           choice3 VARCHAR(255),
+                           choice4 VARCHAR(255),
                            correct_answer VARCHAR(255),
-                           image_url VARCHAR(255),
-                           FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
+                           points INT,
+                           type VARCHAR(100),
+                           true_false BOOLEAN DEFAULT FALSE,
+                           quiz_id INT,
+                           FOREIGN KEY (quiz_id) REFERENCES quizzes(id)
 );
 
--- TABLE SCORES
 CREATE TABLE scores (
                         id SERIAL PRIMARY KEY,
                         user_id INT NOT NULL,
                         quiz_id INT NOT NULL,
-                        score FLOAT DEFAULT 0,
-                        time_taken INT,
+                        score_obtained INT DEFAULT 0,
+                        time_taken_seconds INT,
                         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
                         FOREIGN KEY (quiz_id) REFERENCES quizzes(id) ON DELETE CASCADE
 );

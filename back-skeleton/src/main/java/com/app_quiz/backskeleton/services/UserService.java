@@ -22,6 +22,10 @@ public class UserService {
         return userdao.findById(id);
     }
 
+    public Optional<User> findByEmail(String email) {
+        return userdao.findByEmail(email);
+    }
+
     public User saveUser(User u) {
         return userdao.save(u);
     }

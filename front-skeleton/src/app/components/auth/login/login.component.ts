@@ -19,7 +19,7 @@ export class LoginComponent {
       next: (res: any) => {
         localStorage.setItem('token', res.token);
         this.authService.setCurrentUser(res.user);
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         this.errorMessage = err.error.message || 'Email ou mot de passe invalide';
