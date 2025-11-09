@@ -16,8 +16,10 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private String role; // "ADMIN" ou "USER"
+    @Column(nullable = false)
+    private String role = "PLAYER"; //  Valeur par défaut automatique
     private LocalDateTime createdAt = LocalDateTime.now();
+
 
     @OneToMany(mappedBy = "createdBy")
     @JsonIgnore

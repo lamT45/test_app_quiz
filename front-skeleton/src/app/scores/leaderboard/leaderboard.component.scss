@@ -1,6 +1,6 @@
 .leaderboard-container {
   text-align: center;
-  max-width: 600px;
+  max-width: 700px;
   margin: 2rem auto;
   background: linear-gradient(135deg, #ede6f9, #f8f5ff);
   padding: 2rem;
@@ -11,65 +11,112 @@
 
 .title {
   color: #5e2ca5;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 700;
 }
 
-.loading, .error {
-  font-style: italic;
-  color: #999;
-}
-
+/* ================== PODIUM ================== */
 .podium {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 1rem;
+  gap: 2rem;
   margin-bottom: 2rem;
+  position: relative;
 }
 
+/* Bloc commun podium */
 .podium-slot {
   background: white;
   border-radius: 1rem;
   padding: 1rem;
-  width: 120px;
-  transition: transform 0.3s ease;
+  width: 130px;
+  height: 150px;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards;
+  position: relative;
 }
 
 .podium-slot:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
 }
 
+/* 🥈 Deuxième place */
+.podium-slot.rank-2 {
+  order: 1;
+  height: 140px;
+  border: 3px solid silver;
+  animation-delay: 0.4s;
+  animation-name: riseUp;
+}
+
+/* 🥇 Première place — style doré élégant */
 .podium-slot.rank-1 {
+  order: 2;
   height: 180px;
   border: 3px solid gold;
+  animation-delay: 0.2s;
+  animation-name: bounceSmooth;
+  z-index: 2;
+  box-shadow:
+    0 0 15px rgba(255, 215, 0, 0.4),
+    0 0 40px rgba(255, 215, 0, 0.25);
+  background: linear-gradient(
+      180deg,
+      #fffef7 0%,
+      #fffbea 40%,
+      #ffffff 100%
+  );
 }
 
-.podium-slot.rank-2 {
-  height: 160px;
-  border: 3px solid silver;
+/* 👑 couronne minimaliste stylisée */
+.podium-slot.rank-1::after {
+  content: "👑";
+  position: absolute;
+  top: -48px;
+  font-size: 2.2rem;
+  color: #ffcc00;
+  text-shadow:
+    0 0 6px rgba(255, 215, 0, 0.8),
+    0 0 12px rgba(255, 180, 0, 0.5);
+  animation: crownFloat 2.5s ease-in-out infinite;
+  font-weight: bold;
 }
 
+/* 🥉 Troisième place */
 .podium-slot.rank-3 {
-  height: 140px;
-  border: 3px solid #cd7f32; /* bronze */
+  order: 3;
+  height: 130px;
+  border: 3px solid #cd7f32;
+  animation-delay: 0.6s;
+  animation-name: riseUp;
 }
 
+/* ================== TEXTES ================== */
 .medal {
   font-size: 2rem;
 }
 
 .username {
-  font-weight: 600;
+  font-weight: 700;
   color: #333;
   margin-top: 0.5rem;
 }
 
 .score {
   font-size: 0.9rem;
-  color: #666;
+  color: #555;
+  margin-top: 0.3rem;
 }
 
+/* ================== AUTRES JOUEURS ================== */
 .others {
   text-align: left;
   margin-top: 1.5rem;
@@ -77,16 +124,17 @@
 
 .others h3 {
   color: #5e2ca5;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+  font-weight: 700;
 }
 
 .player-row {
   display: flex;
   justify-content: space-between;
   background: #fff;
-  padding: 0.5rem 1rem;
-  margin: 0.3rem 0;
-  border-radius: 0.5rem;
+  padding: 0.8rem 1rem;
+  margin: 0.4rem 0;
+  border-radius: 0.7rem;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   transition: background 0.2s ease;
 }
@@ -99,16 +147,56 @@
   font-weight: bold;
   color: #5e2ca5;
 }
-.podium-slot {
-  opacity: 0;
-  animation: fadeUp 0.6s ease forwards;
+
+/* ================== ANIMATIONS ================== */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.podium-slot.rank-1 { animation-delay: 0.1s; }
-.podium-slot.rank-2 { animation-delay: 0.2s; }
-.podium-slot.rank-3 { animation-delay: 0.3s; }
+@keyframes bounceSmooth {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+  70% {
+    transform: translateY(4px);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes riseUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes crownFloat {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }

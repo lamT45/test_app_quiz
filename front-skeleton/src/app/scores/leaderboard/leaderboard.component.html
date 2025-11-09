@@ -1,7 +1,6 @@
 <div class="leaderboard-container">
   <h2 class="title">🏆 Classement Général</h2>
 
-  <!-- Chargement ou erreur -->
   <div *ngIf="loading" class="loading">Chargement...</div>
   <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
@@ -14,7 +13,7 @@
     >
       <div class="medal">{{ i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉' }}</div>
       <div class="username">{{ player.username }}</div>
-      <div class="score">{{ player.totalScore }} pts</div>
+      <div class="score">{{ player.score }} pts</div>
     </div>
   </div>
 
@@ -24,7 +23,7 @@
     <div *ngFor="let p of others; let i = index" class="player-row">
       <span class="rank">#{{ i + 4 }}</span>
       <span class="username">{{ p.username }}</span>
-      <span class="score">{{ p.totalScore }} pts</span>
+      <span class="score">{{ p.score }} pts</span>
     </div>
   </div>
 </div>

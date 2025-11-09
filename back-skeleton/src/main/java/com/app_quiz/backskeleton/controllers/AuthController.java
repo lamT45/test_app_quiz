@@ -17,7 +17,7 @@ public class AuthController {
         this.userService = userService;
     }
 
-    // ✅ LOGIN
+    //  LOGIN
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginRequest) {
         String username = loginRequest.getUsername();
@@ -39,7 +39,7 @@ public class AuthController {
         );
     }
 
-    // ✅ REGISTER (corrigé)
+    //  REGISTER (corrigé)
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
@@ -48,7 +48,10 @@ public class AuthController {
             if (existingUser.isPresent()) {
                 return ResponseEntity.status(400).body("{\"message\":\"Email déjà utilisé\"}");
             }
-
+            // Si aucun rôle n’a été défini → le mettre par défaut
+            if (user.getRole() == null || user.getRole().isEmpty()) {
+                user.setRole("PLAYER");
+            }
             // Enregistre l'utilisateur
             userService.saveUser(user);
             return ResponseEntity.ok("{\"message\":\"Utilisateur enregistré avec succès\"}");
@@ -60,7 +63,7 @@ public class AuthController {
         }
     }
 
-    // ✅ Classe interne simple pour la réponse
+    //  Classe interne simple pour la réponse
     static class AuthResponse {
         public String token;
         public User user;

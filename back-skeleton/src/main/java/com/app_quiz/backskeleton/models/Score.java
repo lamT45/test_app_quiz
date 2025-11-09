@@ -24,7 +24,7 @@ public class Score {
 
     public Score() {}
 
-    // ✅ Getters et Setters
+    //  Getters et Setters
     public Long getId() {
         return id;
     }

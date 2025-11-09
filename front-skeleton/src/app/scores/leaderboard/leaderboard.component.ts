@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LeaderboardService, Player } from 'services/leaderboard.service';
+import { LeaderboardService, Player } from '../../services/leaderboard.service';
 
 @Component({
   selector: 'app-leaderboard',
@@ -20,12 +20,12 @@ export class LeaderboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.leaderboardService.getAll().subscribe({
-      next: (data: { top: Player[]; others: Player[] }) => {
+      next: (data) => {
         this.topPlayers = data.top;
         this.others = data.others;
         this.loading = false;
       },
-      error: (err: unknown) => {
+      error: (err) => {
         console.error('Erreur de chargement du classement :', err);
         this.errorMessage = 'Erreur de chargement du classement';
         this.loading = false;

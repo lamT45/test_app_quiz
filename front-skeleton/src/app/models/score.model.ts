@@ -1,7 +1,14 @@
 export interface Score {
   id?: number;
-  userId: number;
-  quizId: number;
-  score: number;
-  timeTaken: number;    // en secondes
+  score_obtained: number;
+  time_taken_seconds: number;
+  user?: {
+    id: number;
+    username?: string;
+    email?: string;
+  };
+  quiz?: {
+    id: number;
+    title?: string;
+  };
 }
