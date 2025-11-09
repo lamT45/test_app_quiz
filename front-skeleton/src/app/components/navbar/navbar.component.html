@@ -1,15 +1,42 @@
-<nav class="navbar">
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <!-- Logo -->
   <a routerLink="/" class="logo">
     <i class="fa-solid fa-trophy logo-icon"></i>
     <span class="logo-text">QuizMaster</span>
   </a>
 
-      <ul class="links" [class.open]="menuOpen">
-          <li><a routerLink="/" routerLinkActive="active" (click)="closeMenu()">Accueil</a></li>
-          <li><a routerLink="/quiz" routerLinkActive="active" (click)="closeMenu()">Quiz</a></li>
-          <li><a routerLink="/classement" routerLinkActive="active" (click)="closeMenu()">Classement</a></li>
-        </ul> <button class="start-btn" routerLink="/quiz">Commencer</button> <!-- Bouton menu hamburger pour mobile -->
-        <div class="menu-icon" (click)="toggleMenu()"> <span class="bar"></span> <span class="bar"></span> <span
-          class="bar"></span> </div>
-      </nav>
+  <!-- Liens centraux -->
+  <ul class="links" [class.open]="menuOpen">
+    <li><a routerLink="/home" routerLinkActive="active" (click)="closeMenu()">Accueil</a></li>
+    <li><a routerLink="/quiz" routerLinkActive="active" (click)="closeMenu()">Quiz</a></li>
+    <li><a routerLink="/classement" routerLinkActive="active" (click)="closeMenu()">Classement</a></li>
+  </ul>
 
+  <!-- Boutons à droite -->
+  <div class="auth-buttons" *ngIf="!isLoggedIn; else loggedInBlock">
+    <button class="login-btn" routerLink="/login" (click)="closeMenu()">
+      <i class="fa-solid fa-user"></i> Se connecter
+    </button>
+  </div>
+
+  <!-- Bloc affiché quand connecté -->
+  <ng-template #loggedInBlock>
+    <div class="user-inline">
+      <div class="avatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <span class="username">{{ user?.username || 'Utilisateur' }}</span>
+      <button class="logout-btn" (click)="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Déconnexion
+      </button>
+    </div>
+  </ng-template>
+
+
+  <!-- Menu mobile -->
+  <div class="menu-icon" (click)="toggleMenu()">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </div>
+</nav>

@@ -20,10 +20,10 @@ public class AuthController {
     // ✅ LOGIN
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User loginRequest) {
-        String email = loginRequest.getEmail();
+        String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 
-        Optional<User> userOpt = userService.findByEmail(email);
+        Optional<User> userOpt = userService.findByUsername(username);
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(401).body("{\"message\":\"Utilisateur non trouvé\"}");
         }
@@ -37,6 +37,27 @@ public class AuthController {
         return ResponseEntity.ok(
                 new AuthResponse("fake-jwt-token", user)
         );
+    }
+
+    // ✅ REGISTER (corrigé)
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+        try {
+            // Vérifie si l'email existe déjà
+            Optional<User> existingUser = userService.findByEmail(user.getEmail());
+            if (existingUser.isPresent()) {
+                return ResponseEntity.status(400).body("{\"message\":\"Email déjà utilisé\"}");
+            }
+
+            // Enregistre l'utilisateur
+            userService.saveUser(user);
+            return ResponseEntity.ok("{\"message\":\"Utilisateur enregistré avec succès\"}");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500)
+                    .body("{\"message\":\"Erreur lors de l'inscription : " + e.getMessage() + "\"}");
+        }
     }
 
     // ✅ Classe interne simple pour la réponse

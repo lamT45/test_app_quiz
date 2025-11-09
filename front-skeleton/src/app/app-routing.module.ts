@@ -10,22 +10,22 @@ import { QuizPlayComponent } from './quizzes/quiz-play/quiz-play.component';
 import { AuthGuard } from './guards/auth.guards';
 
 const routes: Routes = [
-  // ✅ Redirection par défaut vers /login
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  // ✅ Redirection par défaut vers /homr
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
 
   // ✅ Pages publiques
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'home', component: HomeComponent },
+  { path: 'classement', component: LeaderboardComponent },
+  { path: 'quiz', component: QuizListComponent },
+  { path: 'quiz/:id', component: QuizDetailComponent },
 
   // ✅ Pages protégées (accessibles seulement si connecté)
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'quiz', component: QuizListComponent, canActivate: [AuthGuard] },
-  { path: 'classement', component: LeaderboardComponent, canActivate: [AuthGuard] },
-  { path: 'quiz/:id', component: QuizDetailComponent, canActivate: [AuthGuard] },
   { path: 'play/:id', component: QuizPlayComponent, canActivate: [AuthGuard] },
 
   // ✅ Redirection pour routes inconnues
-  { path: '**', redirectTo: '/login' }
+  { path: '**', redirectTo: '/home' }
 ];
 
 @NgModule({

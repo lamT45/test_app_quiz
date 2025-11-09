@@ -22,6 +22,9 @@ public class UserService {
         return userdao.findById(id);
     }
 
+    public Optional<User> findByUsername(String username) {
+        return userdao.findByUsername(username);
+    }
     public Optional<User> findByEmail(String email) {
         return userdao.findByEmail(email);
     }
@@ -33,4 +36,5 @@ public class UserService {
     public void deleteUser(Long id) {
         userdao.deleteById(id);
     }
+
 }

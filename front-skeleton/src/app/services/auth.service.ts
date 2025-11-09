@@ -9,22 +9,34 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {}
-
-  login(credentials: { email: string; password: string }): Observable<any> {
+  constructor(private http: HttpClient) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // 🔹 On recharge le user depuis le localStorage si nécessaire
+      const savedUser = localStorage.getItem('user');
+      if (savedUser) {
+        this.currentUserSubject.next(JSON.parse(savedUser));
+      }
+    }
+  }
+  login(credentials: { username: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials);
   }
 
+  setCurrentUser(user: User) {
+    this.currentUserSubject.next(user);
+    localStorage.setItem('user', JSON.stringify(user));
+  }
   register(user: User): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, user);
   }
 
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     this.currentUserSubject.next(null);
   }
-
-  setCurrentUser(user: User) {
-    this.currentUserSubject.next(user);
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('token');
   }
 }

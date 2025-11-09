@@ -35,9 +35,15 @@ export class QuizDetailComponent implements OnInit {
     });
   }
 
-  startQuiz(): void {
-    if (this.quiz) {
-      this.router.navigate(['/quiz', this.quiz.id, 'play']);
+  startQuiz(quizId: number) {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // ✅ Connecté → accéder au quiz
+      this.router.navigate(['/play', quizId]);
+    } else {
+      // 🔒 Pas connecté → rediriger vers login
+      this.router.navigate(['/login']);
     }
   }
 }
+

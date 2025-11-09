@@ -37,3 +37,4 @@ export class QuizListComponent implements OnInit {
   }
 
 }
+

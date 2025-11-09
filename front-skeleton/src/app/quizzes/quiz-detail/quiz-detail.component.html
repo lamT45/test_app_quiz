@@ -4,7 +4,7 @@
   <p>⏱ Temps/question : {{ quiz.duration}} secondes</p>
   <p>👤 Créé par : {{ quiz.createdBy }}</p>
 
-  <button (click)="startQuiz()">🚀 Commencer le quiz</button>
+  <button (click)="startQuiz(quiz.id)">🚀 Commencer le quiz</button>
 </div>
 
 <ng-template #loadingTpl>
@@ -12,3 +12,5 @@
 </ng-template>
 
 <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+
