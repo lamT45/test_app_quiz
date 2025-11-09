@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 // Angular Common Module
 import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 // Composants principaux
@@ -52,6 +53,7 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

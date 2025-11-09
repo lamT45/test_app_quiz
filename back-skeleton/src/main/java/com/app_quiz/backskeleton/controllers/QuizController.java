@@ -1,10 +1,12 @@
 package com.app_quiz.backskeleton.controllers;
 
 import com.app_quiz.backskeleton.models.Quiz;
+import com.app_quiz.backskeleton.services.QuestionService;
 import com.app_quiz.backskeleton.services.QuizService;
 import org.springframework.web.bind.annotation.*;
 import com.app_quiz.backskeleton.DTO.QuizDto;
 import org.springframework.http.ResponseEntity;
+import com.app_quiz.backskeleton.models.Question;
 
 
 import java.util.List;
@@ -15,9 +17,11 @@ import java.util.Optional;
 public class QuizController {
 
     private final QuizService quizService;
+    private final QuestionService questionService;
 
-    public QuizController(QuizService quizService) {
+    public QuizController(QuizService quizService, QuestionService questionService) {
         this.quizService = quizService;
+        this.questionService = questionService;
     }
 
     @GetMapping
@@ -63,6 +67,11 @@ public class QuizController {
     @DeleteMapping("/{id}")
     public void deleteQuiz(@PathVariable Long id) {
         quizService.deleteQuiz(id);
+    }
+
+    @GetMapping("/{id}/questions")
+    public List<Question> getQuestionsByQuizId(@PathVariable Long id) {
+        return questionService.findByQuizId(id);
     }
 }
 

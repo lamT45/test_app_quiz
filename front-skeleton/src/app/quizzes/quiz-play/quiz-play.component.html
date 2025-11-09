@@ -1,1 +1,40 @@
-<p>quiz-play works!</p>
+<div class="quiz-container" *ngIf="!showResult; else resultScreen">
+  <div
+    *ngIf="animState"
+    @questionAnimation
+    class="question-wrapper"
+  >
+    <h2>
+      Question {{ currentIndex + 1 }} / {{ questions.length }}
+      <span class="points-tag">({{ questions[currentIndex]?.points }} pts)</span>
+    </h2>
+
+    <p class="question-text">{{ questions[currentIndex]?.questionText }}</p>
+
+    <div class="choices">
+      <button
+        *ngFor="let choice of questions[currentIndex]?.choices"
+        (click)="selectChoice(choice)"
+        [class.selected]="selectedChoice === choice"
+        [class.correct]="isCorrect && selectedChoice === choice"
+        [class.wrong]="isCorrect === false && selectedChoice === choice">
+        {{ choice }}
+      </button>
+    </div>
+
+    <button class="validate-btn" (click)="nextQuestion()" [disabled]="!selectedChoice">
+      Valider
+    </button>
+  </div>
+</div>
+
+<canvas id="confetti-canvas"></canvas>
+
+<ng-template #resultScreen>
+  <div class="result" @questionAnimation>
+    <h2>Quiz terminé 🎉</h2>
+    <p>Score : {{ score }} / {{ getTotalPoints() }} pts</p>
+    <button (click)="restartQuiz()">Rejouer</button>
+    <button (click)="goBack()">Retour</button>
+  </div>
+</ng-template>

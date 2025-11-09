@@ -1,5 +1,5 @@
 -- Nettoyage propre avant insertion
-TRUNCATE TABLE scores, questions, quizzes, users RESTART IDENTITY CASCADE;
+TRUNCATE TABLE scores,  quizzes, users RESTART IDENTITY CASCADE;
 
 -- USERS
 INSERT INTO users (username, password, email, role) VALUES
@@ -22,16 +22,7 @@ VALUES
     ('Cinéma et Séries TV', 'Divertissement', 'Êtes-vous un vrai cinéphile ? Testez vos connaissances !', 'Facile', 1567, 45, 1),
     ('Sport - Champions et Records', 'Sport', 'Connaissez-vous les plus grands exploits sportifs ?', 'Moyen', 876, 30, 1);
 
--- QUESTIONS
-INSERT INTO questions (quiz_id, question_text, type, points, choice1, choice2, choice3, choice4, correct_answer, true_false) VALUES
-                                                                                                                                 (1, 'Quelle planète est la plus proche du Soleil ?', 'choix_multiple', 1, 'Venus', 'Mercure', 'Terre', 'Mars', 'Mercure', FALSE),
-                                                                                                                                 (1, 'Quel gaz les plantes absorbent-elles ?', 'choix_multiple', 1, 'Oxygène', 'Carbone', 'Dioxyde de carbone', 'Hydrogène', 'Dioxyde de carbone', FALSE),
-                                                                                                                                 (2, 'Qui a découvert l’Amérique ?', 'choix_multiple', 1, 'Christophe Colomb', 'Napoléon', 'Jules César', 'Magellan', 'Christophe Colomb', FALSE),
-                                                                                                                                 (2, 'En quelle année la Révolution française a-t-elle commencé ?', 'choix_multiple', 1, '1789', '1776', '1804', '1812', '1789', FALSE),
-                                                                                                                                 (3, 'Combien de joueurs dans une équipe de football ?', 'choix_multiple', 1, '9', '10', '11', '12', '11', FALSE),
-                                                                                                                                 (3, 'Combien de sets maximum dans un match de tennis masculin ?', 'choix_multiple', 1, '3', '4', '5', '7', '5', FALSE);
 
--- SCORES
 INSERT INTO scores (user_id, quiz_id, score_obtained, time_taken_seconds) VALUES
                                                                               (2, 1, 8, 160),
                                                                               (4, 3, 9, 120),
