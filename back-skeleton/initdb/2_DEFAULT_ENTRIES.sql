@@ -5,7 +5,12 @@ TRUNCATE TABLE scores, questions, quizzes, users RESTART IDENTITY CASCADE;
 INSERT INTO users (username, password, email, role) VALUES
                                                         ('admin', 'admin123', 'admin@example.com', 'ADMIN'),
                                                         ('player1', 'player123', 'player1@example.com', 'PLAYER'),
-                                                        ('player2', 'player234', 'player2@example.com', 'PLAYER');
+                                                        ('player2', 'player234', 'player2@example.com', 'PLAYER'),
+                                                        ('player3', 'player345', 'player3@example.com', 'PLAYER'),
+                                                        ('player4', 'player456', 'player4@example.com', 'PLAYER'),
+                                                        ('player5', 'player567', 'player5@example.com', 'PLAYER'),
+                                                        ('player6', 'player678', 'player6@example.com', 'PLAYER');
+
 
 -- QUIZZES
 INSERT INTO quizzes (title, category, description, level, players, duration, created_by_id)
@@ -29,7 +34,8 @@ INSERT INTO questions (quiz_id, question_text, type, points, choice1, choice2, c
 -- SCORES
 INSERT INTO scores (user_id, quiz_id, score_obtained, time_taken_seconds) VALUES
                                                                               (2, 1, 8, 160),
-                                                                              (2, 2, 7, 180),
-                                                                              (2, 3, 9, 120),
-                                                                              (3, 1, 6, 200),
-                                                                              (3, 2, 5, 210);
+                                                                              (4, 3, 9, 120),
+                                                                              (6, 2, 5, 210),
+                                                                              (7, 3, 6, 220),
+                                                                              (5, 2, 7, 180),
+                                                                              (3, 2, 6, 200);
