@@ -29,4 +29,5 @@ public class QuizService {
     public void deleteQuiz(Long id) {
         quizdao.deleteById(id);
     }
+
 }

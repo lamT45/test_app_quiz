@@ -23,7 +23,7 @@
       </div>
 
       <!-- Bouton -->
-      <button class="play-btn" [routerLink]="['/quiz', quiz.id]">
+      <button class="play-btn" (click)="startQuiz(quiz.id)">
         Jouer ({{ quiz.questions.length }} questions)
       </button>
     </div>

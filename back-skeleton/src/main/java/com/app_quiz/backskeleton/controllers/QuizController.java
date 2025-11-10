@@ -133,4 +133,21 @@ public class QuizController {
     public List<Question> getQuestionsByQuizId(@PathVariable Long id) {
         return questionService.findByQuizId(id);
     }
+
+    // ==============================
+// 🔹 PUT — Incrémenter le nombre de joueurs
+// ==============================
+    @PutMapping("/{id}/increment-players")
+    public ResponseEntity<Quiz> incrementPlayers(@PathVariable Long id) {
+        Optional<Quiz> quizOpt = quizService.findQuizById(id);
+        if (quizOpt.isPresent()) {
+            Quiz quiz = quizOpt.get();
+            quiz.setPlayers(quiz.getPlayers() + 1);
+            quizService.saveQuiz(quiz);
+            return ResponseEntity.ok(quiz);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }

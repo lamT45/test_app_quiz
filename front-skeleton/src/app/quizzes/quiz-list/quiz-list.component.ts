@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { QuizService } from '../../services/quiz.service';
 import { Quiz } from '../../models/quiz.model';
 
@@ -10,7 +11,7 @@ import { Quiz } from '../../models/quiz.model';
 export class QuizListComponent implements OnInit {
   quizzes: Quiz[] = [];
 
-  constructor(private quizService: QuizService) {}
+  constructor(private quizService: QuizService, private router: Router) {}
 
   ngOnInit(): void {
     this.quizService.getAll().subscribe((data) => this.quizzes = data);
@@ -35,6 +36,25 @@ export class QuizListComponent implements OnInit {
       default: return '#A855F7';
     }
   }
+  startQuiz(quizId: number) {
+    this.quizService.incrementPlayers(quizId).subscribe({
+      next: (updatedQuiz) => {
+        const index = this.quizzes.findIndex(q => q.id === quizId);
+        if (index !== -1) {
+          this.quizzes[index].players = updatedQuiz.players;
+
+          // 💫 Active le pulse temporairement
+          const playerCountEl = document.querySelectorAll('.player-count')[index];
+          playerCountEl?.classList.add('pulsing');
+          setTimeout(() => playerCountEl?.classList.remove('pulsing'), 600);
+        }
+
+        this.router.navigate(['/quiz', quizId]);
+      },
+      error: (err) => console.error('Erreur lors de la mise à jour des joueurs', err)
+    });
+  }
+
 
 }
 

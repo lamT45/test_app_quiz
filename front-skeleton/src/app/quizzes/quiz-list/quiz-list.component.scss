@@ -182,3 +182,33 @@
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+/* ===== ANIMATION PULSE POUR LE NOMBRE DE JOUEURS ===== */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    color: #7c3aed; /* Violet vif */
+  }
+  50% {
+    transform: scale(1.3);
+    color: #a855f7; /* Violet clair */
+  }
+  100% {
+    transform: scale(1);
+    color: #7c3aed;
+  }
+}
+
+/* Style du compteur */
+.player-count {
+  font-weight: 600;
+  color: #7c3aed;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.3s ease;
+}
+
+/* Déclenchement de l’effet au clic ou changement */
+.player-count.pulsing {
+  animation: pulse 0.6s ease;
+}
