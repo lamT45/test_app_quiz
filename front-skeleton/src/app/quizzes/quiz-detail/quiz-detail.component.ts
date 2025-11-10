@@ -58,5 +58,6 @@ export class QuizDetailComponent implements OnInit {
       this.router.navigate(['/login']);
     }
   }
+
 }
 

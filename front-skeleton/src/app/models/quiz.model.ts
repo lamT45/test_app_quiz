@@ -11,7 +11,6 @@ export interface Quiz {
   createdByName: string;
   createdByEmail: string;
   questionIds?: number[];
-
-  // 🔹 Autres champs éventuels
-  rating?: number;
+  rating: number;
+  ratingCount: number;
 }

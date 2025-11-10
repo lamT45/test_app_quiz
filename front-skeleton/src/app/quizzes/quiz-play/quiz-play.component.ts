@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { QuizService } from 'services/quiz.service';
 import * as confetti from 'canvas-confetti';
 import {
   trigger,
@@ -62,7 +63,9 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient
+    private http: HttpClient,
+    private quizService: QuizService
+
   ) {}
 
   ngOnInit(): void {
@@ -241,5 +244,39 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
         requestAnimationFrame(frame);
       }
     })();
+  }
+
+  rateQuiz(value: number) {
+    this.quizService.rateQuiz(this.quiz.id, value).subscribe({
+      next: (updatedQuiz) => {
+        this.quiz.rating = updatedQuiz.rating;
+        this.quiz.ratingCount = updatedQuiz.ratingCount;
+
+        // Animation confettis + glow subtil
+        const duration = 1000;
+        const end = Date.now() + duration;
+        const canvas = document.getElementById('confetti-canvas') as HTMLCanvasElement;
+        const confettiInstance = confetti.create(canvas, { resize: true, useWorker: true });
+
+        (function frame() {
+          confettiInstance({
+            particleCount: 3,
+            startVelocity: 15,
+            spread: 100,
+            ticks: 60,
+            origin: { y: 0.7 },
+            colors: ['#facc15', '#a855f7', '#7c3aed']
+          });
+          if (Date.now() < end) requestAnimationFrame(frame);
+        })();
+
+        // Notification légère
+        alert(`⭐ Merci pour votre note de ${value} étoiles !`);
+      },
+      error: () => alert("Erreur lors de l'envoi de votre note.")
+    });
+  }
+  getRoundedRating(): number {
+    return Math.round(this.quiz?.rating || 0);
   }
 }

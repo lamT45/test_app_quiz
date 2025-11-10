@@ -8,6 +8,7 @@
         <span class="points-tag">+{{ questions[currentIndex]?.points }} pts</span>
       </div>
     </div>
+
     <!-- ✅ Timer -->
     <div class="timer" [ngClass]="getTimerClass()">
       <span class="timer-icon">⏱️</span>
@@ -16,6 +17,7 @@
         <div class="timer-progress" [style.width.%]="(timeLeft / maxTime) * 100"></div>
       </div>
     </div>
+
     <!-- 🧠 Question -->
     <p class="question-text">{{ questions[currentIndex]?.questionText }}</p>
 
@@ -32,8 +34,6 @@
       </button>
     </div>
 
-
-
     <!-- ✅ Bouton validation -->
     <button class="validate-btn" (click)="nextQuestion()" [disabled]="!selectedChoice">
       Valider
@@ -49,11 +49,11 @@
   <div class="result" @questionAnimation>
     <h2>Quiz terminé 🎉</h2>
 
-    <!-- ⚙️ Si tu veux afficher le score calculé par le backend -->
+    <!-- ⚙️ Score calculé par le backend -->
     <ng-container *ngIf="score !== null && score !== undefined; else loadingScore">
-      <p>Score total : <strong>{{ score }}</strong> pts</p>
+      <p>Votre score total est : <strong>{{ score }}</strong> points 🏆</p>
+      <p>Merci d’avoir joué ! Donnez-nous votre avis ci-dessous ⭐</p>
     </ng-container>
-
 
     <ng-template #loadingScore>
       <p>Calcul du score en cours...</p>
@@ -63,5 +63,20 @@
       <button (click)="restartQuiz()">Rejouer</button>
       <button (click)="goBack()">Retour</button>
     </div>
+  </div>
+
+  <!-- ⭐ Bloc d’évaluation -->
+  <div class="quiz-rating">
+    <h3>⭐ Évaluez ce quiz</h3>
+    <div class="stars">
+      <i class="fa-solid fa-star"
+         *ngFor="let star of [1,2,3,4]"
+         (click)="rateQuiz(star)"
+         [class.active]="star <= getRoundedRating()">
+      </i>
+    </div>
+    <p class="rating-info">
+      Moyenne : {{ quiz.rating | number:'1.1-1' }}/4 ({{ quiz.ratingCount }} avis)
+    </p>
   </div>
 </ng-template>
