@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'manage-quizzes',
-  standalone: true,
-  imports: [],
+  selector: 'app-manage-quizzes',
   templateUrl: './manage-quizzes.component.html',
-  styleUrl: './manage-quizzes.component.scss'
+  styleUrls: ['./manage-quizzes.component.scss']
 })
-export class ManageQuizzesComponent {
-
-}
+export class ManageQuizzesComponent { }

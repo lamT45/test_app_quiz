@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AdminAuthService } from '../services/admin-auth.service';
 
 @Component({
   selector: 'app-admin-login',
@@ -8,19 +7,19 @@ import { AdminAuthService } from '../services/admin-auth.service';
   styleUrls: ['./admin-login.component.scss']
 })
 export class AdminLoginComponent {
-  email = '';
-  password = '';
-  errorMsg = '';
+  email: string = '';
+  password: string = '';
+  errorMessage: string = '';
 
-  constructor(private adminAuth: AdminAuthService, private router: Router) {}
+  constructor(private router: Router) {}
 
-  onLogin(): void {
-    const success = this.adminAuth.login(this.email, this.password);
-
-    if (success) {
+  loginAdmin() {
+    // 🟣 Identifiants de démo
+    if (this.email === 'admin@quiz.com' && this.password === 'admin123') {
+      localStorage.setItem('adminToken', 'true'); // token fictif
       this.router.navigate(['/admin']);
     } else {
-      this.errorMsg = 'Identifiants invalides. Veuillez réessayer.';
+      this.errorMessage = 'Identifiants invalides';
     }
   }
 }

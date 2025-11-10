@@ -1,11 +1,21 @@
-<div class="login-admin-container">
-  <h2>🔐 Connexion Administrateur</h2>
+<div class="admin-login-container">
+  <div class="login-card">
+    <h2>🔐 Connexion administrateur</h2>
 
-  <form (ngSubmit)="onLogin()">
-    <input type="email" [(ngModel)]="email" name="email" placeholder="Email" required />
-    <input type="password" [(ngModel)]="password" name="password" placeholder="Mot de passe" required />
-    <button type="submit">Se connecter</button>
-  </form>
+    <form (ngSubmit)="loginAdmin()" #loginForm="ngForm">
+      <div class="form-group">
+        <label>Email :</label>
+        <input type="email" [(ngModel)]="email" name="email" required />
+      </div>
 
-  <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+      <div class="form-group">
+        <label>Mot de passe :</label>
+        <input type="password" [(ngModel)]="password" name="password" required />
+      </div>
+
+      <button type="submit" [disabled]="!loginForm.valid">Se connecter</button>
+
+      <p class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</p>
+    </form>
+  </div>
 </div>

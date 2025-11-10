@@ -1,14 +1,89 @@
-.admin-container {
-  padding: 20px;
-  text-align: center;
+/* ----- GLOBAL LAYOUT ----- */
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #f8f6ff;
+  color: #333;
 }
 
-.admin-nav a {
-  margin: 0 10px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #4b0082;
+/* ----- HEADER ----- */
+.admin-header {
+  background: linear-gradient(90deg, #6a0dad, #9b4de1);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
-.admin-nav a:hover {
-  text-decoration: underline;
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.admin-header .right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-name {
+  font-weight: 500;
+}
+
+.logout-btn {
+  background: #fff;
+  color: #6a0dad;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logout-btn:hover {
+  background: #f1e7ff;
+}
+
+/* ----- BODY (Sidebar + Content) ----- */
+.admin-body {
+  display: flex;
+  flex: 1;
+}
+
+/* ----- SIDEBAR ----- */
+.sidebar {
+  width: 220px;
+  background: #ede3ff;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar nav a {
+  color: #4b0082;
+  padding: 0.6rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.sidebar nav a.active,
+.sidebar nav a:hover {
+  background: #d5b3ff;
+}
+
+/* ----- CONTENT ----- */
+.content {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  margin: 1rem;
+  padding: 1.5rem;
+  overflow-y: auto;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }

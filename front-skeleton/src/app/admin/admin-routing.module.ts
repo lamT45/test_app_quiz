@@ -1,16 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
-import { ManageQuestionsComponent } from './manage-questions/manage-questions.component';
-import { ManageQuizzesComponent } from './manage-quizzes/manage-quizzes.component';
-import { ManageUsersComponent } from './manage-users/manage-users.component';
 
+// 🧱 Import des composants Admin
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { ManageUsersComponent } from './manage-users/manage-users.component';
+import { ManageQuizzesComponent } from './manage-quizzes/manage-quizzes.component';
+import { ManageQuestionsComponent } from './manage-questions/manage-questions.component';
 
 const routes: Routes = [
-  { path: '', component: AdminDashboardComponent },
-  { path: 'quizzes', component: ManageQuizzesComponent },
-  { path: 'questions', component: ManageQuestionsComponent },
-  { path: 'users', component: ManageUsersComponent },
+  {
+    path: '',
+    component: AdminDashboardComponent, // 🏠 tableau de bord principal
+    children: [
+      { path: 'manage-users', component: ManageUsersComponent },
+      { path: 'manage-quizzes', component: ManageQuizzesComponent },
+      { path: 'manage-questions', component: ManageQuestionsComponent },
+      { path: '', redirectTo: 'manage-quizzes', pathMatch: 'full' } // ✅ page par défaut
+    ]
+  }
 ];
 
 @NgModule({

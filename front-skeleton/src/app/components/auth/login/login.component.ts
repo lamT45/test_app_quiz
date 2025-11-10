@@ -10,19 +10,28 @@ import { AuthService } from '../../../services/auth.service';
 export class LoginComponent {
   username = '';
   password = '';
+  role = 'player'; // ✅ par défaut, joueur
   errorMessage = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
+    // Appel au backend pour vérifier les identifiants
     this.authService.login({ username: this.username, password: this.password }).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
         this.authService.setCurrentUser(res.user);
-        this.router.navigate(['/home']);
+
+        // 🔹 Logique de redirection selon le rôle choisi
+        if (this.role === 'admin') {
+          localStorage.setItem('adminToken', res.token);
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/home']);
+        }
       },
       error: (err) => {
-        this.errorMessage = err.error.message || 'Username ou mot de passe invalide';
+        this.errorMessage = err.error?.message || 'Nom d’utilisateur ou mot de passe invalide.';
       }
     });
   }

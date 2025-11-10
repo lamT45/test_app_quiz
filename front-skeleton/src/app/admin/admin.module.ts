@@ -1,27 +1,30 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
-import { AdminRoutingModule } from './admin-routing.module';
-
+// 🧩 Composants Admin
 import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
-import { ManageQuestionsComponent } from './manage-questions/manage-questions.component';
-import { ManageQuizzesComponent } from './manage-quizzes/manage-quizzes.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
+import { ManageQuizzesComponent } from './manage-quizzes/manage-quizzes.component';
+import { ManageQuestionsComponent } from './manage-questions/manage-questions.component';
+
+// 🛣️ Routing
+import { AdminRoutingModule } from './admin-routing.module';
 
 @NgModule({
   declarations: [
     AdminDashboardComponent,
-    ManageQuestionsComponent,
+    ManageUsersComponent,
     ManageQuizzesComponent,
-    ManageUsersComponent
+    ManageQuestionsComponent
   ],
   imports: [
-    CommonModule,
-    FormsModule,
-    HttpClientModule,
+    CommonModule,           // ✅ ngIf, ngFor, pipes, etc.
+    FormsModule,            // ✅ ngModel
+    ReactiveFormsModule,    // ✅ pour formulaires avancés
+    RouterModule,
     AdminRoutingModule
   ]
 })
-export class AdminModule { }
+export class AdminModule {}

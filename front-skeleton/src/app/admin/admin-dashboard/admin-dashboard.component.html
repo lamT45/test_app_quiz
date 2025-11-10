@@ -1,12 +1,30 @@
-<div class="admin-container">
-  <h1>🛠️ Panneau d'administration</h1>
-  <p>Gérez les quiz, les questions et les utilisateurs depuis cette interface.</p>
+<link rel="stylesheet" href="admin-dashboard.component.scss">
+<div class="admin-layout">
+  <!-- HEADER -->
+  <header class="admin-header">
+    <div class="left">
+      <h1>🎛️ Tableau de bord administrateur</h1>
+    </div>
+    <div class="right">
+      <span class="admin-name">👋 Bonjour, <strong>Admin</strong></span>
+      <button class="logout-btn" (click)="logout()">🚪 Déconnexion</button>
+    </div>
+  </header>
 
-  <nav class="admin-nav">
-    <a routerLink="quizzes">📘 Gérer les Quiz</a> |
-    <a routerLink="questions">❓ Gérer les Questions</a> |
-    <a routerLink="users">👤 Gérer les Utilisateurs</a>
-  </nav>
+  <!-- CONTENU -->
+  <div class="admin-body">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <nav>
+        <a routerLink="manage-quizzes" routerLinkActive="active">📚 Quiz</a>
+        <a routerLink="manage-questions" routerLinkActive="active">❓ Questions</a>
+        <a routerLink="manage-users" routerLinkActive="active">👥 Utilisateurs</a>
+      </nav>
+    </aside>
 
-  <router-outlet></router-outlet>
+    <!-- CONTENU PRINCIPAL -->
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>
