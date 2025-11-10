@@ -56,9 +56,9 @@
 .links {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%); /* ✅ centre parfaitement horizontalement */
+  transform: translateX(-50%); /* centre parfaitement horizontalement */
   top: 50%;
-  transform: translate(-50%, -50%); /* ✅ centre aussi verticalement */
+  transform: translate(-50%, -50%); /*  centre aussi verticalement */
   display: flex;
   gap: 35px;
   margin: 0;
