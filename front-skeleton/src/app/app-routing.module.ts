@@ -23,6 +23,8 @@ const routes: Routes = [
 
   // ✅ Pages protégées (accessibles seulement si connecté)
   { path: 'play/:id', component: QuizPlayComponent, canActivate: [AuthGuard] },
+  { path: 'play/:quiz/:id', component: QuizPlayComponent, canActivate: [AuthGuard] },
+
 
   // ✅ Redirection pour routes inconnues
   { path: '**', redirectTo: '/home' }

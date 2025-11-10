@@ -30,25 +30,34 @@ import {
 })
 export class QuizPlayComponent implements OnInit, OnDestroy {
   quizId!: number;
-  quiz: any; // ✅ pour stocker le quiz complet (et récupérer duration)
+  quiz: any;
   questions: any[] = [];
   currentIndex = 0;
-  score = 0;
   selectedChoice: string | null = null;
   showResult = false;
   animState = true;
   isCorrect: boolean | null = null;
+  score: number | null = null;
 
-  // ⏱️ Timer
+  // Temps total et par question
   timeLeft = 0;
   maxTime = 0;
   timerInterval: any;
+  totalTimeTaken = 0;
 
-  // 🔊 Sons
+  // Sons
   clickSound = new Audio('assets/sounds/click.mp3');
   correctSound = new Audio('assets/sounds/correct.mp3');
   wrongSound = new Audio('assets/sounds/wrong.mp3');
   victorySound = new Audio('assets/sounds/victory.mp3');
+
+  // Réponses de l’utilisateur
+  userAnswers: string[] = [];
+  // Verrouillage des réponses pour éviter les clics multiples
+  isAnswerLocked = false;
+// Feedback de la réponse
+  showAnswerFeedback = false;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -58,26 +67,26 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.quizId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadQuiz(); // ✅ on charge le quiz (pour avoir la durée)
+    this.loadQuiz();
   }
 
   ngOnDestroy(): void {
     clearInterval(this.timerInterval);
   }
 
-  // 📥 Charger le quiz complet (titre, durée, etc.)
+  // Charger le quiz
   loadQuiz(): void {
     this.http.get<any>(`http://localhost:8082/api/quizzes/${this.quizId}`).subscribe({
       next: (quizData) => {
         this.quiz = quizData;
-        this.maxTime = quizData.duration || 15; // par défaut 15s si non défini
+        this.maxTime = quizData.duration || 15;
         this.loadQuestions();
       },
       error: (err) => console.error('Erreur lors du chargement du quiz', err)
     });
   }
 
-  // 📥 Charger les questions
+  // Charger les questions
   loadQuestions(): void {
     this.http.get<any[]>(`http://localhost:8082/api/quizzes/${this.quizId}/questions`).subscribe({
       next: (data) => {
@@ -89,13 +98,13 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
             )
           }))
         );
-        this.startTimer(); // démarrer le timer dès la première question
+        this.startTimer();
       },
       error: (err) => console.error('Erreur lors du chargement des questions', err)
     });
   }
 
-  // 🔀 Mélange de tableau
+  // Mélanger un tableau
   private shuffleArray(array: any[]): any[] {
     return array
       .map(value => ({ value, sort: Math.random() }))
@@ -103,54 +112,55 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
       .map(({ value }) => value);
   }
 
-  // 🎯 Sélection d’un choix
+  // Sélection d’un choix
   selectChoice(choice: string): void {
     this.selectedChoice = choice;
     this.clickSound.play();
   }
 
-  // ⏱️ Démarrer le timer
+  // Timer
   startTimer(): void {
     clearInterval(this.timerInterval);
     this.timeLeft = this.maxTime;
 
     this.timerInterval = setInterval(() => {
       this.timeLeft--;
+      this.totalTimeTaken++;
 
       if (this.timeLeft <= 0) {
         clearInterval(this.timerInterval);
-        this.nextQuestion(true); // auto-passer si le temps est écoulé
+        this.nextQuestion(true);
       }
     }, 1000);
   }
 
-  // ✅ Passer à la question suivante
+  // Passer à la question suivante
   nextQuestion(autoSkipped = false): void {
     clearInterval(this.timerInterval);
     const currentQuestion = this.questions[this.currentIndex];
-    let isAnswerCorrect = false;
+    this.isAnswerLocked = true;
+    this.userAnswers.push(this.selectedChoice || "");
 
-    if (!autoSkipped) {
-      isAnswerCorrect =
-        this.selectedChoice?.trim().toLowerCase() ===
-        currentQuestion.correctAnswer?.trim().toLowerCase();
+    if (!autoSkipped && this.selectedChoice) {
+      const correctAnswer = currentQuestion.correctAnswer?.trim().toLowerCase();
+      const userAnswer = this.selectedChoice?.trim().toLowerCase();
+
+      this.showAnswerFeedback = true; //  Montre feedback uniquement après validation
+
+      if (userAnswer === correctAnswer) {
+        this.isCorrect = true;
+        this.correctSound.play();
+      } else {
+        this.isCorrect = false;
+        this.wrongSound.play();
+      }
     }
 
-    this.isCorrect = isAnswerCorrect;
-
-    if (isAnswerCorrect) {
-      this.correctSound.play();
-
-      // 🧮 Calcul des points dynamiques
-      const timeBonus = this.timeLeft / this.maxTime; // ratio entre 0 et 1
-      const earnedPoints = Math.round(currentQuestion.points * (0.5 + timeBonus)); // min 50% - max 150%
-      this.score += earnedPoints;
-    } else if (!autoSkipped) {
-      this.wrongSound.play();
-    }
-
+    // Pause avant de passer à la suivante
     setTimeout(() => {
+      this.showAnswerFeedback = false; //  Cache feedback pour la prochaine
       this.isCorrect = null;
+      this.isAnswerLocked = false;
       this.selectedChoice = null;
       this.animState = false;
 
@@ -160,38 +170,57 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
           this.showResult = true;
           this.victorySound.play();
           this.launchConfetti();
+          this.saveScoreToBackend();
         } else {
           this.animState = true;
-          this.startTimer(); // 🔁 redémarre le timer pour la question suivante
+          this.startTimer();
         }
-      }, 300);
-    }, 800);
+      }, 500);
+    }, 1000);
   }
 
-  getTimerClass(): string {
-    const ratio = this.timeLeft / this.maxTime;
-    if (ratio > 0.6) return 'timer-green';
-    else if (ratio > 0.3) return 'timer-orange';
-    else return 'timer-red';
+  // Enregistrer le score (backend fait le calcul)
+  saveScoreToBackend(): void {
+    const payload = {
+      userId: Number(localStorage.getItem('userId')),
+      quizId: this.quizId,
+      timeTakenSeconds: this.totalTimeTaken,
+      answers: this.userAnswers
+    };
+
+    this.http.post<any>('http://localhost:8082/api/scores/calculate', payload).subscribe({
+      next: (res) => {
+        console.log('✅ Score calculé et enregistré par le backend', res);
+        this.score = res.score_obtained; // 🔹 affiche le score du backend dans le template
+      },
+      error: (err) => console.error('❌ Erreur lors de l’enregistrement du score', err)
+    });
   }
 
 
-  // 🔁 Rejouer le quiz
+  getTimerClass() {
+    if (this.timeLeft <= 3) return 'urgent final-seconds';
+    if (this.timeLeft <= 10) return 'urgent';
+    return '';
+
+  }
+
+
   restartQuiz(): void {
     this.currentIndex = 0;
-    this.score = 0;
     this.showResult = false;
     this.animState = true;
     this.isCorrect = null;
+    this.userAnswers = [];
+    this.totalTimeTaken = 0;
     this.loadQuestions();
   }
 
-  // 🔙 Retour
   goBack(): void {
     this.router.navigate(['/quiz']);
   }
 
-  // 🎊 Confettis de victoire
+  // Effet de victoire
   launchConfetti(): void {
     const duration = 3 * 1000;
     const end = Date.now() + duration;
@@ -212,10 +241,5 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
         requestAnimationFrame(frame);
       }
     })();
-  }
-
-  // 🧮 Total des points max
-  getTotalPoints(): number {
-    return this.questions.reduce((sum, q) => sum + (q.points ?? 0), 0);
   }
 }

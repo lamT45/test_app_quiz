@@ -25,6 +25,8 @@ export class QuizDetailComponent implements OnInit {
     this.quizService.getById(quizId).subscribe({
       next: (data) => {
         this.quiz = data;
+        console.log('📦 Quiz reçu du backend :', this.quiz);
+
         this.loading = false;
       },
       error: (err) => {
@@ -33,6 +35,17 @@ export class QuizDetailComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+  getDifficultyClass(level: string): string {
+    if (!level) return '';
+    const lvl = level.toLowerCase();
+    if (lvl === 'facile') return 'easy';
+    if (lvl === 'moyen') return 'medium';
+    if (lvl === 'difficile') return 'hard';
+    return '';
+  }
+  goBack(): void {
+    this.router.navigate(['/quiz']);
   }
 
   startQuiz(quizId: number) {

@@ -17,9 +17,26 @@ export class LoginComponent {
   login() {
     this.authService.login({ username: this.username, password: this.password }).subscribe({
       next: (res: any) => {
-        localStorage.setItem('token', res.token);
-        this.authService.setCurrentUser(res.user);
-        this.router.navigate(['/home']);
+        //  Enregistre le token si présent
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+        }
+
+        //  Enregistre les infos utilisateur
+        if (res.user) {
+          this.authService.setCurrentUser(res.user);
+          localStorage.setItem('userId', res.user.id); // 🔥 obligatoire pour AuthGuard
+          localStorage.setItem('user', JSON.stringify(res.user));
+        }
+
+        // ✅ Nouvelle logique : redirige vers la dernière page visitée
+        const redirectUrl = this.authService.getRedirectUrl();
+        if (redirectUrl) {
+          this.router.navigateByUrl(redirectUrl);
+          this.authService.clearRedirectUrl(); // nettoyage
+        } else {
+          this.router.navigate(['/home']); // fallback par défaut
+        }
       },
       error: (err) => {
         this.errorMessage = err.error.message || 'Username ou mot de passe invalide';

@@ -7,17 +7,15 @@
         <h2>Question {{ currentIndex + 1 }} / {{ questions.length }}</h2>
         <span class="points-tag">+{{ questions[currentIndex]?.points }} pts</span>
       </div>
-
-      <!-- ✅ on met la classe "timer" (pas timer-wrapper) -->
-      <div class="timer" [ngClass]="getTimerClass()">
-        <span class="timer-icon">⏱️</span>
-        <span class="timer-value">{{ timeLeft }}s</span>
-        <div class="timer-bar">
-          <div class="timer-progress" [style.width.%]="(timeLeft / maxTime) * 100"></div>
-        </div>
+    </div>
+    <!-- ✅ Timer -->
+    <div class="timer" [ngClass]="getTimerClass()">
+      <span class="timer-icon">⏱️</span>
+      <span class="timer-value">{{ timeLeft }}s</span>
+      <div class="timer-bar">
+        <div class="timer-progress" [style.width.%]="(timeLeft / maxTime) * 100"></div>
       </div>
     </div>
-
     <!-- 🧠 Question -->
     <p class="question-text">{{ questions[currentIndex]?.questionText }}</p>
 
@@ -26,12 +24,15 @@
       <button
         *ngFor="let choice of questions[currentIndex]?.choices"
         (click)="selectChoice(choice)"
-        [class.selected]="selectedChoice === choice"
-        [class.correct]="isCorrect && selectedChoice === choice"
-        [class.wrong]="isCorrect === false && selectedChoice === choice">
+        [disabled]="isAnswerLocked"
+        [class.selected]="selectedChoice === choice && !showAnswerFeedback"
+        [class.correct]="showAnswerFeedback && choice === questions[currentIndex]?.correctAnswer"
+        [class.wrong]="showAnswerFeedback && selectedChoice === choice && choice !== questions[currentIndex]?.correctAnswer">
         {{ choice }}
       </button>
     </div>
+
+
 
     <!-- ✅ Bouton validation -->
     <button class="validate-btn" (click)="nextQuestion()" [disabled]="!selectedChoice">
@@ -47,7 +48,17 @@
 <ng-template #resultScreen>
   <div class="result" @questionAnimation>
     <h2>Quiz terminé 🎉</h2>
-    <p>Score : {{ score }} / {{ getTotalPoints() }} pts</p>
+
+    <!-- ⚙️ Si tu veux afficher le score calculé par le backend -->
+    <ng-container *ngIf="score !== null && score !== undefined; else loadingScore">
+      <p>Score total : <strong>{{ score }}</strong> pts</p>
+    </ng-container>
+
+
+    <ng-template #loadingScore>
+      <p>Calcul du score en cours...</p>
+    </ng-template>
+
     <div class="result-buttons">
       <button (click)="restartQuiz()">Rejouer</button>
       <button (click)="goBack()">Retour</button>

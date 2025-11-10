@@ -8,6 +8,7 @@ export class AuthService {
   private apiUrl = 'http://localhost:8082/api/auth';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
+  private redirectUrl: string | null = null;
 
   constructor(private http: HttpClient) {
     const token = localStorage.getItem('token');
@@ -34,9 +35,29 @@ export class AuthService {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('userId');
     this.currentUserSubject.next(null);
   }
+
   isAuthenticated(): boolean {
     return !!localStorage.getItem('token');
+  }
+
+  // ===============================
+  // 🔁 Gestion de la redirection après login
+  // ===============================
+  setRedirectUrl(url: string) {
+    this.redirectUrl = url;
+    localStorage.setItem('redirectUrl', url); // optionnel : pour persistance
+  }
+
+  getRedirectUrl(): string | null {
+    // On essaie d'abord la variable locale, sinon celle stockée
+    return this.redirectUrl || localStorage.getItem('redirectUrl');
+  }
+
+  clearRedirectUrl() {
+    this.redirectUrl = null;
+    localStorage.removeItem('redirectUrl');
   }
 }

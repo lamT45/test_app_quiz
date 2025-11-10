@@ -1,6 +1,3 @@
--- Nettoyage propre avant insertion
-TRUNCATE TABLE scores, questions, quizzes, users RESTART IDENTITY CASCADE;
-
 -- USERS
 INSERT INTO users (username, password, email, role) VALUES
                                                         ('admin', 'admin123', 'admin@example.com', 'ADMIN'),
@@ -24,9 +21,38 @@ VALUES
 
 -- SCORES
 INSERT INTO scores (user_id, quiz_id, score_obtained, time_taken_seconds) VALUES
-                                                                              (2, 1, 8, 160),
-                                                                              (4, 3, 9, 120),
-                                                                              (6, 2, 5, 210),
-                                                                              (7, 3, 6, 220),
-                                                                              (5, 2, 7, 180),
-                                                                              (3, 2, 6, 200);
+-- 🌍 Culture Générale (Facile, 35s)
+(2, 1, 48, 28),  -- rapide
+(3, 1, 42, 33),  -- proche de la limite
+(4, 1, 35, 34),  -- lent
+(5, 1, 50, 26),  -- parfait et rapide
+
+-- 🏙️ Capitales du Monde (Moyen, 25s)
+(2, 2, 44, 21),  -- rapide et bon
+(3, 2, 40, 24),
+(6, 2, 36, 25),  -- juste à temps
+(7, 2, 48, 20),  -- excellent
+
+-- 🏰 Histoire de France (Difficile, 15s)
+(2, 3, 39, 13),
+(4, 3, 33, 15),  -- limite atteinte
+(5, 3, 45, 11),
+(6, 3, 28, 15),  -- lent et erreurs
+
+-- ⚗️ Sciences & Technologies (Moyen, 25s)
+(2, 4, 41, 22),
+(3, 4, 47, 19),
+(5, 4, 49, 18),
+(7, 4, 37, 25),
+
+-- 🎬 Cinéma & Séries TV (Facile, 35s)
+(2, 5, 50, 27),
+(4, 5, 43, 33),
+(5, 5, 47, 29),
+(6, 5, 45, 31),
+
+-- ⚽ Sport - Champions & Records (Moyen, 25s)
+(3, 6, 42, 22),
+(4, 6, 47, 20),
+(6, 6, 34, 25),
+(7, 6, 44, 21);

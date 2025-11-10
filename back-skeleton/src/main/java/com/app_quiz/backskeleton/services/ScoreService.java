@@ -25,6 +25,7 @@ public class ScoreService {
         this.questiondao = questiondao;
     }
 
+    // 🔹 CRUD basique
     public List<Score> findAllScores() {
         return scoredao.findAll();
     }
@@ -41,7 +42,6 @@ public class ScoreService {
         scoredao.deleteById(id);
     }
 
-    // 🔹 Méthodes manquantes
     public List<Score> findScoresByUserId(Long userId) {
         return scoredao.findByUserId(userId);
     }
@@ -50,39 +50,44 @@ public class ScoreService {
         return scoredao.findByQuizId(quizId);
     }
 
-    /**
-     * Calcul automatique du score total et du temps total pour un quiz
-     */
-    public Score calculateAndSaveScore(User u, Quiz qz, List<String> userAnswers, List<Integer> timesTaken) {
-        List<Question> questions = qz.getQuestions();
+    // =============================================================
+    //  Calcul automatique du score en fonction des réponses + temps
+    // =============================================================
+    public Score calculateAndSaveScore(User user, Quiz quiz, List<String> userAnswers, int totalTimeSeconds) {
+        List<Question> questions = quiz.getQuestions();
 
-        double totalScore = 0;
-        int totalTime = 0;
+        int totalScore = 0;
+        int totalPointsPossible = 0;
 
-        for (int i = 0; i < questions.size(); i++) {
+        // 🧮 Parcours des questions pour comparer les réponses
+        for (int i = 0; i < questions.size() && i < userAnswers.size(); i++) {
             Question q = questions.get(i);
-            String userAnswer = userAnswers.get(i);
-            int time = timesTaken.get(i);
+            String givenAnswer = userAnswers.get(i);
 
-            // Si >30s → 0 points
-            if (time > 30) continue;
+            totalPointsPossible += q.getPoints();
 
-            // Vrai/Faux = 2 pts, sinon 4 pts
-            int maxPoints = q.getType().equalsIgnoreCase("vrai/faux") ? 2 : 4;
-
-            if (q.getCorrectAnswer().equalsIgnoreCase(userAnswer)) {
-                totalScore += maxPoints;
+            if (givenAnswer != null &&
+                    givenAnswer.trim().equalsIgnoreCase(q.getCorrectAnswer().trim())) {
+                totalScore += q.getPoints();
             }
-
-            totalTime += time;
         }
 
-        Score finalScore = new Score();
-        finalScore.setUser(u);
-        finalScore.setQuiz(qz);
-        finalScore.setScore_obtained((int) totalScore);
-        finalScore.setTime_taken_seconds(totalTime);
+        // ⚙️ Ajustement selon le temps total (bonus/malus)
+        // Exemple : plus tu es rapide, plus ton score final est boosté
+        int quizDuration = quiz.getDuration(); // en secondes depuis la table quizzes
+        double timeRatio = (double) totalTimeSeconds / (quizDuration * questions.size());
 
-        return scoredao.save(finalScore);
+        // Limite pour éviter un score négatif ou trop élevé
+        double efficiency = Math.max(0.5, Math.min(1.5, 1.2 - timeRatio));
+        int finalScore = (int) Math.round(totalScore * efficiency);
+
+        // 🧾 Création et sauvegarde du score
+        Score finalScoreObj = new Score();
+        finalScoreObj.setUser(user);
+        finalScoreObj.setQuiz(quiz);
+        finalScoreObj.setScore_obtained(finalScore);
+        finalScoreObj.setTime_taken_seconds(totalTimeSeconds);
+
+        return scoredao.save(finalScoreObj);
     }
 }
