@@ -1,18 +1,28 @@
 <div class="quiz-list-container">
-  <h1 class="page-title">Tous les Quiz</h1>
-  <p class="page-subtitle">Choisissez votre quiz et commencez à jouer !</p>
+  <!-- 🔹 En-tête dynamique -->
+  <h1 class="page-title">
+    {{ selectedCategory ? 'Quiz — ' + selectedCategory : 'Tous les Quiz' }}
+  </h1>
+
+  <p class="page-subtitle">
+    {{ selectedCategory ? 'Découvrez tous les quiz de cette catégorie' : 'Choisissez votre quiz et commencez à jouer !' }}
+  </p>
+
+  <!-- 🔙 Bouton retour si filtré -->
+  <button *ngIf="selectedCategory"
+          class="reset-btn"
+          (click)="resetFilter()">
+    ← Voir tous les quiz
+  </button>
 
   <div class="quiz-grid">
-    <div *ngFor="let quiz of quizzes" class="quiz-card" [ngStyle]="{'border-top-color': getCategoryColor(quiz.category)}">
+    <div *ngFor="let quiz of filteredQuizzes" class="quiz-card"
+         [ngStyle]="{'border-top-color': getCategoryColor(quiz.category)}">
 
       <!-- Catégorie + Niveau -->
       <div class="quiz-badges">
-        <span class="category-badge" [ngStyle]="{'background-color': getCategoryColor(quiz.category)}">
-          {{ quiz.category }}
-        </span>
-        <span class="level-badge" [ngStyle]="{'background-color': getLevelColor(quiz.level)}">
-          {{ quiz.level }}
-        </span>
+        <span class="category-badge {{ quiz.category | titlecase }}">{{ quiz.category }}</span>
+        <span class="level-badge {{ quiz.level | titlecase }}">{{ quiz.level }}</span>
       </div>
 
       <!-- Titre et description -->
@@ -22,16 +32,14 @@
       <!-- Infos -->
       <div class="quiz-info">
         <span>⏱️ {{ quiz.duration }}s</span>
-        <span>👥 {{ quiz.players }}</span>
-        <span>⭐ {{ quiz.rating || 4.7 }}</span>
+        <span>👥 <span class="player-count">{{ quiz.players }}</span></span>
+        <span>⭐ {{ quiz.rating | number:'1.1-2' }}</span>
       </div>
 
       <!-- Bouton -->
-      <button class="play-btn" [routerLink]="['/quiz', quiz.id]">
+      <button class="play-btn" (click)="startQuiz(quiz.id)">
         Jouer ({{ quiz.questions.length }} questions)
       </button>
     </div>
   </div>
 </div>
-
-

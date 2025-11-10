@@ -48,7 +48,11 @@ public class QuizController {
         dto.setLevel(quiz.getLevel());
         dto.setPlayers(quiz.getPlayers());
         dto.setDuration(quiz.getDuration());
+        dto.setRating(quiz.getRating());
+        dto.setRatingCount(quiz.getRatingCount());
         dto.setCreatedById(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getId() : null);
+        dto.setCreatedByName(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getUsername() : "Inconnu");
+        dto.setCreatedByEmail(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getEmail() : null);
         dto.setQuestionIds(
                 quiz.getQuestions() != null
                         ? quiz.getQuestions().stream().map(q -> q.getId()).toList()
@@ -57,6 +61,7 @@ public class QuizController {
 
         return ResponseEntity.ok(dto);
     }
+
 
     // ==============================
     // 🔹 POST — Créer un quiz
@@ -130,4 +135,50 @@ public class QuizController {
     public List<Question> getQuestionsByQuizId(@PathVariable Long id) {
         return questionService.findByQuizId(id);
     }
+
+    // ==============================
+// 🔹 PUT — Incrémenter le nombre de joueurs
+// ==============================
+    @PutMapping("/{id}/increment-players")
+    public ResponseEntity<Quiz> incrementPlayers(@PathVariable Long id) {
+        Optional<Quiz> quizOpt = quizService.findQuizById(id);
+        if (quizOpt.isPresent()) {
+            Quiz quiz = quizOpt.get();
+            quiz.setPlayers(quiz.getPlayers() + 1);
+            quizService.saveQuiz(quiz);
+            return ResponseEntity.ok(quiz);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    // ==============================
+// 🔹 PUT — Ajouter une note au quiz (1 à 4 étoiles)
+// ==============================
+    @PutMapping("/{id}/rate")
+    public ResponseEntity<Quiz> rateQuiz(@PathVariable Long id, @RequestParam("value") double value) {
+        Optional<Quiz> quizOpt = quizService.findQuizById(id);
+
+        if (quizOpt.isEmpty() || value < 1 || value > 4) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Quiz quiz = quizOpt.get();
+
+        // 🧮 Calcul de la nouvelle moyenne pondérée
+        double total = quiz.getRating() * quiz.getRatingCount();
+        quiz.setRatingCount(quiz.getRatingCount() + 1);
+        quiz.setRating((total + value) / quiz.getRatingCount());
+
+        quizService.saveQuiz(quiz);
+        return ResponseEntity.ok(quiz);
+    }
+    // ==============================
+// 🔹 GET — Liste des catégories distinctes
+// ==============================
+    @GetMapping("/categories")
+    public List<String> getDistinctCategories() {
+        return quizService.findDistinctCategories();
+    }
+
 }

@@ -9,14 +9,13 @@ import com.app_quiz.backskeleton.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
-
+import com.app_quiz.backskeleton.DTO.ScoreDto;
 
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/scores")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ScoreController {
 
     private final ScoreService scoreService;
@@ -91,30 +90,45 @@ public class ScoreController {
         return ResponseEntity.ok(scoreService.findScoresByQuizId(quizId));
     }
 
-    // 8️⃣ Calcul automatique du score (simulation d’une fin de quiz)
+    // 8️⃣ Calcul et sauvegarde du score (appelé depuis Angular)
     @PostMapping("/calculate")
-    public ResponseEntity<Score> calculateScore(
-            @RequestParam Long userId,
-            @RequestParam Long quizId,
-            @RequestBody Map<String, Object> payload
-    ) {
+    public ResponseEntity<?> calculateScore(@RequestBody ScoreDto dto) {
+        System.out.println("📩 Requête reçue : " + dto);
+
         try {
-            User user = userService.findUserById(userId).orElseThrow();
-            Quiz quiz = quizService.findQuizById(quizId).orElseThrow();
+            // Logs détaillés
+            System.out.println("➡️ userId = " + dto.getUserId());
+            System.out.println("➡️ quizId = " + dto.getQuizId());
+            System.out.println("➡️ timeTakenSeconds = " + dto.getTimeTakenSeconds());
+            System.out.println("➡️ answers = " + dto.getAnswers());
 
-            ObjectMapper mapper = new ObjectMapper();
-            List<String> answers = mapper.convertValue(payload.get("answers"), new TypeReference<List<String>>() {});
-            List<Integer> times = mapper.convertValue(payload.get("times"), new TypeReference<List<Integer>>() {});
+            // Vérifie que l'utilisateur existe
+            var userOpt = userService.findUserById(dto.getUserId());
+            if (userOpt.isEmpty()) {
+                return ResponseEntity.badRequest().body("❌ Utilisateur introuvable (ID=" + dto.getUserId() + ")");
+            }
 
-            Score score = scoreService.calculateAndSaveScore(user, quiz, answers, times);
+            var quizOpt = quizService.findQuizById(dto.getQuizId());
+            if (quizOpt.isEmpty()) {
+                return ResponseEntity.badRequest().body("❌ Quiz introuvable (ID=" + dto.getQuizId() + ")");
+            }
+
+            Score score = scoreService.calculateAndSaveScore(
+                    userOpt.get(),
+                    quizOpt.get(),
+                    dto.getAnswers(),
+                    dto.getTimeTakenSeconds()
+            );
+
             return ResponseEntity.ok(score);
+
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body("Erreur interne : " + e.getMessage());
         }
     }
 
-    // 9️⃣ Leaderboard global (TOP 3 + autres)
+    // 9️⃣ Leaderboard global
     @GetMapping("/leaderboard")
     public ResponseEntity<Map<String, Object>> getLeaderboard() {
         List<Score> allScores = scoreService.findAllScores();

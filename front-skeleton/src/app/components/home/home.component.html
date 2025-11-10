@@ -65,9 +65,23 @@
   </div>
 </section>
 
+<section class="categories" *ngIf="categories.length > 0">
+  <h2>Explorez nos catégories</h2>
+  <div class="category-grid">
+    <div class="category-card"
+         *ngFor="let cat of categories"
+         [style.--color]="getCategoryColor(cat)"
+         (click)="goToCategory(cat)">
+      <h3>{{ cat }}</h3>
+    </div>
+  </div>
+</section>
+
+
+
 <section class="hero second">
   <h2>Prêt à relever le défi ?</h2>
-  <p>Des milliers de questions pour défier votre cerveau. Jouez solo ou défiez vos amis !</p>
+  <p>Rejoignez des milliers de joueurs et prouvez vos connaissances</p>
   <div class="buttons">
     <button class="primary" routerLink="/quiz">Commencer maintenant</button>
     <button class="secondary" routerLink="/classement">Voir le classement</button>

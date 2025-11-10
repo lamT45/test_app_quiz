@@ -1,10 +1,30 @@
 <div class="quiz-detail" *ngIf="!loading && quiz; else loadingTpl">
-  <h2>{{ quiz.title }}</h2>
-  <p>{{ quiz.description }}</p>
-  <p>⏱ Temps/question : {{ quiz.duration}} secondes</p>
-  <p>👤 Créé par : {{ quiz.createdBy }}</p>
+  <h2 class="quiz-title">{{ quiz.title }}</h2>
+  <p class="quiz-desc">{{ quiz.description }}</p>
 
-  <button (click)="startQuiz(quiz.id)">🚀 Commencer le quiz</button>
+  <!-- 🔹 Badge de difficulté -->
+  <div class="difficulty-badge" [ngClass]="getDifficultyClass(quiz.level)">
+    {{ quiz.level }}
+  </div>
+
+  <div class="quiz-meta">
+    <p class="quiz-time">
+      ⏱ <strong>Temps/question :</strong> {{ quiz.duration }} secondes
+    </p>
+    <p class="quiz-creator">
+      👤 <strong>Créé par :</strong> {{ quiz.createdByName || 'Inconnu' }}
+    </p>
+  </div>
+
+  <div class="quiz-actions">
+    <button class="start-btn" (click)="startQuiz(quiz.id)">
+      <i class="fa-solid fa-play"></i> Commencer le quiz
+    </button>
+
+    <button class="back-btn" (click)="goBack()">
+      <i class="fa-solid fa-arrow-left"></i> Retour
+    </button>
+  </div>
 </div>
 
 <ng-template #loadingTpl>
@@ -12,5 +32,3 @@
 </ng-template>
 
 <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-
-

@@ -21,6 +21,8 @@ CREATE TABLE quizzes (
                          level VARCHAR(50),
                          players INT DEFAULT 0,
                          duration INT DEFAULT 0,
+                         rating DOUBLE PRECISION DEFAULT 0.0,
+                         rating_count INT DEFAULT 0,
                          created_by_id INT,
                          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                          FOREIGN KEY (created_by_id) REFERENCES users(id) ON DELETE SET NULL

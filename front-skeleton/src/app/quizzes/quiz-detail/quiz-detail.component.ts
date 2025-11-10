@@ -25,6 +25,8 @@ export class QuizDetailComponent implements OnInit {
     this.quizService.getById(quizId).subscribe({
       next: (data) => {
         this.quiz = data;
+        console.log('📦 Quiz reçu du backend :', this.quiz);
+
         this.loading = false;
       },
       error: (err) => {
@@ -34,16 +36,34 @@ export class QuizDetailComponent implements OnInit {
       }
     });
   }
+  getDifficultyClass(level: string): string {
+    if (!level) return '';
+    const lvl = level.toLowerCase();
+    if (lvl === 'facile') return 'easy';
+    if (lvl === 'moyen') return 'medium';
+    if (lvl === 'difficile') return 'hard';
+    return '';
+  }
+  goBack(): void {
+    this.router.navigate(['/quiz']);
+  }
 
   startQuiz(quizId: number) {
     const token = localStorage.getItem('token');
+
     if (token) {
-      // ✅ Connecté → accéder au quiz
+      //  Utilisateur connecté → accéder directement au quiz
       this.router.navigate(['/play', quizId]);
     } else {
-      // 🔒 Pas connecté → rediriger vers login
+      //  Pas connecté → sauvegarde la page actuelle et redirige vers login
+      const currentUrl = this.router.url;
+      localStorage.setItem('redirectUrl', currentUrl);
+      console.log('💾 redirectUrl sauvegardée :', currentUrl);
+
       this.router.navigate(['/login']);
     }
   }
+
+
 }
 

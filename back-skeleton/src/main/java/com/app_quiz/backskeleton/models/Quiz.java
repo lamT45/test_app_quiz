@@ -1,6 +1,7 @@
 package com.app_quiz.backskeleton.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -15,14 +16,20 @@ public class Quiz {
     private String title;
     private String category;
     private String description;
-    private String level;      // ✅ niveau : Facile, Moyen, Difficile
-    private int players;       // ✅ nombre de joueurs
-    private int duration;      // ✅ durée du quiz (minutes)
+    private String level;      // ✅niveau : Facile, Moyen, Difficile
+    private int players;       //  nombre de joueurs
+    private int duration;      //  durée du quiz (secondes)
+    private double rating = 0.0;     // moyenne des notes
+    private int ratingCount = 0;     // nombre total d’évaluations
 
-    @ManyToOne
+
+    // 🔹 Relation avec l’utilisateur (créateur du quiz)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "created_by_id")
+    @JsonIgnoreProperties({"quizzes", "scores"}) // empêche la boucle JSON infinie
     private User createdBy;
 
+    // 🔹 Relation avec les questions
     @OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<Question> questions;
@@ -56,4 +63,11 @@ public class Quiz {
 
     public List<Question> getQuestions() { return questions; }
     public void setQuestions(List<Question> questions) { this.questions = questions; }
+
+    public double getRating() { return rating; }
+    public void setRating(double rating) { this.rating = rating; }
+
+    public int getRatingCount() { return ratingCount; }
+    public void setRatingCount(int ratingCount) { this.ratingCount = ratingCount; }
+
 }

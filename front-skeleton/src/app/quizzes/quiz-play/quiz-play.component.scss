@@ -1,6 +1,5 @@
 /* =============================
-   STYLE — Quiz Play Component
-   + Animations fluides
+   STYLE — Quiz Play (Timer moderne + Shake urgency)
    ============================= */
 
 .quiz-container {
@@ -10,21 +9,23 @@
   justify-content: center;
   min-height: 80vh;
   text-align: center;
-  background: linear-gradient(180deg, #f9f6ff 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #faf7ff 0%, #ffffff 100%);
   border-radius: 20px;
   padding: 3rem 2rem;
-  box-shadow: 0 0 20px rgba(121, 85, 212, 0.1);
+  box-shadow: 0 0 25px rgba(136, 84, 208, 0.12);
   margin: 3rem auto;
   width: 90%;
   max-width: 600px;
+  min-width: 500px;
   position: relative;
+  transition: all 0.3s ease;
 }
 
-/* ======= TITRES ======= */
+/* ===== TITRE ===== */
 h2 {
-  color: #512da8;
+  color: #5b33b3;
   font-weight: 700;
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   margin-bottom: 1.2rem;
   animation: slideDown 0.6s ease;
 }
@@ -35,17 +36,10 @@ h2 {
 .header-line {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-  position: relative;
-  margin-bottom: 1.5rem;
-}
-
-/* Zone titre + points */
-.question-info {
-  display: flex;
   align-items: center;
-  gap: 0.6rem;
+  width: 100%;
+  margin-bottom: 2rem;
+  position: relative;
 }
 
 .points-tag {
@@ -53,149 +47,180 @@ h2 {
   font-weight: 600;
   color: #8e24aa;
   background: #f3e5f5;
-  border-radius: 12px;
-  padding: 0.2rem 0.6rem;
-  box-shadow: 0 2px 6px rgba(142, 36, 170, 0.2);
+  border-radius: 20px;
+  padding: 0.25rem 0.75rem;
+  box-shadow: 0 2px 8px rgba(142, 36, 170, 0.15);
 }
 
-/* ======= TIMER MODERNE ======= */
+/* ===== TIMER — visible, moderne et animé ===== */
 .timer {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  font-size: 1rem;
+  position: absolute;
+  top: 0.8rem;
+  right: 1rem;
+  background: linear-gradient(180deg, #f6ecff 0%, #e9d8ff 100%);
+  backdrop-filter: blur(10px);
+  color: #5e35b1;
+  border-radius: 16px;
+  padding: 0.8rem 1.1rem;
   font-weight: 700;
-  color: #6a1b9a;
-  background: #f3e5f5;
-  border-radius: 14px;
-  padding: 0.4rem 0.9rem 0.6rem;
-  box-shadow: 0 2px 10px rgba(106, 27, 154, 0.2);
-  animation: fadeIn 0.8s ease-in-out;
-  z-index: 2;
-  min-width: 75px;
-  text-align: right;
-  transition: background 0.4s ease, color 0.4s ease;
-}
-
-.timer-icon {
-  font-size: 0.85rem;
-  margin-right: 4px;
-}
-
-.timer-value {
-  font-weight: 600;
   font-size: 1rem;
+  box-shadow: 0 8px 20px rgba(123, 31, 162, 0.25),
+  0 0 10px rgba(186, 104, 200, 0.3);
+  transition: all 0.4s ease;
+  text-align: center;
+  z-index: 10;
+  animation: fadeIn 0.6s ease-in-out;
 }
 
-/* Petite barre de progression en dessous du timer */
+.timer .timer-icon {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+  animation: rotateTimer 5s linear infinite;
+  opacity: 0.8;
+}
+
+.timer .timer-value {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+}
+
+/* ===== TIMER BAR ===== */
 .timer-bar {
   width: 100%;
-  height: 6px;
+  height: 5px;
   margin-top: 6px;
-  background: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 10px;
   overflow: hidden;
-  position: relative;
 }
 
 .timer-progress {
   height: 100%;
   border-radius: 10px;
   background: linear-gradient(90deg, #7e57c2, #ab47bc);
-  transition: width 1s linear;
+  transition: width 0.8s linear;
 }
 
-/* ====== Animation douce du chrono ====== */
-.timer-icon {
-  display: inline-block;
-  animation: rotateTimer 4s linear infinite;
+/* 🔥 URGENT — pulsation rouge douce (de 10 à 4s) */
+.timer.urgent {
+  background: linear-gradient(180deg, #ffebee 0%, #ffcdd2 100%);
+  color: #b71c1c;
+  animation: pulseCritical 1s infinite ease-in-out;
+  box-shadow: 0 0 20px rgba(183, 28, 28, 0.4);
 }
 
-@keyframes rotateTimer {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+/* 💣 FINAL — shake + pulse rapide (≤ 3s) */
+.timer.final-seconds {
+  background: linear-gradient(180deg, #ffcdd2 0%, #ef9a9a 100%);
+  color: #b71c1c;
+  animation: pulseCriticalFast 0.6s infinite ease-in-out, shakeHarder 0.25s infinite ease-in-out;
+  transform-origin: center;
+  box-shadow: 0 0 25px rgba(183, 28, 28, 0.5);
 }
 
+/* ====== Keyframes ====== */
 
-/* Centrer le texte de la question */
+/* Pulse normal */
+@keyframes pulseCritical {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.05); opacity: 0.85; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Pulse rapide */
+@keyframes pulseCriticalFast {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Shake plus fort (final-seconds) */
+@keyframes shakeHarder {
+  0%, 100% { transform: translateX(0) rotate(0); }
+  20% { transform: translateX(-3px) rotate(-1deg); }
+  40% { transform: translateX(3px) rotate(1deg); }
+  60% { transform: translateX(-4px) rotate(-1deg); }
+  80% { transform: translateX(4px) rotate(1deg); }
+}
+
+/* ===== QUESTION ===== */
 .question-text {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 500;
-  color: #4a148c;
+  color: #3d1775;
   margin-bottom: 1.5rem;
-  animation: fadeIn 0.8s ease-in-out;
+  animation: fadeIn 0.5s ease-in;
   text-align: center;
   line-height: 1.6;
 }
 
-/* ======= CHOICES ======= */
+/* ===== CHOIX ===== */
 .choices {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.9rem;
   width: 100%;
   max-width: 400px;
-  animation: fadeInUp 0.7s ease-in-out;
+  animation: fadeInUp 0.6s ease-in-out;
 }
 
 .choices button {
   background: #ede7f6;
   border: 2px solid transparent;
   color: #4a148c;
-  padding: 0.8rem 1rem;
+  padding: 0.9rem 1rem;
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: background 0.15s ease, color 0.15s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-.choices button:hover {
-  background: #d1c4e9;
-  transform: scale(1.03);
+.choices button:hover:not(:disabled) {
+  background: #d8cde9;
+  transform: translateY(-2px);
 }
 
 .choices button.selected {
-  background: #7e57c2;
+  background: linear-gradient(90deg, #8e24aa, #7e57c2);
   color: #fff;
-  border-color: #512da8;
-  transform: scale(1.05);
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(126, 87, 194, 0.25);
 }
 
-/* Effets de feedback */
 .choices button.correct {
   background: #81c784 !important;
   color: #fff;
   border-color: #388e3c;
-  transform: scale(1.05);
 }
 
 .choices button.wrong {
-  background: #e57373 !important;
+  background: #ef5350 !important;
   color: #fff;
   border-color: #d32f2f;
-  transform: scale(1.05);
 }
 
-/* ======= VALIDATE BUTTON ======= */
+/* ===== VALIDATE BUTTON ===== */
 .validate-btn {
-  margin-top: 1.5rem;
-  padding: 0.9rem 2.2rem;
-  font-size: 1rem;
+  margin-top: 2rem;
+  padding: 1rem 2.5rem;
+  font-size: 1.05rem;
   font-weight: 600;
   border: none;
-  border-radius: 30px;
-  background: linear-gradient(90deg, #7e57c2, #ab47bc);
+  border-radius: 35px;
+  background: linear-gradient(90deg, #8e24aa, #7e57c2);
   color: white;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(123, 31, 162, 0.2);
-  transition: all 0.3s ease;
-  animation: fadeIn 0.8s ease-in-out;
+  box-shadow: 0 6px 14px rgba(123, 31, 162, 0.25);
+  transition: all 0.25s ease;
 }
 
 .validate-btn:hover:not(:disabled) {
   transform: translateY(-3px);
-  box-shadow: 0 8px 15px rgba(123, 31, 162, 0.25);
+  box-shadow: 0 12px 25px rgba(123, 31, 162, 0.3);
 }
 
 .validate-btn:disabled {
@@ -203,31 +228,24 @@ h2 {
   cursor: not-allowed;
 }
 
-
-
-/* ======= RESULT SCREEN ======= */
+/* ===== RESULT SCREEN ===== */
 .result {
   text-align: center;
   background: linear-gradient(180deg, #f3e5f5 0%, #ede7f6 100%);
-  border-radius: 20px;
+  border-radius: 22px;
   padding: 3rem 2rem;
   width: 90%;
-  max-width: 500px;
+  max-width: 520px;
   margin: 3rem auto;
   box-shadow: 0 0 25px rgba(123, 31, 162, 0.15);
   animation: fadeInScale 0.8s ease-in-out;
-  position: relative;
-  overflow: hidden;
 }
 
 .result h2 {
   font-size: 2rem;
-  color: #512da8;
-  font-weight: 700;
+  color: #5e35b1;
   margin-bottom: 1rem;
-  animation: popIn 0.8s ease-in-out, float 2s infinite ease-in-out;
 }
-
 #confetti-canvas {
   position: fixed;
   top: 0;
@@ -237,7 +255,6 @@ h2 {
   pointer-events: none;
   z-index: 9999;
 }
-
 .result p {
   font-size: 1.3rem;
   color: #4a148c;
@@ -246,7 +263,7 @@ h2 {
 
 .result button {
   margin: 0 0.5rem;
-  padding: 0.8rem 2rem;
+  padding: 0.9rem 2rem;
   font-size: 1rem;
   border: none;
   border-radius: 30px;
@@ -260,39 +277,74 @@ h2 {
   background: linear-gradient(90deg, #7e57c2, #ab47bc);
   transform: translateY(-3px);
 }
-
-/* ======= TIMER COLORS ======= */
-.timer-green {
-  background: #e8f5e9;
-  color: #2e7d32;
-  box-shadow: 0 0 10px rgba(46, 125, 50, 0.2);
+.quiz-rating {
+  margin-top: 2.5rem;
+  text-align: center;
+  background: linear-gradient(180deg, #faf7ff 0%, #f3e8ff 100%);
+  border-radius: 24px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.15);
+  animation: fadeInScale 0.7s ease-in-out;
 }
 
-.timer-orange {
-  background: #fff3e0;
-  color: #ef6c00;
-  box-shadow: 0 0 10px rgba(239, 108, 0, 0.2);
+.quiz-rating h3 {
+  color: #7c3aed;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
 }
 
-.timer-red {
-  background: #ffebee;
-  color: #c62828;
-  box-shadow: 0 0 10px rgba(198, 40, 40, 0.2);
-  animation: pulse 1s infinite;
+/* ---- Étoiles ---- */
+.stars {
+  display: flex;
+  justify-content: center;
+  gap: 0.7rem;
+  margin-bottom: 0.6rem;
 }
 
-/* Petit effet clignotant pour le rouge */
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
+.stars i {
+  font-size: 2rem;
+  color: #d1d5db; /* gris neutre par défaut */
+  cursor: pointer;
+  transition: transform 0.25s ease, color 0.25s ease, text-shadow 0.25s ease;
 }
 
-/* =============================
-   ✨ ANIMATIONS
-   ============================= */
+.stars i:hover {
+  transform: scale(1.3);
+  color: #a855f7;
+  text-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+}
+
+.stars i.active {
+  color: #facc15; /* doré */
+  text-shadow: 0 0 12px rgba(250, 204, 21, 0.6);
+  animation: starPulse 0.4s ease;
+}
+
+/* ---- Texte info ---- */
+.rating-info {
+  color: #5b21b6;
+  font-size: 0.95rem;
+  margin-top: 0.4rem;
+  font-weight: 500;
+}
+
+/* ---- Animation pulse des étoiles ---- */
+@keyframes starPulse {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+
+/* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(25px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -301,24 +353,12 @@ h2 {
   to { transform: translateY(0); opacity: 1; }
 }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(25px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes rotateTimer {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 @keyframes fadeInScale {
   0% { opacity: 0; transform: scale(0.9); }
   100% { opacity: 1; transform: scale(1); }
-}
-
-@keyframes popIn {
-  0% { transform: scale(0.5); opacity: 0; }
-  60% { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1); }
-}
-
-@keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-  100% { transform: translateY(0); }
 }

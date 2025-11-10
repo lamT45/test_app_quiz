@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit  } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/user.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -14,7 +15,7 @@ export class NavbarComponent  implements OnInit {
   user: User | null = null;
   isScrolled = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     //  Observe les changements d’état de connexion
@@ -46,7 +47,9 @@ export class NavbarComponent  implements OnInit {
     this.user = null;
     this.isLoggedIn = false;
     this.userMenuOpen = false;
+    this.router.navigate(['/login']);
   }
+
 
   @HostListener('window:scroll', [])
   onScroll() {
