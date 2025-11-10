@@ -7,12 +7,8 @@
 
       <!-- Catégorie + Niveau -->
       <div class="quiz-badges">
-        <span class="category-badge" [ngStyle]="{'background-color': getCategoryColor(quiz.category)}">
-          {{ quiz.category }}
-        </span>
-        <span class="level-badge" [ngStyle]="{'background-color': getLevelColor(quiz.level)}">
-          {{ quiz.level }}
-        </span>
+        <span class="category-badge {{ quiz.category | titlecase }}">{{ quiz.category }}</span>
+        <span class="level-badge {{ quiz.level | titlecase }}">{{ quiz.level }}</span>
       </div>
 
       <!-- Titre et description -->

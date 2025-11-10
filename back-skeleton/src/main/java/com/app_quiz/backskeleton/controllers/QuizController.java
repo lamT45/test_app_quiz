@@ -49,6 +49,8 @@ public class QuizController {
         dto.setPlayers(quiz.getPlayers());
         dto.setDuration(quiz.getDuration());
         dto.setCreatedById(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getId() : null);
+        dto.setCreatedByName(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getUsername() : "Inconnu");
+        dto.setCreatedByEmail(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getEmail() : null);
         dto.setQuestionIds(
                 quiz.getQuestions() != null
                         ? quiz.getQuestions().stream().map(q -> q.getId()).toList()
@@ -57,6 +59,7 @@ public class QuizController {
 
         return ResponseEntity.ok(dto);
     }
+
 
     // ==============================
     // 🔹 POST — Créer un quiz

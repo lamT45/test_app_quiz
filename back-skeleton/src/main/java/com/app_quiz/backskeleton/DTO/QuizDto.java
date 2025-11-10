@@ -12,11 +12,13 @@ public class QuizDto {
     private int players;
     private int duration;
     private Long createdById;
+    private String createdByName;
+    private String createdByEmail;
     private List<Long> questionIds;
 
     public QuizDto() {}
 
-    // ✅ Getters & Setters
+    // ✅ Getters et Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -40,6 +42,12 @@ public class QuizDto {
 
     public Long getCreatedById() { return createdById; }
     public void setCreatedById(Long createdById) { this.createdById = createdById; }
+
+    public String getCreatedByName() { return createdByName; }
+    public void setCreatedByName(String createdByName) { this.createdByName = createdByName; }
+
+    public String getCreatedByEmail() { return createdByEmail; }
+    public void setCreatedByEmail(String createdByEmail) { this.createdByEmail = createdByEmail; }
 
     public List<Long> getQuestionIds() { return questionIds; }
     public void setQuestionIds(List<Long> questionIds) { this.questionIds = questionIds; }

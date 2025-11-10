@@ -7,9 +7,9 @@ export interface Quiz {
   players: number;
   duration: number; // temps total ou par question selon ton design
   questions: any[]; // optionnel si tu ne charges pas les questions à chaque fois
-  createdById?: number;
-  createdByName?: string;
-  createdByEmail?: string;
+  createdById: number;
+  createdByName: string;
+  createdByEmail: string;
   questionIds?: number[];
 
   // 🔹 Autres champs éventuels
