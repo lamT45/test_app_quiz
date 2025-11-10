@@ -1,217 +1,224 @@
-# Set up cours Java Spring Boot
+# 🧠 Quiz Game – Application Web (Java / Angular / Docker / PostgreSQL)
 
-## I. Installation
-**2 méthodes d'installation sont possibles : par téléchargements Internet ou par Clé USB**
-### Windows
-#### Par téléchargements Internet :
-- Docker : https://docs.docker.com/desktop/install/windows-install/
-- IntelliJ : https://www.jetbrains.com/fr-fr/idea/down
-Pour les puces M1 ou M2, choisis *Apple Chip* & *(Apple Silicon)* <br>
-Pour les puces Intel, choisis *Intel Chip* & *(Intel)*
+## 📋 Description du projet
 
-#### Par téléchargements Internet :
-- Docker  : https://docs.docker.com/desktop/install/mac-install/
-- IntelliJ : https://www.jetbrains.com/fr-fr/idea/download/#section=mac
+**Quiz Game** est une application web interactive développée en **Java (Spring Boot)** et **Angular**, inspirée de *Kahoot!*.
 
-### Linux
-#### Commandes pour les installations :
-- Docker : <br>
-  - `curl -fsSL https://get.docker.com -o get-docker.sh` <br>
-  - `sudo sh get-docker.sh`
-  - `sudo usermod -aG docker $USER`
+L’application repose sur une **architecture 3-tiers** :
+- **Frontend Angular** : interface utilisateur réactive et dynamique.
+- **Backend Spring Boot** : logique métier, gestion des utilisateurs, quiz et scores.
+- **Base de données PostgreSQL** : stockage des données, conteneurisée via **Docker**.
 
-- IntelliJ : <br>
-  - `sudo snap install intellij-idea-ultimate --classic`
+L’interface propose **différents sujets de quiz classés par niveaux de difficulté**.  
+Chaque joueur peut choisir :
+- un **sujet** parmi : 🎬 *Cinéma et Séries TV*, 📡 *Sciences et Technologies*, 🏛️ *Histoire de France*, et d'autres .....
+- un **niveau de difficulté** : *Facile*, *Moyen* ou *Difficile*
 
-## II. Set up IntelliJ
-### 1. Création compte
-IntelliJ est un IDE super complet et est devenu un indispensable pour le développement de projet Java. <br>
+### ⏱️ Temps imparti selon la difficulté
 
-Avec ses recherches de fichiers optimisées, ses auto-complétions et ses raccourcis à gogo, IntelliJ améliore grandement l'expérience de développement.
-Le Graal étant que Maven y est de base intégré et que tu puisses
-télécharger n'importe quelle version de Java directement depuis ton IDE (non ce n'est pas un rêve !)<br>
+| Niveau | Temps de réponse |
+|:--------|:----------------|
+| 🟢 **Facile** | 35 secondes |
+| 🟡 **Moyen** | 25 secondes |
+| 🔴 **Difficile** | 15 secondes |
 
-Cerise sur le gateau grâce à ton compte EPF, tu peux gratuitement obtenir une licence de la version payante (Ultimate).
-Elle est essentielle au bon déroulement du TP car, avec cette dernière, tu pourras notamment visualiser ta base de données et interagir avec elle directement depuis IntelliJ. <br>
-Pour te créer un compte, suis ce lien et effectue les actions détaillées ci-dessous : https://www.jetbrains.com/fr-fr/idea/
+### 💯 Système de score et classement
 
-<p align="center">
-<img src="img-readme/main-readme/img.png" width="500"/>
-<img src="img-readme/main-readme/img2.png" width="500"/>
-</p>
+Le système de score attribue des points en fonction :
+- de la **justesse des réponses**,
+- et de la **rapidité** : plus la réponse est donnée vite, plus le score augmente.
 
-### 2. Licence IntelliJ
-Pour récupérer une licence gratuite utilise ce lien : https://jetbrains.com/shop/eform/students
+À la fin de chaque partie, un **classement général** affiche les meilleurs joueurs selon leur score cumulé.  
+Les scores et historiques sont enregistrés dans une base de données **PostgreSQL** initialisée automatiquement via **Docker**.
 
-### 3. Lancer IntelliJ
-Une fois ta licence récupérée, lance l'IDE et relie ton compte
-<p align="center">
-<img src="img-readme/main-readme/img4.png" width="600"/>
-<img src="img-readme/main-readme/img3.png" width="600"/>
-</p>
+---
 
-### 4. Clonage du projet
-Pour récupérer le repository GitLab du TP, lance `git clone https://gitlab.takima.io/formation-dev-web/skeleton-web-app-school.git` dans le dossier de ton choix
+## 👥 Équipe
 
-Tu y trouveras toutes les ressources nécessaires à la suite du TP.
+- Lamyae TALA
+- Safae BERRICHI
+- Xiner GU
 
-Dans IntelliJ, ouvre dans un premier temps uniquement le dossier `back-skeleton`.
-<p align="center">
-<img src="img-readme/main-readme/img5.png" width="400"/>
-</p>
+---
 
-### 5. Téléchargement de Java 17
-Depuis IntelliJ, tu peux directement télécharger Java 17 : <br>
-<p align="center">
-<img src="img-readme/main-readme/img7.png" width="300"/>
-<img src="img-readme/main-readme/img8.png" width="300"/>
-<img src="img-readme/main-readme/img9.png" width="600"/>
-<img src="img-readme/main-readme/img10.png" width="600"/>
-</p>
+## 🗂️ Architecture exacte du dépôt
 
-### 6. Ouvrir un terminal dans IntelliJ
-Il est très utile d'avoir un terminal ouvert pour pouvoir interagir avec le programme en ligne de commande.
-<p align="center">
-<img src="img-readme/main-readme/img11.png" width="600"/>
-</p>
-<br>
-Tu peux également changer de Shell (Surtout utile pour les Windows)<br>
-<br>
-<p align="center">
-<img src="img-readme/main-readme/img12.png" width="500"/>
-</p>
-<br>
+```
+test_app_quiz/
+├─ back-skeleton/                         # Backend Spring Boot
+│  ├─ .env.sample                         # Exemple de configuration DB
+│  ├─ docker-compose.yml                  # Service PostgreSQL (container api_database)
+│  ├─ pom.xml                             # Dépendances Maven
+│  ├─ mvnw / mvnw.cmd                     # Wrapper Maven
+│  ├─ initdb/                             # Scripts SQL d'initialisation
+│  │  ├─ 1_TABLES.sql
+│  │  ├─ 2_DEFAULT_ENTRIES.sql
+│  │  └─ 3_SEED_QUESTIONS.sql
+│  └─ src/
+│     ├─ main/java/com/app_quiz/backskeleton/
+│     │  ├─ controllers/                  # AuthController, QuizController, QuestionController, ScoreController, UserController
+│     │  ├─ services/                     # ScoreService, UserService, etc.
+│     │  ├─ DAO/                          # Repositories JPA
+│     │  ├─ models/                       # Entités JPA
+│     │  └─ config/                       # CorsConfig
+│     └─ main/resources/application.properties
+│         # server.port=8082
+│         # spring.datasource.url=jdbc:postgresql://localhost:5432/${DATABASE_NAME}
+│         # spring.datasource.username=${DATABASE_USER}
+│         # spring.datasource.password=${DATABASE_PASSWORD}
+│
+├─ front-skeleton/                        # Frontend Angular
+│  ├─ package.json                        # scripts: start (ng serve), build, test
+│  └─ src/app/
+│     ├─ auth/                            # login/register
+│     ├─ quiz/                            # liste & jeu
+│     ├─ scores/leaderboard/              # classement
+│     └─ services/                        # services REST
+│
+├─ .git
+└─ README.md
+```
 
-Sélectionne *Git Bash*
-<p align="center">
-<img src="img-readme/main-readme/img13.png" width="500"/>
-</p>
+---
 
-## III. Set up de la BDD via Docker
-### 1. Docker
-Après avoir télechargé docker, lance le Docker Desktop en cliquant sur l'icône. Tu dois obtenir l'écran suivant :
-<p align="center">
-<img src="img-readme/main-readme/img14.png" width="800"/>
-</p>
-Ferme et ré-ouvre ton application IntelliJ pour que les changements effectués par l'installation de Docker soit pris en compte.
-<br>
+## ⚙️ Prérequis
 
-Pour s'assurer que ton install Docker a bien fonctionné, lance la commande suivante dans ton terminal :
-`docker run -d -p 80:80 docker/getting-started`
+Avant de lancer le projet, installez :
 
-Tu dois obtenir ce résultat :
-<br>
-<p align="center">
-<img src="img-readme/main-readme/img15.png" width="600"/>
-</p>
+- 🐳 **Docker Desktop** (ou Docker Engine)
+- 🟢 **Node.js ≥ 18** et **npm**
+- ☕ **Java JDK 17+** et **Maven** (ou `mvnw` fourni)
 
-### 2. Définition des variables d'environnement
-1. Copie-colle le `.env.sample` en `.env`
-2. Remplis le fichier `.env` avec les credentials de ton choix. Ce sont les accès de ta bdd.
+---
 
-<img src="img-readme/main-readme/img36.png" width="300"/>
+## 🧩 Configuration des variables d’environnement (Backend)
 
-Il est important que ces variables restent privées. Il ne faut pas les push avec le reste de ton code :
+Dupliquez `back-skeleton/.env.sample` vers `back-skeleton/.env` puis renseignez :
 
-3. Vérifie que le `.env` est bien dans le fichier .gitignore
+```env
+DATABASE_USER=root
+DATABASE_PASSWORD=toor
+DATABASE_NAME=defaultdb
+```
 
-### 3. Lancement de la BDD
-Dans un terminal, place-toi si tu n'y es pas déjà à la racine du dossier back-skeleton.
-<p align="center">
-<img src="img-readme/main-readme/img33.png" width="700"/>
-</p>
+> Le backend lit ces variables pour se connecter à PostgreSQL (voir `application.properties`).  
+> Port backend par défaut : **8082**
 
-Tu vas maintenant lancer le container de ta bdd. Pour ce faire, lance la commande `docker compose up -d`
+---
 
-Tu dois obtenir ce résultat :
-<p align="center">
-<img src="img-readme/main-readme/img34.png" width="700"/>
-</p>
+## ▶️ Comment lancer **le Backend** (Spring Boot + PostgreSQL)
 
-Voilà ! Ta base de données est créée, mais c'est plus sympa si on peut la voir...
+### 1️⃣ Démarrer PostgreSQL avec Docker
 
-### 4. Afficher la BDD dans IntelliJ
-<em>Attention, cette étape ne fonctionne qu'avec la version "Ultimate" de IntelliJ. Pour rappel, tu peux la demander gratuitement en tant qu'étudiant.</em>
+```bash
+cd back-skeleton
+docker-compose up -d   # lance le conteneur api_database (PostgreSQL, port 5432)
+```
 
-Effectue les étapes suivantes :
-<p align="center">
-<img src="img-readme/main-readme/img16.png" width="700"/>
-<img src="img-readme/main-readme/img17.png" width="700"/>
-</p>
+### 2️⃣ Initialiser la base de données
 
-Installe les drivers si besoin :
-<p align="center">
-<img src="img-readme/main-readme/img18.png" width="500"/>
-</p>
+> Exécutez **toujours** les trois scripts dans cet ordre précis 1️⃣ 2️⃣ 3️⃣:
 
-Saisie les infos (1-3), puis test la connexion à la bdd (4)
-<p align="center">
-<img src="img-readme/main-readme/img19.png" width="500"/>
-<img src="img-readme/main-readme/img20.png"/>
-</p><br> 
+```bash
+docker cp initdb/1_TABLES.sql api_database:/1_TABLES.sql
+docker cp initdb/2_DEFAULT_ENTRIES.sql api_database:/2_DEFAULT_ENTRIES.sql
+docker cp initdb/3_SEED_QUESTIONS.sql api_database:/3_SEED_QUESTIONS.sql
 
-Si c'est valide, clique sur *Apply* (5) puis *OK*
+docker exec -i api_database psql -U ${DATABASE_USER} -d ${DATABASE_NAME} -f /1_TABLES.sql
+docker exec -i api_database psql -U ${DATABASE_USER} -d ${DATABASE_NAME} -f /2_DEFAULT_ENTRIES.sql
+docker exec -i api_database psql -U ${DATABASE_USER} -d ${DATABASE_NAME} -f /3_SEED_QUESTIONS.sql
+```
 
-### 5. Initialisation de la BDD
-C'est cool d'avoir une BDD qui fonctionne mais c'est encore plus cool quand on peut lui insérer des données en 2 clics.
-Il se trouve qu'il y a des script de peuplement SQL déjà tout prêts qui n'attendent qu'à être lancés :
-<p align="center">
-<img src="img-readme/main-readme/img21.png" width="500"/>
-</p>
-Clic droit + run : 
-<p align="center">
-<img src="img-readme/main-readme/img22.png" width="600"/>
-<img src="img-readme/main-readme/img23.png" width="400"/>
-</p>
+> 💡 **Astuce Windows PowerShell :** remplacez les variables par leurs valeurs si `$env:DATABASE_USER` n’est pas reconnu.
 
-Tadaaaam (j'avoue un peu plus que 2 clics)
-<p align="center">
-<img src="img-readme/main-readme/img24.png" width="500"/>
-</p>
+### 3️⃣ Démarrer l’API Spring Boot
 
-## IV. Run du projet (c'est bientôt fini promis !)
-Ce projet utilise Maven, qui permet de déclarer et gérer toutes ses dépendances grâce à un fichier *pom.xml* <br>
+```bash
+# Option A : avec le wrapper Maven fourni
+./mvnw spring-boot:run
 
-Il faut donc que l'IDE le détecte en tant que projet Maven. Pour ce faire, clique-droit sur le pom.xml et sélectionne l'option suivante :
-<p align="center">
-<img src="img-readme/main-readme/img35.png" width="200"/>
-</p>
+# Option B : Maven installé sur la machine
+mvn spring-boot:run
+```
 
-Rajoute le plugin : [env-file](https://plugins.jetbrains.com/plugin/7861-envfile)
+- API accessible sur **http://localhost:8082**
+- Connexion DB : `jdbc:postgresql://localhost:5432/${DATABASE_NAME}`
 
-Tu peux maintenant run ton projet ! <br>
+---
 
-**Deux** façons de faire :
-<p align="center">
-<img src="img-readme/main-readme/img25.png" width="600"/>
-</p>
+## 💻 Comment lancer **le Frontend** (Angular)
 
-**OU**
-<p align="center">
-<img src="img-readme/main-readme/img26.png" width="600"/>
-</p>
+```bash
+cd front-skeleton
+npm install
+npm start      # équivaut à: ng serve
+```
 
-Ça ouvre :
-<p align="center">
-<img src="img-readme/main-readme/img27.png" width="600"/>
-</p>
-Sélectionne le Java 17 préalablement téléchargé et ajoute l'option `-Xms256m -Xmx256m` (c'est pour éviter que IntelliJ mange toute ta RAM)<br>
-<br>
-<p align="center">
-<img src="img-readme/main-readme/img28.png" width="600"/>
-<img src="img-readme/main-readme/img29.png" />
-<img src="img-readme/main-readme/img30.png" width="500"/>
-</p>
+- Interface accessible sur **http://localhost:4200**
+- Le frontend communique avec l’API **http://localhost:8082**
 
-Enfin, ajoute ton fichier `.env` comme ci-dessous (n'oublie pas d'activer les fichiers cachés)
+---
 
-<img src="img-readme/main-readme/img37.png" width="600"/>
-<img src="img-readme/main-readme/img38.png" width="600"/>
-<img src="img-readme/main-readme/img39.png" width="600"/>
+## 🚀 Comment lancer **l’application complète** (ordre recommandé)
 
-Tu peux maintenant lancer ton application :
-<br>
-<p align="center"><img src="img-readme/main-readme/img31.png" width="800"/></p>
+1️⃣ **Backend / Base de données**
+```bash
+cd back-skeleton
+docker-compose up -d
+./mvnw spring-boot:run
+```
 
-Alors ça marche ? ✨​
-<p align="center"><img src="img-readme/main-readme/img32.png" width="900"/></p>
+2️⃣ **Frontend**
+```bash
+cd ../front-skeleton
+npm install
+npm start
+```
+
+3️⃣ **Accès**
+- UI : **http://localhost:4200**
+- API : **http://localhost:8082**
+
+---
+
+## 🧪 Vérification rapide
+
+- `GET http://localhost:8082/api/quiz`, `/score`, `/user`
+- L’interface affiche la liste des quiz, les questions et le **leaderboard**.
+
+---
+
+## 🧭 Endpoints API principaux
+
+| Contrôleur | Méthode | Endpoint | Description |
+|-------------|----------|-----------|--------------|
+| **AuthController** | POST | `/auth/login` | Authentification d’un utilisateur |
+| **UserController** | GET | `/users` | Liste des utilisateurs |
+| **QuizController** | GET | `/quiz` | Récupération des quiz disponibles |
+| **QuestionController** | GET | `/questions/{id}` | Récupération des questions d’un quiz |
+| **ScoreController** | GET | `/scores` | Récupération du classement global |
+
+---
+
+## 🔧 Dépannage
+
+| Problème | Cause probable | Correctif                                           |
+|-----------|----------------|-----------------------------------------------------|
+| `Connection refused localhost:5432` | Conteneur DB arrêté | `docker ps` / `docker start api_database`           |
+| Quiz ou scores vides | Scripts SQL non exécutés | Rejouer 1️⃣ 2️⃣ 3️⃣ via `docker exec ... psql -f`   |
+| Port 8082 occupé | Process déjà actif | Changer `server.port` dans `application.properties` |
+| `npm start` échoue | Conflit de dépendances | Supprimer `node_modules` puis `npm install`         |
+
+---
+
+## 📸 Captures d’écran (à ajouter)
+
+Placez vos images dans `docs/img/` et référencez-les ainsi :
+
+```markdown
+![Accueil](docs/img/home.png)
+![Sélection du quiz](docs/img/select_quiz.png)
+![Question](docs/img/question.png)
+![Classement](docs/img/ranking.png)
+```
+

@@ -85,4 +85,11 @@ public class ScoreService {
 
         return scoredao.save(finalScore);
     }
+    // ==============================
+// 🔹 Supprimer tous les scores d’un utilisateur
+// ==============================
+    public void deleteScoresByUserId(Long userId) {
+        scoredao.deleteByUserId(userId);
+    }
+
 }

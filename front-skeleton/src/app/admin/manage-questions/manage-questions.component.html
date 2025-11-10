@@ -1,0 +1,47 @@
+<div class="quiz-admin">
+  <h2>📘 Gestion des Quiz</h2>
+
+  <div class="add-section">
+    <h3>➕ Ajouter un nouveau quiz</h3>
+    <input [(ngModel)]="newQuiz.title" placeholder="Titre du quiz" />
+    <input [(ngModel)]="newQuiz.category" placeholder="Catégorie" />
+    <textarea [(ngModel)]="newQuiz.description" placeholder="Description"></textarea>
+
+    <select [(ngModel)]="newQuiz.level">
+      <option *ngFor="let l of levels" [value]="l">{{ l | titlecase }}</option>
+    </select>
+
+    <button (click)="addQuiz()">Ajouter</button>
+  </div>
+
+  <hr />
+
+  <div *ngIf="loading">Chargement...</div>
+
+  <table *ngIf="!loading && quizzes.length > 0" class="quiz-table">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Titre</th>
+      <th>Catégorie</th>
+      <th>Niveau</th>
+      <th>Durée</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let quiz of quizzes">
+      <td>{{ quiz.id }}</td>
+      <td>{{ quiz.title }}</td>
+      <td>{{ quiz.category }}</td>
+      <td>{{ quiz.level }}</td>
+      <td>{{ quiz.duration }} sec</td>
+      <td>
+        <button class="delete-btn" (click)="deleteQuiz(quiz.id!)">🗑️ Supprimer</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!loading && quizzes.length === 0">Aucun quiz disponible.</p>
+</div>

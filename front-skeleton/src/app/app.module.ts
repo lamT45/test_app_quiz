@@ -1,71 +1,53 @@
-// Module principal de l'application Angular
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { RouterModule, Routes } from '@angular/router';
 
-// Angular Common Module
-import { CommonModule } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
-// Composants principaux
-import { AppComponent } from './app.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
+// 🏠 Composants principaux
 import { HomeComponent } from './components/home/home.component';
 
-// Quiz
+// 🎯 Quiz
+import { QuizListComponent } from './quizzes/quiz-list/quiz-list.component';
 import { QuizDetailComponent } from './quizzes/quiz-detail/quiz-detail.component';
 import { QuizPlayComponent } from './quizzes/quiz-play/quiz-play.component';
-import { QuizListComponent } from "./quizzes/quiz-list/quiz-list.component";
 
-// Scores
-import { LeaderboardComponent } from "./scores/leaderboard/leaderboard.component";
+// 🏆 Scores
+import { LeaderboardComponent } from './scores/leaderboard/leaderboard.component';
 
-
-// Authentification
+// 🔐 Auth
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 
-// Services
-import { QuizService } from './services/quiz.service';
-import { AuthService } from './services/auth.service';
-import { ScoreService } from './services/score.service';
-import { QuestionService } from './services/question.service';
+// 🧱 (Facultatif) Guard pour protéger l'accès admin
+import { AdminGuard } from './guards/admin.guard';
 
+const routes: Routes = [
+  // 🏠 Accueil
+  { path: '', component: HomeComponent },
 
+  // 🎯 Quiz
+  { path: 'quiz', component: QuizListComponent },
+  { path: 'quiz/:id', component: QuizDetailComponent },
+  { path: 'play/:id', component: QuizPlayComponent },
 
+  // 🏆 Classement
+  { path: 'leaderboard', component: LeaderboardComponent },
 
-// Routing
-import { AppRoutingModule } from './app-routing.module';
+  // 🔐 Authentification
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
 
+  // ⚙️ Section Admin (chargée dynamiquement)
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    canActivate: [AdminGuard] // 🔒 Facultatif (à garder si tu veux restreindre l’accès)
+  },
+
+  // 🚫 Redirection si URL inconnue
+  { path: '**', redirectTo: '' }
+];
 
 @NgModule({
-  declarations: [
-    LoginComponent,
-    RegisterComponent,
-    AppComponent,
-    NavbarComponent,
-    HomeComponent,
-    QuizListComponent,
-    QuizDetailComponent,
-    QuizPlayComponent
-  ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    AppRoutingModule
-  ],
-  providers: [
-    QuizService,
-    AuthService,
-    ScoreService,
-    QuestionService
-  ],
-  bootstrap: [AppComponent]
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
 })
-export class AppModule {}
+export class AppRoutingModule { }
