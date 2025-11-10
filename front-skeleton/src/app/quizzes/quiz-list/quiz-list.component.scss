@@ -74,6 +74,21 @@
   justify-content: space-between;
   margin-bottom: 0.8rem;
 }
+.reset-btn {
+  background: none;
+  border: none;
+  color: #7c3aed;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    color: #5b33b3;
+    transform: translateX(-3px);
+  }
+}
 
 .category-badge,
 .level-badge {

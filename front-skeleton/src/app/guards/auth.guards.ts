@@ -13,6 +13,7 @@ export class AuthGuard implements CanActivate {
     if (!userId && !token) {
       console.log('🔒 Non connecté — redirection vers /login depuis', state.url);
       this.authService.setRedirectUrl(state.url);
+      console.log('📍 Sauvegarde redirectUrl =', state.url);
       this.router.navigate(['/login']);
       return false;
     }

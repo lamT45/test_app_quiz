@@ -25,13 +25,14 @@ export class LoginComponent {
         //  Enregistre les infos utilisateur
         if (res.user) {
           this.authService.setCurrentUser(res.user);
-          localStorage.setItem('userId', res.user.id); // 🔥 obligatoire pour AuthGuard
+          localStorage.setItem('userId', res.user.id); //  obligatoire pour AuthGuard
           localStorage.setItem('user', JSON.stringify(res.user));
         }
 
-        // ✅ Nouvelle logique : redirige vers la dernière page visitée
+        //  Redirige vers la dernière page visitée
         const redirectUrl = this.authService.getRedirectUrl();
         if (redirectUrl) {
+          console.log(' Redirection vers', redirectUrl);
           this.router.navigateByUrl(redirectUrl);
           this.authService.clearRedirectUrl(); // nettoyage
         } else {

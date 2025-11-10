@@ -13,13 +13,14 @@ export class AuthService {
   constructor(private http: HttpClient) {
     const token = localStorage.getItem('token');
     if (token) {
-      // 🔹 On recharge le user depuis le localStorage si nécessaire
+      // On recharge le user depuis le localStorage si nécessaire
       const savedUser = localStorage.getItem('user');
       if (savedUser) {
         this.currentUserSubject.next(JSON.parse(savedUser));
       }
     }
   }
+  // === AUTHENTIFICATION ===
   login(credentials: { username: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials);
   }

@@ -11,6 +11,8 @@ import { Quiz } from '../../models/quiz.model';
 export class QuizListComponent implements OnInit {
   quizzes: Quiz[] = [];
   filteredQuizzes: Quiz[] = [];
+  selectedCategory: string | null = null;
+
 
   constructor(
     private quizService: QuizService,
@@ -25,12 +27,12 @@ export class QuizListComponent implements OnInit {
 
       // 🔹 Vérifie s’il y a un paramètre de catégorie dans l’URL
       this.route.queryParams.subscribe(params => {
-        const selectedCategory = params['category'];
+        this.selectedCategory = params['category'] || null;
 
-        if (selectedCategory) {
+        if (this.selectedCategory) {
           //  Filtrer les quiz par catégorie
           this.filteredQuizzes = this.quizzes.filter(
-            q => q.category === selectedCategory
+            q => q.category === this.selectedCategory
           );
         } else {
           //  Sinon, afficher tous les quiz
@@ -40,7 +42,14 @@ export class QuizListComponent implements OnInit {
     });
   }
 
-  // 🎨 Couleurs de catégories
+  // Réinitialiser le filtre et revenir à tous les quiz
+  resetFilter(): void {
+    this.selectedCategory = null;
+    this.filteredQuizzes = this.quizzes;
+    this.router.navigate(['/quiz']); // retire le paramètre de l’URL
+  }
+
+  //  Couleurs de catégories
   getCategoryColor(category: string): string {
     switch (category) {
       case 'Culture Générale': return '#EAB308'; // jaune

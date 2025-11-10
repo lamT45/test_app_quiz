@@ -50,14 +50,20 @@ export class QuizDetailComponent implements OnInit {
 
   startQuiz(quizId: number) {
     const token = localStorage.getItem('token');
+
     if (token) {
-      // ✅ Connecté → accéder au quiz
+      //  Utilisateur connecté → accéder directement au quiz
       this.router.navigate(['/play', quizId]);
     } else {
-      // 🔒 Pas connecté → rediriger vers login
+      //  Pas connecté → sauvegarde la page actuelle et redirige vers login
+      const currentUrl = this.router.url;
+      localStorage.setItem('redirectUrl', currentUrl);
+      console.log('💾 redirectUrl sauvegardée :', currentUrl);
+
       this.router.navigate(['/login']);
     }
   }
+
 
 }
 

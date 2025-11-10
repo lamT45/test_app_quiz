@@ -10,10 +10,10 @@ import { QuizPlayComponent } from './quizzes/quiz-play/quiz-play.component';
 import { AuthGuard } from './guards/auth.guards';
 
 const routes: Routes = [
-  // ✅ Redirection par défaut vers /homr
+  //  Redirection par défaut vers /home
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 
-  // ✅ Pages publiques
+  //  Pages publiques
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
@@ -21,12 +21,11 @@ const routes: Routes = [
   { path: 'quiz', component: QuizListComponent },
   { path: 'quiz/:id', component: QuizDetailComponent },
 
-  // ✅ Pages protégées (accessibles seulement si connecté)
+  //  Pages protégées (accessibles seulement si connecté)
   { path: 'play/:id', component: QuizPlayComponent, canActivate: [AuthGuard] },
-  { path: 'play/:quiz/:id', component: QuizPlayComponent, canActivate: [AuthGuard] },
 
 
-  // ✅ Redirection pour routes inconnues
+  //  Redirection pour routes inconnues
   { path: '**', redirectTo: '/home' }
 ];
 
