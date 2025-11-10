@@ -39,19 +39,18 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
 
   // 🔐 Auth admin
-  { path: 'login-admin', component: AdminLoginComponent },
-
-  // ⚙️ Section Administration
   {
     path: 'login-admin',
-    component: AdminLoginComponent
+    loadComponent: () =>
+      import('./admin/admin-login/admin-login.component')
+        .then(m => m.AdminLoginComponent)
   },
   {
     path: 'admin',
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-    canActivate: [AdminGuard]
-  },
-
+    loadChildren: () =>
+      import('./admin/admin.module').then(m => m.AdminModule)
+  }
+,
 
   // 🚫 Redirection pour routes inconnues
   { path: '**', redirectTo: '' }

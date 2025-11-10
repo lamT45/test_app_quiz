@@ -21,7 +21,6 @@ import { LeaderboardComponent } from './scores/leaderboard/leaderboard.component
 // 🔐 Auth
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
-import { AdminLoginComponent } from './admin/admin-login/admin-login.component';
 
 // ⚙️ Routing principal
 import { AppRoutingModule } from './app-routing.module';
@@ -41,8 +40,8 @@ import { QuestionService } from './services/question.service';
     QuizDetailComponent,
     QuizPlayComponent,
     LoginComponent,
-    RegisterComponent,
-    AdminLoginComponent
+    RegisterComponent
+    // ❌ PAS AdminLoginComponent ici
   ],
   imports: [
     BrowserModule,
@@ -52,9 +51,14 @@ import { QuestionService } from './services/question.service';
     ReactiveFormsModule,
     HttpClientModule,
     AppRoutingModule,
-    LeaderboardComponent // ✅ Import au lieu de déclaration
+    LeaderboardComponent // ✅ car standalone
   ],
-  providers: [QuizService, AuthService, ScoreService, QuestionService],
+  providers: [
+    QuizService,
+    AuthService,
+    ScoreService,
+    QuestionService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
