@@ -48,6 +48,8 @@ public class QuizController {
         dto.setLevel(quiz.getLevel());
         dto.setPlayers(quiz.getPlayers());
         dto.setDuration(quiz.getDuration());
+        dto.setRating(quiz.getRating());
+        dto.setRatingCount(quiz.getRatingCount());
         dto.setCreatedById(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getId() : null);
         dto.setCreatedByName(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getUsername() : "Inconnu");
         dto.setCreatedByEmail(quiz.getCreatedBy() != null ? quiz.getCreatedBy().getEmail() : null);
@@ -149,5 +151,28 @@ public class QuizController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    // ==============================
+// 🔹 PUT — Ajouter une note au quiz (1 à 4 étoiles)
+// ==============================
+    @PutMapping("/{id}/rate")
+    public ResponseEntity<Quiz> rateQuiz(@PathVariable Long id, @RequestParam("value") double value) {
+        Optional<Quiz> quizOpt = quizService.findQuizById(id);
+
+        if (quizOpt.isEmpty() || value < 1 || value > 4) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Quiz quiz = quizOpt.get();
+
+        // 🧮 Calcul de la nouvelle moyenne pondérée
+        double total = quiz.getRating() * quiz.getRatingCount();
+        quiz.setRatingCount(quiz.getRatingCount() + 1);
+        quiz.setRating((total + value) / quiz.getRatingCount());
+
+        quizService.saveQuiz(quiz);
+        return ResponseEntity.ok(quiz);
+    }
+
 
 }

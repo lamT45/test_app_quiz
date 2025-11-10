@@ -10,14 +10,16 @@ INSERT INTO users (username, password, email, role) VALUES
 
 
 -- QUIZZES
-INSERT INTO quizzes (title, category, description, level, players, duration, created_by_id)
+INSERT INTO quizzes
+(title, category, description, level, players, duration, rating, rating_count, created_by_id)
 VALUES
-    ('Culture Générale', 'Culture Générale', 'Testez vos connaissances générales avec ce quiz pour débutants', 'Facile', 1234, 35, 1),
-    ('Les Capitales du Monde', 'Géographie', 'Connaissez-vous toutes les capitales ? Prouvez-le !', 'Moyen', 856, 25, 1),
-    ('Histoire de France', 'Histoire', 'De la Gaule à nos jours, testez vos connaissances historiques', 'Difficile', 543, 15, 1),
-    ('Sciences et Technologies', 'Sciences', 'Physique, chimie, biologie... êtes-vous un scientifique ?', 'Moyen', 978, 25, 1),
-    ('Cinéma et Séries TV', 'Divertissement', 'Êtes-vous un vrai cinéphile ? Testez vos connaissances !', 'Facile', 1567, 35, 1),
-    ('Sport - Champions et Records', 'Sport', 'Connaissez-vous les plus grands exploits sportifs ?', 'Moyen', 876, 25, 1);
+    ('Culture Générale', 'Culture Générale', 'Testez vos connaissances générales avec ce quiz pour débutants', 'Facile', 4, 35, 2.0, 1, 1),
+    ('Les Capitales du Monde', 'Géographie', 'Connaissez-vous toutes les capitales ? Prouvez-le !', 'Moyen', 4, 25, 1.5, 2, 1),
+    ('Histoire de France', 'Histoire', 'De la Gaule à nos jours, testez vos connaissances historiques', 'Difficile', 4, 15, 3.0, 3, 1),
+    ('Sciences et Technologies', 'Sciences', 'Physique, chimie, biologie... êtes-vous un scientifique ?', 'Moyen', 4, 25, 2.5, 4, 1),
+    ('Cinéma et Séries TV', 'Divertissement', 'Êtes-vous un vrai cinéphile ? Testez vos connaissances !', 'Facile', 4, 35, 3.5, 5, 1),
+    ('Sport - Champions et Records', 'Sport', 'Connaissez-vous les plus grands exploits sportifs ?', 'Moyen', 4, 25, 4.0, 2, 1);
+
 
 -- SCORES
 INSERT INTO scores (user_id, quiz_id, score_obtained, time_taken_seconds) VALUES

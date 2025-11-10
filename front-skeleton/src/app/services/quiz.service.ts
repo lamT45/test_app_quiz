@@ -41,4 +41,10 @@ export class QuizService {
   incrementPlayers(quizId: number) {
     return this.http.put<any>(`${this.baseUrl}/${quizId}/increment-players`, {});
   }
+
+  // Ajouter une évaluation (note sur 4)
+  rateQuiz(quizId: number, value: number): Observable<any> {
+    return this.http.put<any>(`${this.baseUrl}/${quizId}/rate?value=${value}`, {});
+  }
+
 }
