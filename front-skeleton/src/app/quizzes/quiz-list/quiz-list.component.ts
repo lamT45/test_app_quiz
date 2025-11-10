@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { QuizService } from '../../services/quiz.service';
 import { Quiz } from '../../models/quiz.model';
 
@@ -10,12 +10,37 @@ import { Quiz } from '../../models/quiz.model';
 })
 export class QuizListComponent implements OnInit {
   quizzes: Quiz[] = [];
+  filteredQuizzes: Quiz[] = [];
 
-  constructor(private quizService: QuizService, private router: Router) {}
+  constructor(
+    private quizService: QuizService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.quizService.getAll().subscribe((data) => this.quizzes = data);
+    // 🔹 Récupère tous les quiz depuis le backend
+    this.quizService.getAll().subscribe((data) => {
+      this.quizzes = data;
+
+      // 🔹 Vérifie s’il y a un paramètre de catégorie dans l’URL
+      this.route.queryParams.subscribe(params => {
+        const selectedCategory = params['category'];
+
+        if (selectedCategory) {
+          //  Filtrer les quiz par catégorie
+          this.filteredQuizzes = this.quizzes.filter(
+            q => q.category === selectedCategory
+          );
+        } else {
+          //  Sinon, afficher tous les quiz
+          this.filteredQuizzes = this.quizzes;
+        }
+      });
+    });
   }
+
+  // 🎨 Couleurs de catégories
   getCategoryColor(category: string): string {
     switch (category) {
       case 'Culture Générale': return '#EAB308'; // jaune
@@ -28,14 +53,8 @@ export class QuizListComponent implements OnInit {
     }
   }
 
-  getLevelColor(level: string): string {
-    switch (level) {
-      case 'Facile': return '#22C55E';
-      case 'Moyen': return '#FACC15';
-      case 'Difficile': return '#EF4444';
-      default: return '#A855F7';
-    }
-  }
+
+  // 🚀 Lancement du quiz
   startQuiz(quizId: number) {
     this.quizService.incrementPlayers(quizId).subscribe({
       next: (updatedQuiz) => {
@@ -43,7 +62,7 @@ export class QuizListComponent implements OnInit {
         if (index !== -1) {
           this.quizzes[index].players = updatedQuiz.players;
 
-          // 💫 Active le pulse temporairement
+          // 💫 Animation pulse temporaire
           const playerCountEl = document.querySelectorAll('.player-count')[index];
           playerCountEl?.classList.add('pulsing');
           setTimeout(() => playerCountEl?.classList.remove('pulsing'), 600);
@@ -54,7 +73,4 @@ export class QuizListComponent implements OnInit {
       error: (err) => console.error('Erreur lors de la mise à jour des joueurs', err)
     });
   }
-
-
 }
-

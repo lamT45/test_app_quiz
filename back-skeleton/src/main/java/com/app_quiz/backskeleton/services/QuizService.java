@@ -29,5 +29,10 @@ public class QuizService {
     public void deleteQuiz(Long id) {
         quizdao.deleteById(id);
     }
+    
+    public List<String> findDistinctCategories() {
+        return quizdao.findDistinctCategories();
+    }
+
 
 }

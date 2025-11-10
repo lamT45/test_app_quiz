@@ -3,7 +3,7 @@
   <p class="page-subtitle">Choisissez votre quiz et commencez à jouer !</p>
 
   <div class="quiz-grid">
-    <div *ngFor="let quiz of quizzes" class="quiz-card" [ngStyle]="{'border-top-color': getCategoryColor(quiz.category)}">
+    <div *ngFor="let quiz of filteredQuizzes" class="quiz-card" [ngStyle]="{'border-top-color': getCategoryColor(quiz.category)}">
 
       <!-- Catégorie + Niveau -->
       <div class="quiz-badges">

@@ -173,6 +173,12 @@ public class QuizController {
         quizService.saveQuiz(quiz);
         return ResponseEntity.ok(quiz);
     }
-
+    // ==============================
+// 🔹 GET — Liste des catégories distinctes
+// ==============================
+    @GetMapping("/categories")
+    public List<String> getDistinctCategories() {
+        return quizService.findDistinctCategories();
+    }
 
 }
