@@ -1,16 +1,27 @@
 <div class="quiz-container" *ngIf="!showResult; else resultScreen">
-  <div
-    *ngIf="animState"
-    @questionAnimation
-    class="question-wrapper"
-  >
-    <h2>
-      Question {{ currentIndex + 1 }} / {{ questions.length }}
-      <span class="points-tag">({{ questions[currentIndex]?.points }} pts)</span>
-    </h2>
+  <div *ngIf="animState" @questionAnimation class="question-wrapper">
 
+    <!-- 🌟 En-tête avec titre, points et timer -->
+    <div class="header-line">
+      <div class="question-info">
+        <h2>Question {{ currentIndex + 1 }} / {{ questions.length }}</h2>
+        <span class="points-tag">+{{ questions[currentIndex]?.points }} pts</span>
+      </div>
+
+      <!-- ✅ on met la classe "timer" (pas timer-wrapper) -->
+      <div class="timer" [ngClass]="getTimerClass()">
+        <span class="timer-icon">⏱️</span>
+        <span class="timer-value">{{ timeLeft }}s</span>
+        <div class="timer-bar">
+          <div class="timer-progress" [style.width.%]="(timeLeft / maxTime) * 100"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🧠 Question -->
     <p class="question-text">{{ questions[currentIndex]?.questionText }}</p>
 
+    <!-- 🟣 Choix de réponses -->
     <div class="choices">
       <button
         *ngFor="let choice of questions[currentIndex]?.choices"
@@ -22,19 +33,24 @@
       </button>
     </div>
 
+    <!-- ✅ Bouton validation -->
     <button class="validate-btn" (click)="nextQuestion()" [disabled]="!selectedChoice">
       Valider
     </button>
   </div>
 </div>
 
+<!-- 🎉 Confettis -->
 <canvas id="confetti-canvas"></canvas>
 
+<!-- 🏁 Résultat -->
 <ng-template #resultScreen>
   <div class="result" @questionAnimation>
     <h2>Quiz terminé 🎉</h2>
     <p>Score : {{ score }} / {{ getTotalPoints() }} pts</p>
-    <button (click)="restartQuiz()">Rejouer</button>
-    <button (click)="goBack()">Retour</button>
+    <div class="result-buttons">
+      <button (click)="restartQuiz()">Rejouer</button>
+      <button (click)="goBack()">Retour</button>
+    </div>
   </div>
 </ng-template>

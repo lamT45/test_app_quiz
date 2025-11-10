@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import * as confetti from 'canvas-confetti'; // 🎊 confettis
+import * as confetti from 'canvas-confetti';
 import {
   trigger,
   transition,
@@ -28,8 +28,9 @@ import {
     ])
   ]
 })
-export class QuizPlayComponent implements OnInit {
+export class QuizPlayComponent implements OnInit, OnDestroy {
   quizId!: number;
+  quiz: any; // ✅ pour stocker le quiz complet (et récupérer duration)
   questions: any[] = [];
   currentIndex = 0;
   score = 0;
@@ -37,6 +38,11 @@ export class QuizPlayComponent implements OnInit {
   showResult = false;
   animState = true;
   isCorrect: boolean | null = null;
+
+  // ⏱️ Timer
+  timeLeft = 0;
+  maxTime = 0;
+  timerInterval: any;
 
   // 🔊 Sons
   clickSound = new Audio('assets/sounds/click.mp3');
@@ -52,10 +58,26 @@ export class QuizPlayComponent implements OnInit {
 
   ngOnInit(): void {
     this.quizId = Number(this.route.snapshot.paramMap.get('id'));
-    this.loadQuestions();
+    this.loadQuiz(); // ✅ on charge le quiz (pour avoir la durée)
   }
 
-  // 📥 Charger les questions depuis l’API et mélanger l’ordre
+  ngOnDestroy(): void {
+    clearInterval(this.timerInterval);
+  }
+
+  // 📥 Charger le quiz complet (titre, durée, etc.)
+  loadQuiz(): void {
+    this.http.get<any>(`http://localhost:8082/api/quizzes/${this.quizId}`).subscribe({
+      next: (quizData) => {
+        this.quiz = quizData;
+        this.maxTime = quizData.duration || 15; // par défaut 15s si non défini
+        this.loadQuestions();
+      },
+      error: (err) => console.error('Erreur lors du chargement du quiz', err)
+    });
+  }
+
+  // 📥 Charger les questions
   loadQuestions(): void {
     this.http.get<any[]>(`http://localhost:8082/api/quizzes/${this.quizId}/questions`).subscribe({
       next: (data) => {
@@ -67,12 +89,13 @@ export class QuizPlayComponent implements OnInit {
             )
           }))
         );
+        this.startTimer(); // démarrer le timer dès la première question
       },
       error: (err) => console.error('Erreur lors du chargement des questions', err)
     });
   }
 
-  // 🔀 Fonction pour mélanger un tableau
+  // 🔀 Mélange de tableau
   private shuffleArray(array: any[]): any[] {
     return array
       .map(value => ({ value, sort: Math.random() }))
@@ -86,19 +109,43 @@ export class QuizPlayComponent implements OnInit {
     this.clickSound.play();
   }
 
+  // ⏱️ Démarrer le timer
+  startTimer(): void {
+    clearInterval(this.timerInterval);
+    this.timeLeft = this.maxTime;
+
+    this.timerInterval = setInterval(() => {
+      this.timeLeft--;
+
+      if (this.timeLeft <= 0) {
+        clearInterval(this.timerInterval);
+        this.nextQuestion(true); // auto-passer si le temps est écoulé
+      }
+    }, 1000);
+  }
+
   // ✅ Passer à la question suivante
-  nextQuestion(): void {
+  nextQuestion(autoSkipped = false): void {
+    clearInterval(this.timerInterval);
     const currentQuestion = this.questions[this.currentIndex];
-    const isAnswerCorrect =
-      this.selectedChoice?.trim().toLowerCase() ===
-      currentQuestion.correctAnswer?.trim().toLowerCase();
+    let isAnswerCorrect = false;
+
+    if (!autoSkipped) {
+      isAnswerCorrect =
+        this.selectedChoice?.trim().toLowerCase() ===
+        currentQuestion.correctAnswer?.trim().toLowerCase();
+    }
 
     this.isCorrect = isAnswerCorrect;
 
     if (isAnswerCorrect) {
       this.correctSound.play();
-      this.score += currentQuestion.points ?? 1;
-    } else {
+
+      // 🧮 Calcul des points dynamiques
+      const timeBonus = this.timeLeft / this.maxTime; // ratio entre 0 et 1
+      const earnedPoints = Math.round(currentQuestion.points * (0.5 + timeBonus)); // min 50% - max 150%
+      this.score += earnedPoints;
+    } else if (!autoSkipped) {
       this.wrongSound.play();
     }
 
@@ -113,11 +160,21 @@ export class QuizPlayComponent implements OnInit {
           this.showResult = true;
           this.victorySound.play();
           this.launchConfetti();
+        } else {
+          this.animState = true;
+          this.startTimer(); // 🔁 redémarre le timer pour la question suivante
         }
-        this.animState = true;
       }, 300);
     }, 800);
   }
+
+  getTimerClass(): string {
+    const ratio = this.timeLeft / this.maxTime;
+    if (ratio > 0.6) return 'timer-green';
+    else if (ratio > 0.3) return 'timer-orange';
+    else return 'timer-red';
+  }
+
 
   // 🔁 Rejouer le quiz
   restartQuiz(): void {
@@ -129,14 +186,14 @@ export class QuizPlayComponent implements OnInit {
     this.loadQuestions();
   }
 
-  // 🔙 Retour à la page des quiz
+  // 🔙 Retour
   goBack(): void {
-    this.router.navigate(['/quizzes']);
+    this.router.navigate(['/quiz']);
   }
 
   // 🎊 Confettis de victoire
   launchConfetti(): void {
-    const duration = 3 * 1000; // 3 secondes
+    const duration = 3 * 1000;
     const end = Date.now() + duration;
 
     const canvas = document.getElementById('confetti-canvas') as HTMLCanvasElement;
@@ -157,7 +214,7 @@ export class QuizPlayComponent implements OnInit {
     })();
   }
 
-  // 🧮 Calcul du total des points
+  // 🧮 Total des points max
   getTotalPoints(): number {
     return this.questions.reduce((sum, q) => sum + (q.points ?? 0), 0);
   }
