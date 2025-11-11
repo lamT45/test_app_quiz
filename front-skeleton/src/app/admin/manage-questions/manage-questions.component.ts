@@ -82,12 +82,12 @@ export class ManageQuestionsComponent implements OnInit {
 
     if (this.isEdit && this.newQuestion.id) {
       // 🔹 UPDATE
-      this.http.put(`http://localhost:8082/api/admin/questions/${this.newQuestion.id}`, payload)
-        .subscribe(() => {
-          this.isEdit = false;
-          this.newQuestion = this.resetForm();
-          this.loadQuestions();
-        });
+      this.http.put('http://localhost:8082/api/admin/questions/${this.newQuestion.id}', payload)
+    .subscribe(() => {
+        this.isEdit = false;
+        this.newQuestion = this.resetForm();
+        this.loadQuestions();
+      });
     } else {
       // 🔹 ADD
       this.http.post('http://localhost:8082/api/admin/questions', payload)
@@ -100,8 +100,8 @@ export class ManageQuestionsComponent implements OnInit {
 
   // Supprimer une question
   deleteQuestion(id: number): void {
-    if (confirm('🗑️ Supprimer cette question ?')) {
-      this.http.delete(`http://localhost:8082/api/admin/questions/${id}`).subscribe(() => this.loadQuestions());
+    if (confirm('🗑 Supprimer cette question ?')) {
+      this.http.delete('http://localhost:8082/api/admin/questions/${id}').subscribe(() => this.loadQuestions());
     }
   }
 
@@ -116,5 +116,9 @@ export class ManageQuestionsComponent implements OnInit {
   cancelEdit(): void {
     this.isEdit = false;
     this.newQuestion = this.resetForm();
+  }
+  getQuizTitle(quizId: number): string {
+    const quiz = this.quizzes.find(q => q.id === quizId);
+    return quiz ? quiz.title : '—';
   }
 }

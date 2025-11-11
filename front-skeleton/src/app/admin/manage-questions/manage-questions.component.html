@@ -41,10 +41,10 @@
       <td>{{ q.questionText }}</td>
       <td>{{ q.correctAnswer }}</td>
       <td>{{ q.points }}</td>
-      <td>{{ q.quizId || '-' }}</td>
+      <td>{{ getQuizTitle(q.quizId) }}</td>
       <td class="actions">
-        <button class="edit" (click)="editQuestion(q)">✏️ Modifier</button>
-        <button class="delete" (click)="deleteQuestion(q.id!)">🗑️ Supprimer</button>
+        <button class="edit" (click)="editQuestion(q)">✏ Modifier</button>
+        <button class="delete" (click)="deleteQuestion(q.id!)">🗑 Supprimer</button>
       </td>
     </tr>
     </tbody>

@@ -2,6 +2,7 @@ package com.app_quiz.backskeleton.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "questions")
@@ -25,6 +26,12 @@ public class Question {
     @JoinColumn(name = "quiz_id")
     @JsonBackReference // 🔥 empêche la boucle infinie
     private Quiz quiz;
+
+    // === Ajouté pour exposer l'ID du quiz dans la réponse JSON ===
+    @JsonProperty("quizId")
+    public Long getQuizId() {
+        return (quiz != null) ? quiz.getId() : null;
+    }
 
     public Question() {}
 

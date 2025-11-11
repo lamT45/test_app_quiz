@@ -6,6 +6,8 @@ import com.app_quiz.backskeleton.services.ScoreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/admin/users")
@@ -46,9 +48,32 @@ public class UserAdminController {
     // 🔹 PUT — Modifier un utilisateur
     // ==============================
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        user.setId(id);
-        return userService.saveUser(user);
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User updatedUser) {
+        Optional<User> optionalUser = userService.findUserById(id);
+        if (optionalUser.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        User existingUser = optionalUser.get();
+
+        // 🔹 Met à jour uniquement les champs envoyés
+        if (updatedUser.getUsername() != null && !updatedUser.getUsername().isEmpty()) {
+            existingUser.setUsername(updatedUser.getUsername());
+        }
+        if (updatedUser.getEmail() != null && !updatedUser.getEmail().isEmpty()) {
+            existingUser.setEmail(updatedUser.getEmail());
+        }
+        if (updatedUser.getRole() != null && !updatedUser.getRole().isEmpty()) {
+            existingUser.setRole(updatedUser.getRole());
+        }
+
+        //  Ne pas écraser le mot de passe si vide
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+            existingUser.setPassword(updatedUser.getPassword());
+        }
+
+        User saved = userService.saveUser(existingUser);
+        return ResponseEntity.ok(saved);
     }
 
     // ==============================
