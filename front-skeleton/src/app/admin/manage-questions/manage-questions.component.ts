@@ -82,7 +82,7 @@ export class ManageQuestionsComponent implements OnInit {
 
     if (this.isEdit && this.newQuestion.id) {
       // 🔹 UPDATE
-      this.http.put('http://localhost:8082/api/admin/questions/${this.newQuestion.id}', payload)
+      this.http.put(`http://localhost:8082/api/admin/questions/${this.newQuestion.id}`, payload)
     .subscribe(() => {
         this.isEdit = false;
         this.newQuestion = this.resetForm();
@@ -101,7 +101,7 @@ export class ManageQuestionsComponent implements OnInit {
   // Supprimer une question
   deleteQuestion(id: number): void {
     if (confirm('🗑 Supprimer cette question ?')) {
-      this.http.delete('http://localhost:8082/api/admin/questions/${id}').subscribe(() => this.loadQuestions());
+      this.http.delete(`http://localhost:8082/api/admin/questions/${id}`).subscribe(() => this.loadQuestions());
     }
   }
 
