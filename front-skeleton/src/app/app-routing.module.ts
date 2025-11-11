@@ -8,12 +8,13 @@ import { RegisterComponent } from './components/auth/register/register.component
 import { QuizDetailComponent } from './quizzes/quiz-detail/quiz-detail.component';
 import { QuizPlayComponent } from './quizzes/quiz-play/quiz-play.component';
 import { AuthGuard } from './guards/auth.guards';
+import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
-  //  Redirection par défaut vers /home
+  // 🏠 Redirection par défaut
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 
-  //  Pages publiques
+  // 🌍 Pages publiques
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
@@ -21,11 +22,18 @@ const routes: Routes = [
   { path: 'quiz', component: QuizListComponent },
   { path: 'quiz/:id', component: QuizDetailComponent },
 
-  //  Pages protégées (accessibles seulement si connecté)
+  //  Zones protégées (auth obligatoire)
   { path: 'play/:id', component: QuizPlayComponent, canActivate: [AuthGuard] },
 
+  // 👑 Panneau Admin (chargement paresseux + guard)
+  {
+    path: 'admin',
+    canActivate: [AdminGuard],
+    loadChildren: () =>
+      import('./admin/admin.module').then((m) => m.AdminModule),
+  },
 
-  //  Redirection pour routes inconnues
+  //  Fallback pour routes inconnues
   { path: '**', redirectTo: '/home' }
 ];
 

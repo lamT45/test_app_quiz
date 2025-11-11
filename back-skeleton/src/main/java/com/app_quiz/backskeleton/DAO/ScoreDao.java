@@ -11,4 +11,6 @@ public interface ScoreDao extends JpaRepository<Score, Long> {
     List<Score> findByUserId(Long userId);  // Filtre par user
 
     List<Score> findByQuizId(Long quizId);  // Filtre par quiz
+
+    void deleteByUserId(Long userId);  // Supprime les scores d'un utilisateur
 }

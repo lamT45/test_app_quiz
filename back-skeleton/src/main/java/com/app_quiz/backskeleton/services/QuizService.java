@@ -1,6 +1,7 @@
 package com.app_quiz.backskeleton.services;
 
 import com.app_quiz.backskeleton.DAO.QuizDao;
+import com.app_quiz.backskeleton.models.Question;
 import com.app_quiz.backskeleton.models.Quiz;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,4 +36,8 @@ public class QuizService {
     }
 
 
+    public List<Question> findByQuizId(Long quizId) {
+        Optional<Quiz> quizOpt = quizdao.findById(quizId);
+        return quizOpt.map(Quiz::getQuestions).orElse(null);
+    }
 }

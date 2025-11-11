@@ -25,7 +25,7 @@ public class ScoreService {
         this.questiondao = questiondao;
     }
 
-    // 🔹 CRUD basique
+    //  CRUD basique
     public List<Score> findAllScores() {
         return scoredao.findAll();
     }
@@ -59,7 +59,7 @@ public class ScoreService {
         int totalScore = 0;
         int totalPointsPossible = 0;
 
-        // 🧮 Parcours des questions pour comparer les réponses
+        //  Parcours des questions pour comparer les réponses
         for (int i = 0; i < questions.size() && i < userAnswers.size(); i++) {
             Question q = questions.get(i);
             String givenAnswer = userAnswers.get(i);
@@ -72,7 +72,7 @@ public class ScoreService {
             }
         }
 
-        // ⚙️ Ajustement selon le temps total (bonus/malus)
+        //  Ajustement selon le temps total (bonus/malus)
         // Exemple : plus tu es rapide, plus ton score final est boosté
         int quizDuration = quiz.getDuration(); // en secondes depuis la table quizzes
         double timeRatio = (double) totalTimeSeconds / (quizDuration * questions.size());
@@ -81,7 +81,7 @@ public class ScoreService {
         double efficiency = Math.max(0.5, Math.min(1.5, 1.2 - timeRatio));
         int finalScore = (int) Math.round(totalScore * efficiency);
 
-        // 🧾 Création et sauvegarde du score
+        // Création et sauvegarde du score
         Score finalScoreObj = new Score();
         finalScoreObj.setUser(user);
         finalScoreObj.setQuiz(quiz);
@@ -89,5 +89,11 @@ public class ScoreService {
         finalScoreObj.setTime_taken_seconds(totalTimeSeconds);
 
         return scoredao.save(finalScoreObj);
+    }
+    // ==============================
+// 🔹 Supprimer tous les scores d’un utilisateur
+// ==============================
+    public void deleteScoresByUserId(Long userId) {
+        scoredao.deleteByUserId(userId);
     }
 }

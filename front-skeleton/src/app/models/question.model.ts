@@ -1,6 +1,5 @@
 export interface Question {
   id?: number;
-  quizId: number;
   text: string;
   type: 'Vrai/Faux' | 'Quiz';
   points: number;
@@ -8,5 +7,6 @@ export interface Question {
     text: string;
     correct: boolean;
   }[];
+  quizId: number;
   imageUrl?: string;
 }

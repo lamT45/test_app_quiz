@@ -14,6 +14,21 @@ public class QuestionDto {
 
     public QuestionDto() {}
 
+    public QuestionDto(Long id, String questionText, String choice1, String choice2, String choice3, String choice4,
+                       boolean trueFalse, String correctAnswer, int points, Long quizId) {
+        this.id = id;
+        this.questionText = questionText;
+        this.choice1 = choice1;
+        this.choice2 = choice2;
+        this.choice3 = choice3;
+        this.choice4 = choice4;
+        this.trueFalse = trueFalse;
+        this.correctAnswer = correctAnswer;
+        this.points = points;
+        this.quizId = quizId;
+    }
+
+    // Getters & Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

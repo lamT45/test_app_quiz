@@ -13,13 +13,13 @@ export class AuthService {
   constructor(private http: HttpClient) {
     const token = localStorage.getItem('token');
     if (token) {
-      // On recharge le user depuis le localStorage si nécessaire
       const savedUser = localStorage.getItem('user');
       if (savedUser) {
         this.currentUserSubject.next(JSON.parse(savedUser));
       }
     }
   }
+
   // === AUTHENTIFICATION ===
   login(credentials: { username: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials);
@@ -29,6 +29,21 @@ export class AuthService {
     this.currentUserSubject.next(user);
     localStorage.setItem('user', JSON.stringify(user));
   }
+
+  //  Retourne directement le user (pas le BehaviorSubject)
+  getCurrentUser(): User | null {
+    const user = this.currentUserSubject.value;
+    if (user) return user;
+
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      this.currentUserSubject.next(parsedUser);
+      return parsedUser;
+    }
+    return null;
+  }
+
   register(user: User): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, user);
   }
@@ -44,16 +59,13 @@ export class AuthService {
     return !!localStorage.getItem('token');
   }
 
-  // ===============================
-  // 🔁 Gestion de la redirection après login
-  // ===============================
+  // Gestion de redirection après login
   setRedirectUrl(url: string) {
     this.redirectUrl = url;
-    localStorage.setItem('redirectUrl', url); // optionnel : pour persistance
+    localStorage.setItem('redirectUrl', url);
   }
 
   getRedirectUrl(): string | null {
-    // On essaie d'abord la variable locale, sinon celle stockée
     return this.redirectUrl || localStorage.getItem('redirectUrl');
   }
 

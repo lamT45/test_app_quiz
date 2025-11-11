@@ -17,26 +17,35 @@ export class LoginComponent {
   login() {
     this.authService.login({ username: this.username, password: this.password }).subscribe({
       next: (res: any) => {
-        //  Enregistre le token si présent
+        // 🔹 Enregistre le token si présent
         if (res.token) {
           localStorage.setItem('token', res.token);
         }
 
-        //  Enregistre les infos utilisateur
+        // 🔹 Enregistre les infos utilisateur
         if (res.user) {
           this.authService.setCurrentUser(res.user);
-          localStorage.setItem('userId', res.user.id); //  obligatoire pour AuthGuard
+          localStorage.setItem('userId', res.user.id);
           localStorage.setItem('user', JSON.stringify(res.user));
         }
 
-        //  Redirige vers la dernière page visitée
+        // 🔹 Vérifie le rôle de l’utilisateur
+        const userRole = res.user?.role?.toUpperCase();
+
+        if (userRole === 'ADMIN') {
+          console.log(' Connexion Admin détectée — redirection vers le panneau /admin');
+          this.router.navigate(['/admin']);
+          return;
+        }
+
+        // 🔹 Sinon (PLAYER ou autre) — redirection classique
         const redirectUrl = this.authService.getRedirectUrl();
         if (redirectUrl) {
-          console.log(' Redirection vers', redirectUrl);
+          console.log('️ Redirection vers', redirectUrl);
           this.router.navigateByUrl(redirectUrl);
-          this.authService.clearRedirectUrl(); // nettoyage
+          this.authService.clearRedirectUrl();
         } else {
-          this.router.navigate(['/home']); // fallback par défaut
+          this.router.navigate(['/home']);
         }
       },
       error: (err) => {

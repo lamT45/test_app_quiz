@@ -1,7 +1,7 @@
 <div class="quiz-container" *ngIf="!showResult; else resultScreen">
   <div *ngIf="animState" @questionAnimation class="question-wrapper">
 
-    <!-- 🌟 En-tête avec titre, points et timer -->
+    <!--  En-tête avec titre, points et timer -->
     <div class="header-line">
       <div class="question-info">
         <h2>Question {{ currentIndex + 1 }} / {{ questions.length }}</h2>
@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <!-- ✅ Timer -->
+    <!--  Timer -->
     <div class="timer" [ngClass]="getTimerClass()">
       <span class="timer-icon">⏱️</span>
       <span class="timer-value">{{ timeLeft }}s</span>
@@ -18,10 +18,10 @@
       </div>
     </div>
 
-    <!-- 🧠 Question -->
+    <!--  Question -->
     <p class="question-text">{{ questions[currentIndex]?.questionText }}</p>
 
-    <!-- 🟣 Choix de réponses -->
+    <!--  Choix de réponses -->
     <div class="choices">
       <button
         *ngFor="let choice of questions[currentIndex]?.choices"
