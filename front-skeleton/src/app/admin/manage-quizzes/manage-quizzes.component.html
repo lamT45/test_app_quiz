@@ -1,39 +1,26 @@
 <div class="admin-section">
   <h2>🧠 Gestion des Quiz</h2>
 
-  <!-- Formulaire de création -->
-  <form (ngSubmit)="addQuiz()">
-    <input
-      type="text"
-      [(ngModel)]="newQuiz.title"
-      name="title"
-      placeholder="Titre du quiz"
-      required
-    />
+  <!-- Formulaire d’ajout / modification -->
+  <form (ngSubmit)="addOrUpdateQuiz()">
+    <input type="text" [(ngModel)]="newQuiz.title" name="title" placeholder="Titre du quiz" required />
 
-    <input
-      type="text"
-      [(ngModel)]="newQuiz.category"
-      name="category"
-      placeholder="Catégorie"
-      required
-    />
+    <input type="text" [(ngModel)]="newQuiz.category" name="category" placeholder="Catégorie" required />
 
     <select [(ngModel)]="newQuiz.level" name="level">
       <option *ngFor="let lvl of levels" [value]="lvl">{{ lvl | titlecase }}</option>
     </select>
 
-    <textarea
-      [(ngModel)]="newQuiz.description"
-      name="description"
-      placeholder="Description du quiz"
-    ></textarea>
+    <textarea [(ngModel)]="newQuiz.description" name="description" placeholder="Description du quiz"></textarea>
 
-    <button type="submit">➕ Ajouter</button>
+    <button type="submit" class="add">
+      {{ isEdit ? '💾 Mettre à jour' : '➕ Ajouter' }}
+    </button>
+    <button *ngIf="isEdit" type="button" class="cancel" (click)="cancelEdit()">❌ Annuler</button>
   </form>
 
   <!-- Loader -->
-  <div *ngIf="loading" class="loader">Chargement des quiz...</div>
+  <div *ngIf="loading" class="loader">⏳ Chargement des quiz...</div>
 
   <!-- Table des quiz -->
   <table *ngIf="!loading && quizzes.length > 0">
@@ -52,10 +39,11 @@
       <td>{{ quiz.id }}</td>
       <td>{{ quiz.title }}</td>
       <td>{{ quiz.category }}</td>
-      <td>{{ quiz.level }}</td>
-      <td>{{ quiz.duration }} sec</td>
-      <td>
-        <button (click)="deleteQuiz(quiz.id!)">🗑️ Supprimer</button>
+      <td>{{ quiz.level | titlecase }}</td>
+      <td>{{ quiz.duration || '-' }} sec</td>
+      <td class="actions">
+        <button class="edit" (click)="editQuiz(quiz)">✏️ Modifier</button>
+        <button class="delete" (click)="deleteQuiz(quiz.id!)">🗑️ Supprimer</button>
       </td>
     </tr>
     </tbody>

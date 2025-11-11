@@ -35,4 +35,10 @@ export class QuizAdminService {
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+  // 🔹 Modifier un quiz
+  update(id: number, quiz: Quiz): Observable<Quiz> {
+    return this.http.put<Quiz>(`${this.apiUrl}/${id}`, quiz);
+  }
+
 }

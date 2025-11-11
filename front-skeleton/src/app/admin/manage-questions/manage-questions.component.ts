@@ -23,17 +23,9 @@ export class ManageQuestionsComponent implements OnInit {
 
   questions: Question[] = [];
   quizzes: Quiz[] = [];
-  newQuestion: Question = {
-    questionText: '',
-    choice1: '',
-    choice2: '',
-    choice3: '',
-    choice4: '',
-    correctAnswer: '',
-    points: 5,
-    quizId: 0
-  };
+  newQuestion: Question = this.resetForm();
   loading = false;
+  isEdit = false; // 🔹 mode édition activé ou non
 
   constructor(private http: HttpClient, private quizService: QuizAdminService) {}
 
@@ -42,7 +34,20 @@ export class ManageQuestionsComponent implements OnInit {
     this.loadQuestions();
   }
 
-  // Charger tous les quiz (pour la liste déroulante)
+  resetForm(): Question {
+    return {
+      questionText: '',
+      choice1: '',
+      choice2: '',
+      choice3: '',
+      choice4: '',
+      correctAnswer: '',
+      points: 5,
+      quizId: 0
+    };
+  }
+
+  // Charger tous les quiz
   loadQuizzes(): void {
     this.quizService.getAll().subscribe({
       next: (data) => (this.quizzes = data),
@@ -65,33 +70,51 @@ export class ManageQuestionsComponent implements OnInit {
     });
   }
 
-  // Ajouter une nouvelle question
-  addQuestion(): void {
+  // Ajouter ou modifier une question
+  addOrUpdateQuestion(): void {
     if (!this.newQuestion.questionText || !this.newQuestion.correctAnswer || !this.newQuestion.quizId) return;
 
     const payload = {
       ...this.newQuestion,
-      quiz: { id: this.newQuestion.quizId } // 👈 on envoie un objet quiz
+      quiz: { id: this.newQuestion.quizId }
     };
+    console.log("🟣 Payload envoyé :", payload); // 👈
 
-    this.http.post('http://localhost:8082/api/admin/questions', payload).subscribe(() => {
-      this.newQuestion = {
-        questionText: '',
-        choice1: '',
-        choice2: '',
-        choice3: '',
-        choice4: '',
-        correctAnswer: '',
-        points: 5,
-        quizId: 0
-      };
-      this.loadQuestions();
-    });
+    if (this.isEdit && this.newQuestion.id) {
+      // 🔹 UPDATE
+      this.http.put(`http://localhost:8082/api/admin/questions/${this.newQuestion.id}`, payload)
+        .subscribe(() => {
+          this.isEdit = false;
+          this.newQuestion = this.resetForm();
+          this.loadQuestions();
+        });
+    } else {
+      // 🔹 ADD
+      this.http.post('http://localhost:8082/api/admin/questions', payload)
+        .subscribe(() => {
+          this.newQuestion = this.resetForm();
+          this.loadQuestions();
+        });
+    }
   }
+
   // Supprimer une question
   deleteQuestion(id: number): void {
     if (confirm('🗑️ Supprimer cette question ?')) {
       this.http.delete(`http://localhost:8082/api/admin/questions/${id}`).subscribe(() => this.loadQuestions());
     }
+  }
+
+  // 🔹 Remplir le formulaire avec la question à modifier
+  editQuestion(q: Question): void {
+    this.newQuestion = { ...q };
+    this.isEdit = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // ramène le formulaire en haut
+  }
+
+  // 🔹 Annuler la modification
+  cancelEdit(): void {
+    this.isEdit = false;
+    this.newQuestion = this.resetForm();
   }
 }

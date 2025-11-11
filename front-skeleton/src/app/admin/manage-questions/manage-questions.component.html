@@ -1,44 +1,23 @@
 <div class="admin-section">
   <h2>❓ Gestion des Questions</h2>
 
-  <!-- Formulaire d’ajout -->
-  <form (ngSubmit)="addQuestion()">
-    <input
-      type="text"
-      [(ngModel)]="newQuestion.questionText"
-      name="questionText"
-      placeholder="Énoncé de la question"
-      required
-    />
-
+  <!-- Formulaire d’ajout / modification -->
+  <form (ngSubmit)="addOrUpdateQuestion()">
+    <input type="text" [(ngModel)]="newQuestion.questionText" name="questionText" placeholder="Énoncé de la question" required />
     <input type="text" [(ngModel)]="newQuestion.choice1" name="choice1" placeholder="Choix 1" />
     <input type="text" [(ngModel)]="newQuestion.choice2" name="choice2" placeholder="Choix 2" />
     <input type="text" [(ngModel)]="newQuestion.choice3" name="choice3" placeholder="Choix 3" />
     <input type="text" [(ngModel)]="newQuestion.choice4" name="choice4" placeholder="Choix 4" />
-
-    <input
-      type="text"
-      [(ngModel)]="newQuestion.correctAnswer"
-      name="correctAnswer"
-      placeholder="Bonne réponse"
-      required
-    />
-
-    <input
-      type="number"
-      [(ngModel)]="newQuestion.points"
-      name="points"
-      placeholder="Points"
-      min="1"
-      required
-    />
+    <input type="text" [(ngModel)]="newQuestion.correctAnswer" name="correctAnswer" placeholder="Bonne réponse" required />
+    <input type="number" [(ngModel)]="newQuestion.points" name="points" placeholder="Points" min="1" required />
 
     <select [(ngModel)]="newQuestion.quizId" name="quizId" required>
       <option value="0" disabled selected>Choisir un quiz</option>
       <option *ngFor="let q of quizzes" [value]="q.id">{{ q.title }}</option>
     </select>
 
-    <button type="submit">➕ Ajouter</button>
+    <button type="button" (click)="addOrUpdateQuestion()">{{ isEdit ? '💾 Enregistrer' : '➕ Ajouter' }}</button>
+    <button *ngIf="isEdit" type="button" class="cancel" (click)="cancelEdit()">❌ Annuler</button>
   </form>
 
   <!-- Loader -->
@@ -63,8 +42,9 @@
       <td>{{ q.correctAnswer }}</td>
       <td>{{ q.points }}</td>
       <td>{{ q.quizId || '-' }}</td>
-      <td>
-        <button (click)="deleteQuestion(q.id!)">🗑️ Supprimer</button>
+      <td class="actions">
+        <button class="edit" (click)="editQuestion(q)">✏️ Modifier</button>
+        <button class="delete" (click)="deleteQuestion(q.id!)">🗑️ Supprimer</button>
       </td>
     </tr>
     </tbody>

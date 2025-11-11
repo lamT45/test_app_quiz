@@ -1,16 +1,28 @@
 .admin-section {
   background: #fff;
-  padding: 2rem;
-  border-radius: 16px;
-  box-shadow: 0 0 20px rgba(91, 51, 179, 0.1);
-  max-width: 900px;
-  margin: 2rem auto;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(91, 51, 179, 0.1);
+  max-width: 1000px;
+  margin: 2.5rem auto;
+  transition: all 0.3s ease;
 
   h2 {
     color: #5b33b3;
     text-align: center;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
+    font-weight: 800;
+    font-size: 1.7rem;
+    margin-bottom: 2rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+
+    &::before {
+      content: "🧩";
+      font-size: 1.6rem;
+    }
   }
 
   /* === FORMULAIRE === */
@@ -19,43 +31,65 @@
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #f9f6ff 0%, #f5f0ff 100%);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: inset 0 0 10px rgba(139, 84, 255, 0.1);
     margin-bottom: 2rem;
+    transition: 0.3s ease;
 
     input,
     select,
     textarea {
-      padding: 0.7rem;
+      padding: 0.8rem 1rem;
       border: 1px solid #d4c7f7;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 1rem;
-      width: 200px;
-      transition: all 0.2s ease;
+      width: 230px;
+      transition: all 0.25s ease;
+      background-color: #fff;
 
       &:focus {
         outline: none;
         border-color: #7b4ced;
-        box-shadow: 0 0 6px rgba(91, 51, 179, 0.2);
+        box-shadow: 0 0 8px rgba(91, 51, 179, 0.2);
       }
     }
 
     textarea {
       width: 100%;
-      min-height: 80px;
+      min-height: 90px;
       resize: none;
     }
 
     button {
-      background-color: #5b33b3;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      padding: 0.7rem 1.5rem;
-      cursor: pointer;
       font-weight: 600;
-      transition: 0.3s ease;
+      border: none;
+      border-radius: 12px;
+      padding: 0.8rem 1.6rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      font-size: 1rem;
 
-      &:hover {
-        background-color: #7144d2;
+      &.add {
+        background: linear-gradient(90deg, #6a29e0, #8e53ff);
+        color: white;
+        box-shadow: 0 4px 12px rgba(139, 84, 255, 0.3);
+
+        &:hover {
+          background: linear-gradient(90deg, #5b33b3, #7d44e1);
+          transform: translateY(-2px);
+        }
+      }
+
+      &.cancel {
+        background-color: #aaa;
+        color: white;
+
+        &:hover {
+          background-color: #888;
+        }
       }
     }
   }
@@ -64,15 +98,18 @@
   table {
     width: 100%;
     border-collapse: collapse;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fadeIn 0.6s ease;
 
     thead {
-      background-color: #f3ecff;
+      background: linear-gradient(90deg, #f0e6ff, #f8f5ff);
 
       th {
         color: #5b33b3;
-        padding: 0.8rem;
+        padding: 0.9rem;
         text-align: left;
-        font-weight: 600;
+        font-weight: 700;
         border-bottom: 2px solid #e3d6ff;
       }
     }
@@ -80,29 +117,68 @@
     tbody {
       tr {
         border-bottom: 1px solid #eee;
+        transition: all 0.25s ease;
 
         &:hover {
-          background-color: #faf7ff;
+          background: #faf7ff;
+          transform: scale(1.01);
         }
 
         td {
-          padding: 0.7rem;
+          padding: 0.8rem;
+          vertical-align: middle;
         }
 
-        button {
-          background-color: #ff6161;
-          color: white;
-          border: none;
-          border-radius: 8px;
-          padding: 0.4rem 0.8rem;
-          cursor: pointer;
-          transition: 0.3s ease;
+        .actions {
+          display: flex;
+          gap: 0.4rem;
 
-          &:hover {
-            background-color: #e53e3e;
+          button {
+            border: none;
+            border-radius: 8px;
+            padding: 0.45rem 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s ease;
+          }
+
+          .edit {
+            background-color: #7b4ced;
+            color: #fff;
+
+            &:hover {
+              background-color: #6238cc;
+            }
+          }
+
+          .delete {
+            background-color: #ff6161;
+            color: #fff;
+
+            &:hover {
+              background-color: #e53939;
+            }
           }
         }
       }
+    }
+  }
+
+  .no-data {
+    text-align: center;
+    color: #777;
+    margin-top: 2rem;
+    font-style: italic;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }
