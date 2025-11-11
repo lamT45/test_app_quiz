@@ -1,0 +1,92 @@
+<div class="admin-card">
+  <h2>👥 Gestion des utilisateurs</h2>
+
+  <!-- barre d’outils -->
+  <div class="toolbar">
+    <input type="text" [(ngModel)]="search" placeholder="Rechercher (nom, email, rôle)..." />
+  </div>
+
+  <!-- formulaire création -->
+  <form class="create-form" (ngSubmit)="add()">
+    <input type="text" name="username" [(ngModel)]="newUser.username" placeholder="Nom d'utilisateur" required />
+    <input type="email" name="email" [(ngModel)]="newUser.email" placeholder="Email" required />
+    <input type="password" name="password" [(ngModel)]="newUser.password" placeholder="Mot de passe (optionnel)" />
+    <select name="role" [(ngModel)]="newUser.role">
+      <option value="PLAYER">PLAYER</option>
+      <option value="ADMIN">ADMIN</option>
+    </select>
+    <button type="submit">➕ Ajouter</button>
+  </form>
+
+  <div *ngIf="loading" class="hint">Chargement...</div>
+  <div *ngIf="!loading && filteredUsers.length === 0" class="hint">Aucun utilisateur</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <!-- tableau -->
+  <table *ngIf="!loading && filteredUsers.length > 0">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Utilisateur</th>
+      <th>Email</th>
+      <th>Rôle</th>
+      <th>Créé le</th>
+      <th class="actions">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let u of filteredUsers">
+      <!-- ID -->
+      <td>{{ u.id }}</td>
+
+      <!-- username -->
+      <td>
+        <ng-container *ngIf="editingId !== u.id; else editUsername">
+          {{ u.username }}
+        </ng-container>
+        <ng-template #editUsername>
+          <input [(ngModel)]="editUser.username" name="edit-username-{{u.id}}" />
+        </ng-template>
+      </td>
+
+      <!-- email -->
+      <td>
+        <ng-container *ngIf="editingId !== u.id; else editEmail">
+          {{ u.email }}
+        </ng-container>
+        <ng-template #editEmail>
+          <input [(ngModel)]="editUser.email" name="edit-email-{{u.id}}" />
+        </ng-template>
+      </td>
+
+      <!-- role -->
+      <td>
+        <ng-container *ngIf="editingId !== u.id; else editRole">
+          <span class="role" [class.admin]="u.role === 'ADMIN'">{{ u.role }}</span>
+        </ng-container>
+        <ng-template #editRole>
+          <select [(ngModel)]="editUser.role" name="edit-role-{{u.id}}">
+            <option value="PLAYER">PLAYER</option>
+            <option value="ADMIN">ADMIN</option>
+          </select>
+        </ng-template>
+      </td>
+
+      <!-- createdAt -->
+      <td>{{ u.createdAt | date:'yyyy-MM-dd HH:mm' }}</td>
+
+      <!-- actions -->
+      <td class="actions">
+        <ng-container *ngIf="editingId !== u.id; else editBtns">
+          <button class="secondary" (click)="startEdit(u)">✏️ Modifier</button>
+          <button class="danger" (click)="remove(u.id!)">🗑️ Supprimer</button>
+        </ng-container>
+        <ng-template #editBtns>
+          <button class="primary" (click)="saveEdit(u.id!)">💾 Enregistrer</button>
+          <button class="secondary" (click)="cancelEdit()">↩️ Annuler</button>
+        </ng-template>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

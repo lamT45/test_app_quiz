@@ -1,0 +1,107 @@
+.admin-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(91, 51, 179, 0.1);
+  max-width: 1100px;
+  margin: 2rem auto;
+
+  h2 {
+    color: #5b33b3;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+
+    input {
+      width: 320px;
+      padding: .65rem .9rem;
+      border: 1px solid #d4c7f7;
+      border-radius: 10px;
+      &:focus { outline: none; border-color: #7b4ced; box-shadow: 0 0 6px rgba(91,51,179,.2); }
+    }
+  }
+
+  .create-form {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr 0.8fr auto;
+    gap: .75rem;
+    margin-bottom: 1rem;
+
+    input, select {
+      padding: .6rem .8rem;
+      border: 1px solid #e3d6ff;
+      border-radius: 10px;
+    }
+
+    button {
+      background: #5b33b3;
+      color: #fff;
+      border: 0;
+      border-radius: 10px;
+      padding: .6rem 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      &:hover { background: #7144d2; }
+    }
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      background: #f3ecff;
+      th {
+        color: #5b33b3;
+        text-align: left;
+        padding: .8rem;
+        border-bottom: 2px solid #e3d6ff;
+      }
+    }
+
+    tbody td {
+      padding: .7rem;
+      border-bottom: 1px solid #f1eefb;
+      vertical-align: middle;
+
+      .role.admin {
+        background: #fde7ff;
+        color: #a020f0;
+        padding: .15rem .5rem;
+        border-radius: 6px;
+        font-weight: 700;
+      }
+    }
+
+    .actions {
+      white-space: nowrap;
+
+      button {
+        margin-right: .35rem;
+        padding: .45rem .7rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+
+        &.primary { background: #5b33b3; color: #fff; }
+        &.secondary { background: #e9e3ff; color: #4b3aa3; }
+        &.danger { background: #ff6161; color: #fff; }
+
+        &:hover { filter: brightness(1.03); }
+      }
+    }
+  }
+
+  .hint { color: #777; margin: .75rem 0; }
+  .error { color: #c62828; margin: .75rem 0; font-weight: 600; }
+}

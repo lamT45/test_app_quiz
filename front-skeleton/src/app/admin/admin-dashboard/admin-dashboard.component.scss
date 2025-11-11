@@ -1,0 +1,178 @@
+/* ============================================================
+   🎨 ADMIN DASHBOARD — STYLE MODERNE (lavande / violet)
+   ============================================================ */
+
+/* ----- GLOBAL LAYOUT ----- */
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(180deg, #f6f3ff 0%, #fcfbff 100%);
+  color: #2d1b69;
+  font-family: "Raleway", sans-serif;
+}
+
+/* ----- HEADER ----- */
+.admin-header {
+  background: linear-gradient(90deg, #7a33b3, #9b4de1, #b883ff);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 2rem;
+  box-shadow: 0 3px 10px rgba(96, 37, 172, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.admin-header .right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.admin-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.3rem 0.8rem;
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+}
+
+/* ----- BODY (Sidebar + Content) ----- */
+.admin-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ----- SIDEBAR ----- */
+.sidebar {
+  width: 240px;
+  background: rgba(123, 70, 196, 0.1);
+  backdrop-filter: blur(14px);
+  border-right: 2px solid rgba(139, 84, 255, 0.15);
+  padding: 2rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar nav a {
+  color: #50208c;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.3px;
+  background: transparent;
+}
+
+.sidebar nav a:hover {
+  background: rgba(138, 69, 255, 0.15);
+  transform: translateX(3px);
+}
+
+.sidebar nav a.active {
+  position: relative;
+  background: rgba(139, 84, 255, 0.25);
+  color: rgba(154, 76, 250, 0.69) !important;
+  font-weight: 700;
+  border: 2px solid rgba(139, 84, 255, 0.4);
+  box-shadow: 0 3px 8px rgba(139, 84, 255, 0.25);
+  border-radius: 12px;
+  padding-left: 1.5rem;
+  transition: all 0.25s ease;
+}
+
+/*  Ajoute un accent à gauche (pastille lumineuse) */
+.sidebar nav a.active::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(154, 76, 250, 0.48);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+/*  Effet hover harmonieux même sur actif */
+.sidebar nav a.active:hover {
+  background: rgba(139, 84, 255, 0.35);
+  transform: translateX(3px);
+}
+
+
+/* ----- MAIN CONTENT ----- */
+.content {
+  flex: 1;
+  background: #fff;
+  border-radius: 18px;
+  margin: 1.2rem;
+  padding: 2rem;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(92, 45, 161, 0.1);
+  animation: fadeIn 0.4s ease;
+}
+
+/* ----- ANIMATIONS ----- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----- RESPONSIVE ----- */
+@media (max-width: 900px) {
+  .admin-body {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    flex-direction: row;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid rgba(139, 84, 255, 0.2);
+    justify-content: space-around;
+    padding: 0.8rem;
+  }
+
+  .sidebar nav a {
+    font-size: 0.9rem;
+    justify-content: center;
+  }
+
+  .content {
+    margin: 0.5rem;
+    padding: 1.2rem;
+    border-radius: 12px;
+  }
+
+  .admin-header h1 {
+    font-size: 1.1rem;
+  }
+}
