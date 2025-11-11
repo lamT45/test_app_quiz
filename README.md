@@ -11,12 +11,12 @@ Ce projet est réalisé par :
 
 ## 📋 Description du projet
 
-QuizMaster est une application web interactive développée en Java (Spring Boot) et *Angular, inspirée de *Kahoot!.
+QuizMaster est une application web interactive développée en Java (Spring Boot) et *Angular*, inspirée de *Kahoot!*.
 
 L’application repose sur une architecture 3-tiers :
-- Frontend Angular : interface utilisateur réactive et dynamique
-- Backend Spring Boot : logique métier, gestion des utilisateurs, quiz, scores et évaluations
-- Base de données PostgreSQL : stockage des données, conteneurisée via Docker
+- **Frontend Angular** : interface utilisateur réactive et dynamique
+- **Backend Spring Boot** : logique métier, gestion des utilisateurs, quiz, scores et évaluations
+- **Base de données PostgreSQL** : stockage des données, conteneurisée via Docker
 
 L’interface propose différents quiz prédéfinis classés par thèmes et niveaux de difficulté.  
 Chaque joueur peut choisir :
@@ -76,128 +76,68 @@ Le panneau d’administration permet de gérer entièrement le contenu et les ut
 ### 👥 Gestion des Utilisateurs
 - Possibilité de créer, modifier ou supprimer des utilisateurs.
 - La suppression d’un utilisateur entraîne également la suppression automatique de ses scores et participations dans tous les quiz.
-- L’administrateur peut consulter la liste complète des utilisateurs, leurs **scores moyens, et leurs **évaluations (ratings) laissées sur les quiz.
+- L’administrateur peut consulter la liste complète des utilisateurs, leurs **scores moyens**, et leurs **évaluations (ratings)** laissées sur les quiz.
 
-
+---
 
 ## 🗂 Architecture exacte du dépôt
 
-
+```
 QuizMaster/
-├── back-skeleton/                                  # 🧠 Backend — Spring Boot (API REST)
-│   ├── pom.xml
-│   ├── mvnw / mvnw.cmd
-│   ├── docker-compose.yml                          # PostgreSQL (service: api_database)
-│   ├── .env.sample                                 # DATABASE_NAME / USER / PASSWORD
-│   ├── initdb/
-│   │   ├── 1_TABLES.sql
-│   │   ├── 2_DEFAULT_ENTRIES.sql
-│   │   └── 3_SEED_QUESTIONS.sql
-│   └── src/
-│       └── main/
-│           ├── java/com/app_quiz/backskeleton/
-│           │   ├── controllers/
-│           │   │   ├── AuthController.java         # 🔐 login/register
-│           │   │   ├── QuizController.java         # 🎯 endpoints publics quiz
-│           │   │   ├── QuestionController.java     # ❓ endpoints publics questions
-│           │   │   ├── ScoreController.java        # 🏆 scores / leaderboard
-│           │   │   └── admin/                      # 🧑‍💻 endpoints admin (CRUD)
-│           │   │       ├── QuizAdminController.java
-│           │   │       ├── QuestionAdminController.java
-│           │   │       └── UserAdminController.java
-│           │   │
-│           │   ├── services/
-│           │   │   ├── QuizService.java
-│           │   │   ├── QuestionService.java
-│           │   │   ├── ScoreService.java
-│           │   │   └── UserService.java
-│           │   │
-│           │   ├── DAO/
-│           │   │   ├── QuizDao.java
-│           │   │   ├── QuestionDao.java            # contient findByQuiz_Id(...) ou @Query
-│           │   │   ├── UserDao.java
-│           │   │   └── ScoreDao.java
-│           │   │
-│           │   ├── models/
-│           │   │   ├── User.java
-│           │   │   ├── Quiz.java
-│           │   │   ├── Question.java               # expose getQuizId() pour le JSON
-│           │   │   └── Score.java
-│           │   │
-│           │   ├── DTO/
-│           │   │   ├── QuizDto.java
-│           │   │   ├── QuestionDto.java
-│           │   │   └── ScoreDto.java
-│           │   │
-│           │   └── config/
-│           │       └── CorsConfig.java
-│           │
-│           └── resources/
-│               └── application.properties          # server.port=8082 + datasource
+├── back-skeleton/ # 🧠 Backend — Spring Boot (API REST)
+│ ├── pom.xml
+│ ├── mvnw / mvnw.cmd
+│ ├── docker-compose.yml # PostgreSQL (service: api_database)
+│ ├── .env.sample # DATABASE_NAME / USER / PASSWORD
+│ ├── initdb/
+│ │ ├── 1_TABLES.sql
+│ │ ├── 2_DEFAULT_ENTRIES.sql
+│ │ └── 3_SEED_QUESTIONS.sql
+│ └── src/
+│   └── main/
+│       ├── java/com/app_quiz/backskeleton/
+│       │   ├── controllers/
+│       │   │   ├── AuthController.java # 🔐 login/register
+│       │   │   ├── QuizController.java # 🎯 endpoints publics quiz
+│       │   │   ├── QuestionController.java # ❓ endpoints publics questions
+│       │   │   ├── ScoreController.java # 🏆 scores / leaderboard
+│       │   │   └── admin/ # 🧑‍💻 endpoints admin (CRUD)
+│       │   │       ├── QuizAdminController.java
+│       │   │       ├── QuestionAdminController.java
+│       │   │       └── UserAdminController.java
+│       │   ├── services/
+│       │   ├── DAO/
+│       │   ├── models/
+│       │   ├── DTO/
+│       │   └── config/
+│       └── resources/
+│           └── application.properties # server.port=8082 + datasource
 │
-├── front-skeleton/                                 # 💻 Frontend — Angular
-│   ├── package.json
-│   ├── angular.json / tsconfig.json
-│   └── src/
-│       ├── main.ts
-│       ├── index.html / styles.scss
-│       └── app/
-│           ├── app.module.ts                       # 📦 module racine
-│           ├── app-routing.module.ts               # 🧭 routes principales (/home, /quiz, /admin, ...)
-│           │
-│           ├── components/
-│           │   ├── home/                           # page d’accueil publique
-│           │   └── auth/                           # login & register (si hors /auth)
-│           │
-│           ├── auth/
-│           │   ├── login/
-│           │   └── register/
-│           │
-│           ├── quizzes/
-│           │   ├── quiz-list/
-│           │   ├── quiz-detail/
-│           │   └── quiz-play/
-│           │
-│           ├── scores/
-│           │   └── leaderboard/
-│           │
-│           ├── admin/                              # 🧑‍💻 dashboard admin (lazy ou non)
-│           │   ├── admin-dashboard/
-│           │   │   ├── admin-dashboard.component.ts / html / scss
-│           │   │   └── (héberge le layout: header + sidebar + <router-outlet>)
-│           │   ├── manage-quizzes/
-│           │   │   ├── manage-quizzes.component.ts / html / scss
-│           │   ├── manage-questions/
-│           │   │   ├── manage-questions.component.ts / html / scss
-│           │   └── manage-users/
-│           │       ├── manage-users.component.ts / html / scss
-│           │
-│           ├── guards/
-│           │   └── auth.guards.ts                  # protège /play/:id et /admin/**
-│           │
-│           ├── models/
-│           │   ├── user.model.ts
-│           │   ├── quiz.model.ts
-│           │   └── question.model.ts               # (quizId, text/type/points/choices...)
-│           │
-│           └── services/
-│               ├── auth.service.ts                 # login/register + currentUser/redirect
-│               ├── quiz.service.ts                 # endpoints publics
-│               ├── score.service.ts
-│               ├── quiz-admin.service.ts           # /api/admin/quizzes (create/update/delete/getAll)
-│               ├── question-admin.service.ts       # (optionnel si externalisé)
-│               └── user-admin.service.ts
+├── front-skeleton/ # 💻 Frontend — Angular
+│ ├── package.json
+│ ├── angular.json / tsconfig.json
+│ └── src/
+│   ├── main.ts
+│   ├── index.html / styles.scss
+│   └── app/
+│       ├── app.module.ts
+│       ├── app-routing.module.ts
+│       ├── components/
+│       ├── auth/
+│       ├── quizzes/
+│       ├── scores/
+│       ├── admin/
+│       ├── guards/
+│       ├── models/
+│       └── services/
 │
 ├── README.md
 └── .gitignore
-
-
+```
 
 ---
 
 ## ⚙ Prérequis
-
-Avant de lancer le projet, installez :
 
 - 🐳 Docker Desktop (ou Docker Engine)
 - 🟢 Node.js ≥ 18 et npm
@@ -207,112 +147,67 @@ Avant de lancer le projet, installez :
 
 ## 🧩 Configuration des variables d’environnement (Backend)
 
-Dupliquez back-skeleton/.env.sample vers back-skeleton/.env puis renseignez :
+Créer `back-skeleton/.env` à partir de `.env.sample` :
 
-env
+```env
 DATABASE_USER=root
 DATABASE_PASSWORD=toor
 DATABASE_NAME=defaultdb
+```
 
-
-> Le backend lit ces variables pour se connecter à PostgreSQL (voir application.properties).  
+> Le backend lit ces variables pour se connecter à PostgreSQL (voir `application.properties`).  
 > Port backend par défaut : 8082
 
 ---
 
-## ▶ Comment lancer le Backend (Spring Boot + PostgreSQL)
+## ▶ Lancer le projet
 
 ### 1️⃣ Démarrer PostgreSQL avec Docker
 
-bash
+```bash
 cd back-skeleton
-docker-compose up -d   # lance le conteneur api_database (PostgreSQL, port 5432)
-
+docker-compose up -d
+```
 
 ### 2️⃣ Initialiser la base de données
 
-> Exécutez toujours les trois scripts dans cet ordre précis 1️⃣ 2️⃣ 3️⃣ :
-
-bash
+```bash
 docker cp initdb/1_TABLES.sql api_database:/1_TABLES.sql
 docker cp initdb/2_DEFAULT_ENTRIES.sql api_database:/2_DEFAULT_ENTRIES.sql
 docker cp initdb/3_SEED_QUESTIONS.sql api_database:/3_SEED_QUESTIONS.sql
 
-docker exec -i api_database psql -U ${DATABASE_USER} -d ${DATABASE_NAME} -f /1_TABLES.sql
-docker exec -i api_database psql -U ${DATABASE_USER} -d ${DATABASE_NAME} -f /2_DEFAULT_ENTRIES.sql
-docker exec -i api_database psql -U ${DATABASE_USER} -d ${DATABASE_NAME} -f /3_SEED_QUESTIONS.sql
+docker exec -i api_database psql -U root -d defaultdb -f /1_TABLES.sql
+docker exec -i api_database psql -U root -d defaultdb -f /2_DEFAULT_ENTRIES.sql
+docker exec -i api_database psql -U root -d defaultdb -f /3_SEED_QUESTIONS.sql
+```
 
+### 3️⃣ Lancer le backend
 
-> 💡 Astuce Windows PowerShell : remplacez les variables par leurs valeurs si $env:DATABASE_USER n’est pas reconnu.
-
-### 3️⃣ Démarrer l’API Spring Boot
-
-bash
-# Option A : avec le wrapper Maven fourni
+```bash
 ./mvnw spring-boot:run
+```
 
-# Option B : Maven installé sur la machine
-mvn spring-boot:run
+### 4️⃣ Lancer le frontend
 
-
-- API accessible sur http://localhost:8082
-- Connexion DB : jdbc:postgresql://localhost:5432/${DATABASE_NAME}
-
----
-
-## 💻 Comment lancer le Frontend (Angular)
-
-bash
-cd front-skeleton
-npm install
-npm start      # équivaut à: ng serve
-
-
-- Interface accessible sur http://localhost:4200
-- Le frontend communique avec l’API http://localhost:8082
-
----
-
-## 🚀 Comment lancer l’application complète (ordre recommandé)
-
-1️⃣ Backend / Base de données
-bash
-cd back-skeleton
-docker-compose up -d
-./mvnw spring-boot:run
-
-
-2️⃣ Frontend
-bash
+```bash
 cd ../front-skeleton
 npm install
 npm start
-
-
-3️⃣ Accès
-- UI : http://localhost:4200
-- API : http://localhost:8082
+```
 
 ---
 
-## 🧪 Vérification rapide
-
-- GET http://localhost:8082/api/quiz, /score, /user, /ratings
-- L’interface affiche la liste des quiz, les questions, les évaluations ⭐ et le classement général unique.
-
----
-
-## 🧭 Endpoints API principaux
+## 🧭 Endpoints principaux
 
 | Contrôleur | Méthode | Endpoint | Description |
 |-------------|----------|-----------|--------------|
-| AuthController | POST | /auth/login | Authentification d’un utilisateur |
+| AuthController | POST | /auth/login | Authentification |
 | UserController | GET | /users | Liste des utilisateurs |
-| QuizController | GET | /quiz | Récupération des quiz disponibles |
-| QuestionController | GET | /questions/{id} | Récupération des questions d’un quiz |
-| ScoreController | GET | /scores | Récupération du classement global |
-| RatingController | POST | /ratings | Ajout d’une évaluation (rating) |
-| RatingController | GET | /ratings/{quizId} | Récupération de la moyenne d’un quiz |
+| QuizController | GET | /quiz | Liste des quiz |
+| QuestionController | GET | /questions/{id} | Questions d’un quiz |
+| ScoreController | GET | /scores | Classement global |
+| RatingController | POST | /ratings | Ajouter une évaluation |
+| RatingController | GET | /ratings/{quizId} | Moyenne d’un quiz |
 
 ---
 
@@ -321,19 +216,46 @@ npm start
 | Problème | Cause probable | Correctif |
 |-----------|----------------|-----------|
 | Connection refused localhost:5432 | Conteneur DB arrêté | docker ps / docker start api_database |
-| Quiz ou scores vides | Scripts SQL non exécutés | Rejouer les 3 scripts via docker exec ... psql -f |
-| Port 8082 occupé | Process déjà actif | Modifier server.port dans application.properties |
-| npm start échoue | Conflit de dépendances | Supprimer node_modules puis npm install |
+| Quiz ou scores vides | Scripts SQL non exécutés | Rejouer les 3 scripts |
+| Port 8082 occupé | Process existant | Modifier server.port |
+| npm start échoue | Dépendances cassées | Supprimer node_modules puis npm install |
 
 ---
 
-## 📸 Démonstration
+## 🎥 Démonstration de l’Application
 
-Placez vos images dans docs/img/ et référencez-les ainsi :
+### 🏠 Page d’Accueil
 
-markdown
-![Accueil](docs/img/home.png)
-![Sélection du quiz](docs/img/select_quiz.png)
-![Question](docs/img/question.png)
-![Évaluation](docs/img/rating.png)
-![Classement général](docs/img/ranking.png)
+![Accueil](./front-skeleton/src/assets/home.png)
+![Accueil](./front-skeleton/src/assets/home2.png)
+![Accueil](./front-skeleton/src/assets/home3.png)
+
+
+### 👤 Page d’Authentification
+
+![Login](./front-skeleton/src/assets/loginUtilisateur.png)
+![Inscription](./front-skeleton/src/assets/inscriptionUtilisateur.png)
+
+### 🧑‍💼 Panneau d’Administration
+
+![Admin Dashboard](./front-skeleton/src/assets/gestionUtilisateur.png)
+![Admin Dashboard](./front-skeleton/src/assets/gestionQuiz.png)
+![Admin Dashboard](./front-skeleton/src/assets/gestionQuestion.png)
+
+### ❓ Exemple de Question de Quiz
+
+![Quiz Management](./front-skeleton/src/assets/exempleQuestion.png)
+
+### 🏆 Classement et Résultats
+
+![Scoreboard](./front-skeleton/src/assets/scoreboard.png)
+
+### 📱 Interface Responsive
+
+![Responsive](./front-skeleton/src/assets/responsive.png)
+
+---
+
+## 📸 Conclusion
+
+Ce projet illustre la mise en œuvre d’une architecture complète **Java – Angular – Docker – PostgreSQL** à travers une application ludique et éducative de quiz dynamique.
