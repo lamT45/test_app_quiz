@@ -1,7 +1,7 @@
 <div class="quiz-container" *ngIf="!showResult; else resultScreen">
   <div *ngIf="animState" @questionAnimation class="question-wrapper">
 
-    <!-- 🌟 En-tête avec titre, points et timer -->
+    <!--  En-tête avec titre, points et timer -->
     <div class="header-line">
       <div class="question-info">
         <h2>Question {{ currentIndex + 1 }} / {{ questions.length }}</h2>
@@ -9,19 +9,19 @@
       </div>
     </div>
 
-    <!-- ✅ Timer -->
+    <!--  Timer -->
     <div class="timer" [ngClass]="getTimerClass()">
-      <span class="timer-icon">⏱️</span>
+      <span class="timer-icon">⏱</span>
       <span class="timer-value">{{ timeLeft }}s</span>
       <div class="timer-bar">
         <div class="timer-progress" [style.width.%]="(timeLeft / maxTime) * 100"></div>
       </div>
     </div>
 
-    <!-- 🧠 Question -->
+    <!--  Question -->
     <p class="question-text">{{ questions[currentIndex]?.questionText }}</p>
 
-    <!-- 🟣 Choix de réponses -->
+    <!--  Choix de réponses -->
     <div class="choices">
       <button
         *ngFor="let choice of questions[currentIndex]?.choices"
@@ -49,7 +49,7 @@
   <div class="result" @questionAnimation>
     <h2>Quiz terminé 🎉</h2>
 
-    <!-- ⚙️ Score calculé par le backend -->
+    <!-- ⚙ Score calculé par le backend -->
     <ng-container *ngIf="score !== null && score !== undefined; else loadingScore">
       <p>Votre score total est : <strong>{{ score }}</strong> points 🏆</p>
       <p>Merci d’avoir joué ! Donnez-nous votre avis ci-dessous ⭐</p>

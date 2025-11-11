@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { QuizService } from 'services/quiz.service';
+import { QuizService } from '../../services/quiz.service';
 import * as confetti from 'canvas-confetti';
 import {
   trigger,
@@ -40,32 +40,25 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
   isCorrect: boolean | null = null;
   score: number | null = null;
 
-  // Temps total et par question
   timeLeft = 0;
   maxTime = 0;
   timerInterval: any;
   totalTimeTaken = 0;
 
-  // Sons
   clickSound = new Audio('assets/sounds/click.mp3');
   correctSound = new Audio('assets/sounds/correct.mp3');
   wrongSound = new Audio('assets/sounds/wrong.mp3');
   victorySound = new Audio('assets/sounds/victory.mp3');
 
-  // Réponses de l’utilisateur
   userAnswers: string[] = [];
-  // Verrouillage des réponses pour éviter les clics multiples
   isAnswerLocked = false;
-// Feedback de la réponse
   showAnswerFeedback = false;
-
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
     private quizService: QuizService
-
   ) {}
 
   ngOnInit(): void {
@@ -117,8 +110,9 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
 
   // Sélection d’un choix
   selectChoice(choice: string): void {
+    if (this.isAnswerLocked) return;
     this.selectedChoice = choice;
-    this.clickSound.play();
+    this.clickSound.play().catch(() => {});
   }
 
   // Timer
@@ -148,20 +142,19 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
       const correctAnswer = currentQuestion.correctAnswer?.trim().toLowerCase();
       const userAnswer = this.selectedChoice?.trim().toLowerCase();
 
-      this.showAnswerFeedback = true; //  Montre feedback uniquement après validation
+      this.showAnswerFeedback = true;
 
       if (userAnswer === correctAnswer) {
         this.isCorrect = true;
-        this.correctSound.play();
+        this.correctSound.play().catch(() => {});
       } else {
         this.isCorrect = false;
-        this.wrongSound.play();
+        this.wrongSound.play().catch(() => {});
       }
     }
 
-    // Pause avant de passer à la suivante
     setTimeout(() => {
-      this.showAnswerFeedback = false; //  Cache feedback pour la prochaine
+      this.showAnswerFeedback = false;
       this.isCorrect = null;
       this.isAnswerLocked = false;
       this.selectedChoice = null;
@@ -171,7 +164,7 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
         this.currentIndex++;
         if (this.currentIndex >= this.questions.length) {
           this.showResult = true;
-          this.victorySound.play();
+          this.victorySound.play().catch(() => {});
           this.launchConfetti();
           this.saveScoreToBackend();
         } else {
@@ -182,7 +175,7 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  // Enregistrer le score (backend fait le calcul)
+  // Sauvegarder le score
   saveScoreToBackend(): void {
     const payload = {
       userId: Number(localStorage.getItem('userId')),
@@ -191,23 +184,22 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
       answers: this.userAnswers
     };
 
+    console.log('📤 Envoi du score :', payload);
+
     this.http.post<any>('http://localhost:8082/api/scores/calculate', payload).subscribe({
       next: (res) => {
-        console.log('✅ Score calculé et enregistré par le backend', res);
-        this.score = res.score_obtained; // 🔹 affiche le score du backend dans le template
+        console.log('✅ Score enregistré :', res);
+        this.score = res.score_obtained;
       },
       error: (err) => console.error('❌ Erreur lors de l’enregistrement du score', err)
     });
   }
 
-
   getTimerClass() {
     if (this.timeLeft <= 3) return 'urgent final-seconds';
     if (this.timeLeft <= 10) return 'urgent';
     return '';
-
   }
-
 
   restartQuiz(): void {
     this.currentIndex = 0;
@@ -220,14 +212,13 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/quiz']);
+    this.router.navigate(['/quiz']).then(() => {});
   }
 
-  // Effet de victoire
+  // Confettis de victoire
   launchConfetti(): void {
     const duration = 3 * 1000;
     const end = Date.now() + duration;
-
     const canvas = document.getElementById('confetti-canvas') as HTMLCanvasElement;
     const confettiInstance = confetti.create(canvas, { resize: true, useWorker: true });
 
@@ -239,43 +230,21 @@ export class QuizPlayComponent implements OnInit, OnDestroy {
         ticks: 60,
         origin: { y: 0.6 }
       });
-
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
+      if (Date.now() < end) requestAnimationFrame(frame);
     })();
   }
 
-  rateQuiz(value: number) {
+  rateQuiz(value: number): void {
     this.quizService.rateQuiz(this.quiz.id, value).subscribe({
       next: (updatedQuiz) => {
         this.quiz.rating = updatedQuiz.rating;
         this.quiz.ratingCount = updatedQuiz.ratingCount;
-
-        // Animation confettis + glow subtil
-        const duration = 1000;
-        const end = Date.now() + duration;
-        const canvas = document.getElementById('confetti-canvas') as HTMLCanvasElement;
-        const confettiInstance = confetti.create(canvas, { resize: true, useWorker: true });
-
-        (function frame() {
-          confettiInstance({
-            particleCount: 3,
-            startVelocity: 15,
-            spread: 100,
-            ticks: 60,
-            origin: { y: 0.7 },
-            colors: ['#facc15', '#a855f7', '#7c3aed']
-          });
-          if (Date.now() < end) requestAnimationFrame(frame);
-        })();
-
-        // Notification légère
         alert(`⭐ Merci pour votre note de ${value} étoiles !`);
       },
       error: () => alert("Erreur lors de l'envoi de votre note.")
     });
   }
+
   getRoundedRating(): number {
     return Math.round(this.quiz?.rating || 0);
   }

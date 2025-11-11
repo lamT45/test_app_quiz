@@ -1,4 +1,3 @@
-
 package com.app_quiz.backskeleton.models;
 
 import jakarta.persistence.*;

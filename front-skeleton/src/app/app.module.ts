@@ -50,8 +50,7 @@ import { QuestionService } from './services/question.service';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    AppRoutingModule,
-    LeaderboardComponent // ✅ car standalone
+    AppRoutingModule
   ],
   providers: [
     QuizService,
